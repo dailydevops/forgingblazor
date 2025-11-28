@@ -12,4 +12,7 @@
     <GlobalPackageReference Include="NetEvolve.Defaults" Version="1.4.81" />
     <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="10.16.0.128591" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageVersion Include="System.CommandLine" Version="2.0.0" />
+  </ItemGroup>
 </Project>
