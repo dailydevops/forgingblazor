@@ -20,6 +20,9 @@
     <File Path="renovate.json" />
     <File Path="testEnvironments.json" />
   </Folder>
-  <Folder Name="/src/" />
+  <Folder Name="/src/">
+    <Project Path="src/NetEvolve.ForgingBlazor.Extensibility/NetEvolve.ForgingBlazor.Extensibility.csproj" Id="5462e69f-74ab-40a7-afed-f06eec6bc202" />
+    <Project Path="src/NetEvolve.ForgingBlazor/NetEvolve.ForgingBlazor.csproj" Id="fc1da919-3fd1-4c03-812b-74c77ab30682" />
+  </Folder>
   <Folder Name="/tests/" />
 </Solution>
