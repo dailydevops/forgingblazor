@@ -48,12 +48,7 @@ internal static class ServiceCollectionExtensions
             if (
                 serviceType.IsAssignableTo(typeStartUpMarker)
                 || implementationType?.IsAssignableTo(typeStartUpMarker) == true
-            )
-            {
-                continue;
-            }
-            if (
-                serviceType.IsAssignableTo(typeEnumerableServiceDescriptor)
+                || serviceType.IsAssignableTo(typeEnumerableServiceDescriptor)
                 || implementationType?.IsAssignableTo(typeEnumerableServiceDescriptor) == true
             )
             {
