@@ -4,7 +4,7 @@
     <Description>ForgingBlazor is a modern Blazor-based static site generator backed by a clean, well-structured component library. Built on .NET for high performance and fast builds, it delivers a streamlined, Blazor-first workflow for creating efficient, maintainable, and scalable websites.</Description>
     <RepositoryUrl>https://github.com/dailydevops/forgingblazor.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/dailydevops/forgingblazor</PackageProjectUrl>
-    <PackageReleaseNotes>$(RepositoryUrl)/releases</PackageReleaseNotes>
+    <PackageReleaseNotes>$(PackageProjectUrl)/releases</PackageReleaseNotes>
     <PackageTags>forgingblazor;staticcontent;blog;blogengine;blazor</PackageTags>
     <CopyrightYearStart>2025</CopyrightYearStart>
   </PropertyGroup>
