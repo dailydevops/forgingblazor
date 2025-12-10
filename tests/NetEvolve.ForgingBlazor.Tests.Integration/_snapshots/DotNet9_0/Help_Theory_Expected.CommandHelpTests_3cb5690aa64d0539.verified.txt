@@ -1,0 +1,19 @@
+﻿{
+  args: [
+    build,
+    --help
+  ],
+  output:
+Description:
+  Builds and generates the static content for a Forging Blazor application.
+
+Usage:
+  NetEvolve.ForgingBlazor.Tests.Integration build [options]
+
+Options:
+  -p, --project-path <project-path>
+  -o, --output-path <output-path>    Absolute or relative path for output
+  -?, -h, --help                     Show help and usage information
+
+
+}
