@@ -1,6 +1,8 @@
 ﻿namespace NetEvolve.ForgingBlazor;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
 
 /// <summary>
