@@ -7,4 +7,7 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="YamlDotNet" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="NetEvolve.ForgingBlazor" />
+  </ItemGroup>
 </Project>

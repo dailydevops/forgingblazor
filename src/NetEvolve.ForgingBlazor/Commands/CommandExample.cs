@@ -2,13 +2,13 @@
 
 using System;
 using System.CommandLine;
+using Microsoft.Extensions.DependencyInjection;
+using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
 using static NetEvolve.ForgingBlazor.Commands.CommandOptions;
 
-internal sealed class CommandExample : Command
+internal sealed class CommandExample : Command, IStartUpMarker
 {
-#pragma warning disable S4487 // Unread "private" fields should be removed
     private readonly IServiceProvider _serviceProvider;
-#pragma warning restore S4487 // Unread "private" fields should be removed
 
     public CommandExample(IServiceProvider serviceProvider)
         : base(
@@ -24,6 +24,10 @@ internal sealed class CommandExample : Command
         SetAction(ExecuteAsync);
     }
 
-    private static Task<int> ExecuteAsync(ParseResult parseResult, CancellationToken cancellationToken) =>
-        Task.FromResult(0);
+    private Task<int> ExecuteAsync(ParseResult parseResult, CancellationToken cancellationToken)
+    {
+        _ = new ServiceCollection().TransferAllServices(_serviceProvider);
+
+        return Task.FromResult(0);
+    }
 }

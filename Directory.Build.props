@@ -5,7 +5,7 @@
     <RepositoryUrl>https://github.com/dailydevops/forgingblazor.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/dailydevops/forgingblazor</PackageProjectUrl>
     <PackageReleaseNotes>$(PackageProjectUrl)/releases</PackageReleaseNotes>
-    <PackageTags>forgingblazor;staticcontent;blog;blogengine;blazor</PackageTags>
+    <PackageTags>forgingblazor;staticcontent;staticsitegenerator;generator;blog;blogengine;blazor</PackageTags>
     <CopyrightYearStart>2025</CopyrightYearStart>
   </PropertyGroup>
   <PropertyGroup Label="Build options">

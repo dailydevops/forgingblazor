@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
+using NetEvolve.ForgingBlazor.Extensibility.Models;
 
 /// <summary>
 /// Provides the default implementation of <see cref="IApplicationBuilder"/> for configuring and building ForgingBlazor applications.
@@ -109,7 +110,11 @@ public sealed class ForgingBlazorApplicationBuilder : IApplicationBuilder
                 .AddSingleton(typeof(ILogger<>), typeof(NullLogger<>));
         }
 
-        var serviceProvider = Services.BuildServiceProvider();
+        var serviceProvider = Services
+            // Little bit hacky, but we need to pass the service descriptors to the ServiceProvider
+            // so that we can transfer most of these registered services to child scopes/containers.
+            .AddSingleton<IEnumerable<ServiceDescriptor>>(Services)
+            .BuildServiceProvider();
 
         return new ForgingBlazorApplication(_args, serviceProvider);
     }
@@ -150,10 +155,60 @@ public sealed class ForgingBlazorApplicationBuilder : IApplicationBuilder
     public static IApplicationBuilder CreateDefaultBuilder(string[] args)
     {
         var builder = new ForgingBlazorApplicationBuilder(args);
+        return builder.WithDefaultPages();
+    }
 
-        // Add default services required for ForgingBlazor applications
-
-        return builder;
+    /// <summary>
+    /// Creates a new <see cref="ForgingBlazorApplicationBuilder"/> instance with the specified command-line arguments,
+    /// registers default services required for ForgingBlazor applications, and configures default pages with a custom page type.
+    /// </summary>
+    /// <typeparam name="TPageType">
+    /// The custom page type that inherits from <see cref="PageBase"/> to be used as the base for default pages.
+    /// This type will be used to configure the default page structure and behavior throughout the application.
+    /// </typeparam>
+    /// <param name="args">The command-line arguments passed to the application. Cannot be <see langword="null"/>.</param>
+    /// <returns>
+    /// A new <see cref="IApplicationBuilder"/> instance ready for additional service configuration,
+    /// with default ForgingBlazor services and custom page type configuration already registered.
+    /// </returns>
+    /// <remarks>
+    /// <para>
+    /// This is an overload of <see cref="CreateDefaultBuilder(string[])"/> that allows specifying a custom page type
+    /// for default page configuration. The method creates a new builder instance, registers all default services required
+    /// by the ForgingBlazor framework, and configures default pages using the specified <typeparamref name="TPageType"/>.
+    /// </para>
+    /// <para>
+    /// After calling this method, you can configure additional services using the <see cref="IApplicationBuilder.Services"/> property,
+    /// then call <see cref="Build"/> to create the application instance.
+    /// </para>
+    /// <para>
+    /// If you don't need a custom page type, use the non-generic <see cref="CreateDefaultBuilder(string[])"/> overload instead.
+    /// If you need a minimal builder without default services, use <see cref="CreateEmptyBuilder(string[])"/>.
+    /// </para>
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// public class CustomPage : PageBase
+    /// {
+    ///     // Custom page implementation
+    /// }
+    ///
+    /// var builder = ForgingBlazorApplicationBuilder.CreateDefaultBuilder&lt;CustomPage&gt;(args);
+    /// builder.Services.AddSingleton&lt;ICustomService, CustomService&gt;();
+    /// var app = builder.Build();
+    /// await app.RunAsync();
+    /// </code>
+    /// </example>
+    /// <seealso cref="CreateDefaultBuilder(string[])"/>
+    /// <seealso cref="CreateEmptyBuilder(string[])"/>
+    /// <seealso cref="Build"/>
+    /// <seealso cref="IApplicationBuilder"/>
+    /// <seealso cref="PageBase"/>
+    public static IApplicationBuilder CreateDefaultBuilder<TPageType>(string[] args)
+        where TPageType : PageBase
+    {
+        var builder = new ForgingBlazorApplicationBuilder(args);
+        return builder.WithDefaultPages<TPageType>();
     }
 
     /// <summary>

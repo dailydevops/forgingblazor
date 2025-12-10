@@ -18,7 +18,7 @@ public sealed class ForgingBlazorApplicationBuilderTests
     public async Task CreateEmptyBuilder_EmptyArguments_ReturnsOne()
     {
         var args = Array.Empty<string>();
-        var builder = ForgingBlazorApplicationBuilder.CreateEmptyBuilder(args);
+        var builder = ForgingBlazorApplicationBuilder.CreateEmptyBuilder(args).WithDefaultPages();
         var app = builder.Build();
 
         var exitCode = await app.RunAsync();
