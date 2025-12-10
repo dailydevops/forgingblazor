@@ -1,0 +1,19 @@
+﻿{
+  args: [
+    create,
+    --help
+  ],
+  output:
+Description:
+  Creates a new page
+
+Usage:
+  NetEvolve.ForgingBlazor.Tests.Integration create [options]
+
+Options:
+  -p, --project-path <project-path>
+  -o, --output-path <output-path>    Absolute or relative path for output
+  -?, -h, --help                     Show help and usage information
+
+
+}
