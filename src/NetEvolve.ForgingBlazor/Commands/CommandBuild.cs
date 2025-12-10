@@ -12,6 +12,10 @@ internal sealed class CommandBuild : Command
     {
         _serviceProvider = serviceProvider;
 
+        Add(Environment);
+        Add(IncludeDrafts);
+        Add(IncludeFuture);
+        Add(LogLevel);
         Add(ProjectPath);
         Add(OutputPath);
 
