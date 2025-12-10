@@ -1,0 +1,19 @@
+﻿{
+  args: [
+    example,
+    --help
+  ],
+  output:
+Description:
+  Creates a folder structure with example pages based on the current ForgingBlazor configuration.
+
+Usage:
+  NetEvolve.ForgingBlazor.Tests.Integration example [options]
+
+Options:
+  -p, --project-path <project-path>
+  -o, --output-path <output-path>    Absolute or relative path for output
+  -?, -h, --help                     Show help and usage information
+
+
+}

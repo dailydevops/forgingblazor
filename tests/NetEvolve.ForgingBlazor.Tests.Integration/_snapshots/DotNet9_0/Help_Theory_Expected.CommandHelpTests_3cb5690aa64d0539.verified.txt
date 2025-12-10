@@ -1,0 +1,23 @@
+﻿{
+  args: [
+    build,
+    --help
+  ],
+  output:
+Description:
+  Builds and generates the static content for a Forging Blazor application.
+
+Usage:
+  NetEvolve.ForgingBlazor.Tests.Integration build [options]
+
+Options:
+  -E, --environment <environment>                                        Sets the environment (e.g., Development, Staging, Production) [default: Production]
+  -D, --include-drafts                                                   Includes draft content in the output
+  -F, --include-future                                                   Includes future content in the output
+  -L, --log-level <Critical|Debug|Error|Information|None|Trace|Warning>  Sets the logging level [default: Information]
+  -p, --project-path <project-path>
+  -o, --output-path <output-path>                                        Absolute or relative path for output
+  -?, -h, --help                                                         Show help and usage information
+
+
+}

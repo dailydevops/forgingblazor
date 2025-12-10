@@ -1,15 +1,15 @@
 <Project>
   <PropertyGroup Label="Package settings">
     <Title>$(MSBuildProjectName)</Title>
-    <Description></Description>
-    <RepositoryUrl></RepositoryUrl>
-    <PackageProjectUrl></PackageProjectUrl>
-    <PackageReleaseNotes>$(RepositoryUrl)/releases</PackageReleaseNotes>
-    <PackageTags></PackageTags>
-    <CopyrightYearStart>2024</CopyrightYearStart>
+    <Description>ForgingBlazor is a modern Blazor-based static site generator backed by a clean, well-structured component library. Built on .NET for high performance and fast builds, it delivers a streamlined, Blazor-first workflow for creating efficient, maintainable, and scalable websites.</Description>
+    <RepositoryUrl>https://github.com/dailydevops/forgingblazor.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/dailydevops/forgingblazor</PackageProjectUrl>
+    <PackageReleaseNotes>$(PackageProjectUrl)/releases</PackageReleaseNotes>
+    <PackageTags>forgingblazor;staticcontent;blog;blogengine;blazor</PackageTags>
+    <CopyrightYearStart>2025</CopyrightYearStart>
   </PropertyGroup>
-  <PropertyGroup>
-    <!-- Workaround, until https://github.com/GitTools/GitVersion/pull/4206 is released -->
-    <GitVersionTargetFramework>net8.0</GitVersionTargetFramework>
+  <PropertyGroup Label="Build options">
+    <_ProjectTargetFrameworks>net9.0;net10.0</_ProjectTargetFrameworks>
+    <_TestTargetFrameworks>net9.0;net10.0</_TestTargetFrameworks>
   </PropertyGroup>
 </Project>

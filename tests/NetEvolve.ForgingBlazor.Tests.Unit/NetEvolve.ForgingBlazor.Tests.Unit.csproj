@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>$(_TestTargetFrameworks)</TargetFrameworks>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
+    <PackageReference Include="NetEvolve.Extensions.TUnit" />
+    <PackageReference Include="TUnit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="NetEvolve.Extensions.TUnit.UnitTestAttribute" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\NetEvolve.ForgingBlazor\NetEvolve.ForgingBlazor.csproj" />
+  </ItemGroup>
+</Project>

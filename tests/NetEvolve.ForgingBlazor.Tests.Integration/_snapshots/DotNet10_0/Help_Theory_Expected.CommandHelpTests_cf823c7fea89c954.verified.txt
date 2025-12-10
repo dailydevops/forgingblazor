@@ -1,0 +1,21 @@
+﻿{
+  args: [
+    -h
+  ],
+  output:
+Description:
+  ForgingBlazor CLI
+
+Usage:
+  NetEvolve.ForgingBlazor.Tests.Integration [command] [options]
+
+Options:
+  -?, -h, --help  Show help and usage information
+  --version       Show version information
+
+Commands:
+  build    Builds and generates the static content for a Forging Blazor application.
+  example  Creates a folder structure with example pages based on the current ForgingBlazor configuration.
+
+
+}

@@ -20,6 +20,32 @@
     <File Path="renovate.json" />
     <File Path="testEnvironments.json" />
   </Folder>
-  <Folder Name="/src/" />
-  <Folder Name="/tests/" />
+  <Folder Name="/src/">
+    <Project
+      Path="src/NetEvolve.ForgingBlazor.Core/NetEvolve.ForgingBlazor.Core.csproj"
+      Id="45d886e1-2940-4146-a1ab-56d3b4ac1225"
+    />
+    <Project
+      Path="src/NetEvolve.ForgingBlazor.Extensibility/NetEvolve.ForgingBlazor.Extensibility.csproj"
+      Id="5462e69f-74ab-40a7-afed-f06eec6bc202"
+    />
+    <Project
+      Path="src/NetEvolve.ForgingBlazor/NetEvolve.ForgingBlazor.csproj"
+      Id="fc1da919-3fd1-4c03-812b-74c77ab30682"
+    />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project
+      Path="tests/NetEvolve.ForgingBlazor.Tests.Console/NetEvolve.ForgingBlazor.Tests.Console.csproj"
+      Id="11ca1c09-9649-441b-aef3-85486175bce2"
+    />
+    <Project
+      Path="tests/NetEvolve.ForgingBlazor.Tests.Integration/NetEvolve.ForgingBlazor.Tests.Integration.csproj"
+      Id="d6b76967-ff27-4362-b6ec-bc5dd7993b9f"
+    />
+    <Project
+      Path="tests/NetEvolve.ForgingBlazor.Tests.Unit/NetEvolve.ForgingBlazor.Tests.Unit.csproj"
+      Id="1e945114-671e-417f-b59a-1fb769dfb54f"
+    />
+  </Folder>
 </Solution>
