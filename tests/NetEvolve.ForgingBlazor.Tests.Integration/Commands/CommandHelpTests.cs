@@ -8,7 +8,7 @@ public class CommandHelpTests
     [MethodDataSource(nameof(GetHelpArguments))]
     public async ValueTask Help_Theory_Expected(string[] args)
     {
-        var builder = ForgingBlazorApplicationBuilder.CreateBuilder(args);
+        var builder = ForgingBlazorApplicationBuilder.CreateDefaultBuilder(args);
 
         var app = builder.Build();
         using var output = new StringWriter();
