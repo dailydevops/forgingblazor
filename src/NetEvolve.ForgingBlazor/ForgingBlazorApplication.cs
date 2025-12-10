@@ -20,7 +20,9 @@ internal sealed class ForgingBlazorApplication : IApplication
     public async ValueTask<int> RunAsync(CancellationToken cancellationToken = default)
     {
         // Configure the command structure
-        var rootCommand = _serviceProvider.GetService<RootCommand>();
+        var rootCommand =
+            _serviceProvider.GetService<RootCommand>()
+            ?? throw new InvalidOperationException($"{nameof(RootCommand)} not found in the service provider.");
         var parseResults = rootCommand.Parse(_args);
 
         return await parseResults.InvokeAsync(InvocationConfiguration, cancellationToken).ConfigureAwait(false);
