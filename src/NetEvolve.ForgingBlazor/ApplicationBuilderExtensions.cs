@@ -35,7 +35,7 @@ public static class ApplicationBuilderExtensions
     {
         ArgumentNullException.ThrowIfNull(builder);
 
-        if (builder.Services.IsServiceTypeRegistered<DefaultPageMarker>())
+        if (builder.Services.IsServiceTypeRegistered<DefaultContentMarker>())
         {
             throw new InvalidOperationException(
                 "Default pages have already been registered. Multiple registrations are not allowed."
@@ -44,11 +44,11 @@ public static class ApplicationBuilderExtensions
 
         _ = builder
             .Services.AddForgingBlazorServices()
-            .AddSingleton<DefaultPageMarker>()
-            .AddSingleton<IContentRegistration, ContentRegistration<TPageType>>();
+            .AddSingleton<DefaultContentMarker>()
+            .AddSingleton<IContentRegistration, DefaultContentRegistration<TPageType>>();
 
         return builder;
     }
 
-    private sealed class DefaultPageMarker : IStartUpMarker;
+    private sealed class DefaultContentMarker : IStartUpMarker;
 }
