@@ -1,11 +1,10 @@
 ﻿namespace NetEvolve.ForgingBlazor;
 
 using System.CommandLine;
-using Microsoft.Extensions.DependencyInjection;
 using NetEvolve.ForgingBlazor.Commands;
 using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
 
-internal sealed class ForgingBlazorApplication : IForgingBlazorApplication
+internal sealed class ForgingBlazorApplication : IApplication
 {
     private readonly string[] _args;
     private readonly IServiceProvider _serviceProvider;
@@ -17,8 +16,6 @@ internal sealed class ForgingBlazorApplication : IForgingBlazorApplication
         _args = args;
         _serviceProvider = serviceProvider;
     }
-
-    public IServiceCollection Services => throw new NotImplementedException();
 
     public async ValueTask<int> RunAsync(CancellationToken cancellationToken = default)
     {

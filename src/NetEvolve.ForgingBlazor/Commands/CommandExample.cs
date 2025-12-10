@@ -6,7 +6,9 @@ using static NetEvolve.ForgingBlazor.Commands.CommandOptions;
 
 internal sealed class CommandExample : Command
 {
-    private IServiceProvider _serviceProvider;
+#pragma warning disable S4487 // Unread "private" fields should be removed
+    private readonly IServiceProvider _serviceProvider;
+#pragma warning restore S4487 // Unread "private" fields should be removed
 
     public CommandExample(IServiceProvider serviceProvider)
         : base(
@@ -22,11 +24,6 @@ internal sealed class CommandExample : Command
         SetAction(ExecuteAsync);
     }
 
-    private Task<int> ExecuteAsync(ParseResult parseResult, CancellationToken cancellationToken)
-    {
-        var projectPath = parseResult.GetRequiredValue(ProjectPath);
-        var outputPath = parseResult.GetValue(OutputPath);
-
-        return Task.FromResult(0);
-    }
+    private static Task<int> ExecuteAsync(ParseResult parseResult, CancellationToken cancellationToken) =>
+        Task.FromResult(0);
 }
