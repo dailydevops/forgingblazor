@@ -24,5 +24,12 @@ public class CommandHelpTests
     }
 
     public static IEnumerable<Func<string[]>> GetHelpArguments =>
-        [() => [], () => ["-h"], () => ["build", "--help"], () => ["example", "--help"]];
+        [
+            () => [],
+            () => ["-h"],
+            () => ["create", "--help"],
+            () => ["build", "--help"],
+            () => ["example", "--help"],
+            () => ["serve", "--help"],
+        ];
 }

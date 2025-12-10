@@ -20,5 +20,5 @@ public sealed class CommandBuildTests
     }
 
     public static IEnumerable<Func<string[]>> GetBuildArguments =>
-        [() => Array.Empty<string>(), () => ["build", "--output-path"], () => ["build", "-o"]];
+        [() => [], () => ["build", "--output-path"], () => ["build", "-o"]];
 }

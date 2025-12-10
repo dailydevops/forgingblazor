@@ -15,7 +15,9 @@ Options:
 
 Commands:
   build    Builds and generates the static content for a Forging Blazor application.
+  create   Creates a new page
   example  Creates a folder structure with example pages based on the current ForgingBlazor configuration.
+  serve    Serves a Forging Blazor application.
 
 
 }
