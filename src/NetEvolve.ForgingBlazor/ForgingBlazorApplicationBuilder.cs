@@ -1,6 +1,8 @@
 ﻿namespace NetEvolve.ForgingBlazor;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
 
 /// <summary>
@@ -98,6 +100,15 @@ public sealed class ForgingBlazorApplicationBuilder : IApplicationBuilder
     /// <seealso cref="IApplication.RunAsync"/>
     public IApplication Build()
     {
+        // Check if logging is already registered
+        if (!Services.IsServiceTypeRegistered<ILoggerFactory>())
+        {
+            // Register NullLoggerFactory and NullLogger<T> as defaults
+            _ = Services
+                .AddSingleton<ILoggerFactory>(NullLoggerFactory.Instance)
+                .AddSingleton(typeof(ILogger<>), typeof(NullLogger<>));
+        }
+
         var serviceProvider = Services.BuildServiceProvider();
 
         return new ForgingBlazorApplication(_args, serviceProvider);

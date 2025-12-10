@@ -23,6 +23,7 @@
   <Folder Name="/src/">
     <Project Path="src/NetEvolve.ForgingBlazor.Core/NetEvolve.ForgingBlazor.Core.csproj" Id="45d886e1-2940-4146-a1ab-56d3b4ac1225" />
     <Project Path="src/NetEvolve.ForgingBlazor.Extensibility/NetEvolve.ForgingBlazor.Extensibility.csproj" Id="5462e69f-74ab-40a7-afed-f06eec6bc202" />
+    <Project Path="src/NetEvolve.ForgingBlazor.Logging/NetEvolve.ForgingBlazor.Logging.csproj" Id="e3af7dbf-e2ae-4369-aed2-2192645b01cf" />
     <Project Path="src/NetEvolve.ForgingBlazor/NetEvolve.ForgingBlazor.csproj" Id="fc1da919-3fd1-4c03-812b-74c77ab30682" />
   </Folder>
   <Folder Name="/tests/">
