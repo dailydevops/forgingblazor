@@ -1,6 +1,13 @@
 ﻿using NetEvolve.ForgingBlazor;
 
-var builder = ForgingBlazorApplicationBuilder.CreateDefaultBuilder(args);
+var arguments = args;
+
+if (arguments.Length == 0)
+{
+    arguments = ["build"];
+}
+
+var builder = ForgingBlazorApplicationBuilder.CreateDefaultBuilder(arguments);
 
 var app = builder.Build();
 
