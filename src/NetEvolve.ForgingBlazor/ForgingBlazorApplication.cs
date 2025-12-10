@@ -1,9 +1,8 @@
 ﻿namespace NetEvolve.ForgingBlazor;
 
 using System.CommandLine;
-using NetEvolve.ForgingBlazor.Commands;
+using Microsoft.Extensions.DependencyInjection;
 using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
-using static NetEvolve.ForgingBlazor.Commands.CommandOptions;
 
 internal sealed class ForgingBlazorApplication : IApplication
 {
@@ -20,8 +19,8 @@ internal sealed class ForgingBlazorApplication : IApplication
 
     public async ValueTask<int> RunAsync(CancellationToken cancellationToken = default)
     {
-        // Configurate the command structure
-        var rootCommand = new CommandCli(_serviceProvider);
+        // Configure the command structure
+        var rootCommand = _serviceProvider.GetService<RootCommand>();
         var parseResults = rootCommand.Parse(_args);
 
         return await parseResults.InvokeAsync(InvocationConfiguration, cancellationToken).ConfigureAwait(false);

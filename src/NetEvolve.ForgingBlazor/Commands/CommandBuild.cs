@@ -1,29 +1,32 @@
 ﻿namespace NetEvolve.ForgingBlazor.Commands;
 
 using System.CommandLine;
-using static NetEvolve.ForgingBlazor.Commands.CommandOptions;
+using Microsoft.Extensions.DependencyInjection;
+using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
 
-internal sealed class CommandBuild : Command
+internal sealed class CommandBuild : Command, IStartUpMarker
 {
-#pragma warning disable S4487 // Unread "private" fields should be removed
     private readonly IServiceProvider _serviceProvider;
-#pragma warning restore S4487 // Unread "private" fields should be removed
 
     public CommandBuild(IServiceProvider serviceProvider)
         : base("build", "Builds and generates the static content for a Forging Blazor application.")
     {
         _serviceProvider = serviceProvider;
 
-        Add(Environment);
-        Add(IncludeDrafts);
-        Add(IncludeFuture);
-        Add(LogLevel);
-        Add(ProjectPath);
-        Add(OutputPath);
+        Add(CommandOptions.Environment);
+        Add(CommandOptions.IncludeDrafts);
+        Add(CommandOptions.IncludeFuture);
+        Add(CommandOptions.LogLevel);
+        Add(CommandOptions.ProjectPath);
+        Add(CommandOptions.OutputPath);
 
         SetAction(ExecuteAsync);
     }
 
-    private static Task<int> ExecuteAsync(ParseResult parseResult, CancellationToken cancellationToken) =>
-        Task.FromResult(0);
+    private Task<int> ExecuteAsync(ParseResult parseResult, CancellationToken cancellationToken)
+    {
+        _ = new ServiceCollection().TransferAllServices(_serviceProvider);
+
+        return Task.FromResult(0);
+    }
 }
