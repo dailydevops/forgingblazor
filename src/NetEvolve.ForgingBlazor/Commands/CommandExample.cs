@@ -6,10 +6,27 @@ using Microsoft.Extensions.DependencyInjection;
 using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
 using static NetEvolve.ForgingBlazor.Commands.CommandOptions;
 
+/// <summary>
+/// Provides the "example" command implementation for creating example pages based on ForgingBlazor configuration.
+/// </summary>
+/// <remarks>
+/// This sealed class implements the example command that generates a folder structure with sample pages
+/// demonstrating the capabilities of the current ForgingBlazor configuration. This is useful for users
+/// learning the framework or setting up starter content.
+/// </remarks>
+/// <seealso cref="CommandOptions"/>
+/// <seealso cref="IStartUpMarker"/>
 internal sealed class CommandExample : Command, IStartUpMarker
 {
     private readonly IServiceProvider _serviceProvider;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CommandExample"/> class with the specified service provider.
+    /// </summary>
+    /// <param name="serviceProvider">
+    /// The <see cref="IServiceProvider"/> instance providing access to registered application services.
+    /// This is used to transfer services for command execution.
+    /// </param>
     public CommandExample(IServiceProvider serviceProvider)
         : base(
             "example",
