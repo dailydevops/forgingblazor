@@ -1,4 +1,4 @@
-﻿namespace NetEvolve.ForgingBlazor.Core.Models;
+﻿namespace NetEvolve.ForgingBlazor.Models;
 
 using NetEvolve.ForgingBlazor.Extensibility.Models;
 

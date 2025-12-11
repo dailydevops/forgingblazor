@@ -1,9 +1,9 @@
 ﻿namespace NetEvolve.ForgingBlazor;
 
 using Microsoft.Extensions.DependencyInjection;
-using NetEvolve.ForgingBlazor.Core.Models;
 using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
 using NetEvolve.ForgingBlazor.Extensibility.Models;
+using NetEvolve.ForgingBlazor.Models;
 using NetEvolve.ForgingBlazor.Services;
 
 /// <summary>
