@@ -7,7 +7,7 @@ if (arguments.Length == 0)
     arguments = ["build"];
 }
 
-var builder = ForgingBlazorApplicationBuilder.CreateDefaultBuilder(arguments);
+var builder = ApplicationBuilder.CreateDefaultBuilder(arguments);
 
 var app = builder.Build();
 

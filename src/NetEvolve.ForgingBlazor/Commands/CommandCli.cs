@@ -3,6 +3,7 @@
 using System.CommandLine;
 using Microsoft.Extensions.DependencyInjection;
 using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
+using NetEvolve.ForgingBlazor.Extensibility.Commands;
 
 /// <summary>
 /// Provides the root CLI command for the ForgingBlazor command-line interface.
@@ -28,7 +29,7 @@ internal sealed class CommandCli : RootCommand, IStartUpMarker
     /// </remarks>
     /// <exception cref="InvalidOperationException">Thrown when no sub-commands are registered in the service provider.</exception>
     public CommandCli(IServiceProvider serviceProvider)
-        : base("ForgingBlazor CLI")
+        : base("Command-line interface for managing Forging Blazor applications.")
     {
         var subCommands = serviceProvider.GetServices<Command>().ToArray();
 
@@ -39,7 +40,9 @@ internal sealed class CommandCli : RootCommand, IStartUpMarker
 
         foreach (var command in subCommands)
         {
-            Subcommands.Add(command);
+            Add(command);
         }
+
+        Add(CommandOptions.LogLevel);
     }
 }

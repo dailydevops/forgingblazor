@@ -19,6 +19,5 @@ public sealed class CommandBuildTests
         await Helper.VerifyStaticContent(directory.Path, args).ConfigureAwait(false);
     }
 
-    public static IEnumerable<Func<string[]>> GetBuildArguments =>
-        [() => [], () => ["build", "--output-path"], () => ["build", "-o"]];
+    public static IEnumerable<Func<string[]>> GetBuildArguments => [() => [], () => ["build", "--output-path"]];
 }

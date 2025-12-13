@@ -2,7 +2,9 @@
 
 using System.CommandLine;
 using Microsoft.Extensions.DependencyInjection;
+using NetEvolve.ForgingBlazor.Extensibility;
 using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
+using NetEvolve.ForgingBlazor.Extensibility.Commands;
 
 /// <summary>
 /// Provides the "build" command implementation for building and generating static content from a Forging Blazor application.
@@ -15,6 +17,9 @@ using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
 /// <seealso cref="IStartUpMarker"/>
 internal sealed class CommandBuild : Command, IStartUpMarker
 {
+    /// <summary>
+    /// Stores the service provider for transferring services during command execution.
+    /// </summary>
     private readonly IServiceProvider _serviceProvider;
 
     /// <summary>
@@ -25,20 +30,25 @@ internal sealed class CommandBuild : Command, IStartUpMarker
     /// This is used to transfer services for command execution.
     /// </param>
     public CommandBuild(IServiceProvider serviceProvider)
-        : base("build", "Builds and generates the static content for a Forging Blazor application.")
+        : base("build", "Builds and generates static content for a Forging Blazor application.")
     {
         _serviceProvider = serviceProvider;
 
         Add(CommandOptions.Environment);
         Add(CommandOptions.IncludeDrafts);
         Add(CommandOptions.IncludeFuture);
-        Add(CommandOptions.LogLevel);
         Add(CommandOptions.ProjectPath);
         Add(CommandOptions.OutputPath);
 
         SetAction(ExecuteAsync);
     }
 
+    /// <summary>
+    /// Executes the build command asynchronously.
+    /// </summary>
+    /// <param name="parseResult">The parsed command-line arguments.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A task representing the asynchronous operation, with an exit code result.</returns>
     private Task<int> ExecuteAsync(ParseResult parseResult, CancellationToken cancellationToken)
     {
         _ = new ServiceCollection().TransferAllServices(_serviceProvider);

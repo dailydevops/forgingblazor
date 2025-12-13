@@ -4,20 +4,21 @@
   ],
   output:
 Description:
-  ForgingBlazor CLI
+  Command-line interface for managing Forging Blazor applications.
 
 Usage:
   NetEvolve.ForgingBlazor.Tests.Integration [command] [options]
 
 Options:
-  -?, -h, --help  Show help and usage information
-  --version       Show version information
+  -l, --log-level <Critical|Debug|Error|Information|None|Trace|Warning>  Specifies the minimum logging level (Trace, Debug, Information, Warning, Error, Critical, None) [default: Information]
+  -?, -h, --help                                                         Show help and usage information
+  --version                                                              Show version information
 
 Commands:
-  build    Builds and generates the static content for a Forging Blazor application.
-  create   Creates a new page
-  example  Creates a folder structure with example pages based on the current ForgingBlazor configuration.
-  serve    Serves a Forging Blazor application.
+  build    Builds and generates static content for a Forging Blazor application.
+  create   Creates a new page for a Forging Blazor application.
+  example  Creates a folder structure with example pages for a Forging Blazor application.
+  serve    Starts a development server for a Forging Blazor application.
 
 
 }

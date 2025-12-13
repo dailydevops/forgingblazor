@@ -1,6 +1,7 @@
 ﻿namespace NetEvolve.ForgingBlazor.Tests.Integration.Commands;
 
 using System.Threading.Tasks;
+using NetEvolve.ForgingBlazor;
 
 public class CommandHelpTests
 {
@@ -8,14 +9,14 @@ public class CommandHelpTests
     [MethodDataSource(nameof(GetHelpArguments))]
     public async ValueTask Help_Theory_Expected(string[] args)
     {
-        var builder = ForgingBlazorApplicationBuilder.CreateDefaultBuilder(args);
+        var builder = ApplicationBuilder.CreateDefaultBuilder(args);
 
         var app = builder.Build();
-        using var output = new StringWriter();
+        await using var output = new StringWriter();
 
-        if (app is ForgingBlazorApplication forgingBlazorApplication)
+        if (app is Application Application)
         {
-            forgingBlazorApplication.InvocationConfiguration = new() { Output = output };
+            Application.InvocationConfiguration = new() { Output = output };
         }
 
         _ = await app.RunAsync().ConfigureAwait(false);

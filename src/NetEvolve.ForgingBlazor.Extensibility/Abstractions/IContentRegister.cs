@@ -11,4 +11,4 @@
 /// It should be implemented by the internal content registration service that handles content-related
 /// initialization during application startup.
 /// </remarks>
-internal interface IContentRegister { }
+internal interface IContentRegister;

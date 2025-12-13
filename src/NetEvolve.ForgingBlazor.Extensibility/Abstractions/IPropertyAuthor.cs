@@ -6,7 +6,7 @@
 /// <remarks>
 /// This interface is commonly used for blog posts, articles, and other content types where authorship attribution is important.
 /// </remarks>
-public interface IPagePropertyAuthor
+public interface IPropertyAuthor
 {
     /// <summary>
     /// Gets or sets the name or identifier of the page's author.

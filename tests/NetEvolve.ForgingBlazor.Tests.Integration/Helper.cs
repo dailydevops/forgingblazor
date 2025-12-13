@@ -4,7 +4,7 @@ internal static class Helper
 {
     public static async ValueTask VerifyStaticContent(string directoryPath, string[] args)
     {
-        var builder = ForgingBlazorApplicationBuilder.CreateDefaultBuilder(args);
+        var builder = ApplicationBuilder.CreateDefaultBuilder(args);
 
         var app = builder.Build();
 

@@ -7,7 +7,7 @@
 /// Tags provide a flexible, non-hierarchical way to classify content using keywords.
 /// Unlike categories, tags are typically more granular and can be freely added to describe specific aspects or topics of the content.
 /// </remarks>
-public interface IPagePropertyTags
+public interface IPropertyTags
 {
     /// <summary>
     /// Gets or sets the collection of tags assigned to this page.

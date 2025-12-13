@@ -4,6 +4,7 @@ using System.CommandLine;
 using Microsoft.Extensions.DependencyInjection;
 using NetEvolve.ForgingBlazor.Commands;
 using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
+using NetEvolve.ForgingBlazor.Extensibility.Commands;
 using NetEvolve.ForgingBlazor.Services;
 
 /// <summary>
@@ -40,76 +41,27 @@ internal static class ServiceCollectionExtensions
         {
             _ = services
                 .AddSingleton<MarkerCoreServices>()
-                // Register all Commands
+                // Register RootCommand
                 .AddSingleton<RootCommand, CommandCli>()
+                // Register all Standard Commands
                 .AddSingleton<Command, CommandBuild>()
                 .AddSingleton<Command, CommandCreate>()
                 .AddSingleton<Command, CommandExample>()
                 .AddSingleton<Command, CommandServe>()
                 // Register core services
-                .AddSingleton<IContentRegister, ForgingBlazorContentRegister>();
+                .AddSingleton<IContentRegister, ContentRegister>();
         }
 
         return services;
     }
 
     /// <summary>
-    /// Transfers all non-startup services from one service provider to a service collection, excluding startup markers and enumerables.
+    /// Internal marker class used to track that core ForgingBlazor services have been registered.
     /// </summary>
-    /// <param name="services">
-    /// The target <see cref="IServiceCollection"/> to transfer services into.
-    /// Cannot be <see langword="null"/>.
-    /// </param>
-    /// <param name="serviceProvider">
-    /// The source <see cref="IServiceProvider"/> containing the service descriptors to transfer.
-    /// Cannot be <see langword="null"/>.
-    /// </param>
-    /// <returns>
-    /// The same <see cref="IServiceCollection"/> instance with transferred services added.
-    /// </returns>
     /// <remarks>
-    /// <para>
-    /// This method transfers service descriptors from one service provider to a service collection,
-    /// while filtering out services that implement <see cref="IStartUpMarker"/> or are enumerable of <see cref="ServiceDescriptor"/>.
-    /// This is useful for propagating services from a parent container to child scopes without including startup-specific services.
-    /// </para>
+    /// This sealed class implements <see cref="IStartUpMarker"/> to prevent duplicate service registrations
+    /// and identify startup-specific services during the filtering process.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="services"/> or <paramref name="serviceProvider"/> is <see langword="null"/>.</exception>
-    internal static IServiceCollection TransferAllServices(
-        this IServiceCollection services,
-        IServiceProvider serviceProvider
-    )
-    {
-        ArgumentNullException.ThrowIfNull(services);
-        ArgumentNullException.ThrowIfNull(serviceProvider);
-
-        var typeStartUpMarker = typeof(IStartUpMarker);
-        var typeEnumerableServiceDescriptor = typeof(IEnumerable<ServiceDescriptor>);
-
-        foreach (var descriptors in serviceProvider.GetServices<ServiceDescriptor>())
-        {
-            var serviceType = descriptors.ServiceType;
-            var implementationType = descriptors.ImplementationType;
-
-            if (
-                serviceType.IsAssignableTo(typeStartUpMarker)
-                || implementationType?.IsAssignableTo(typeStartUpMarker) == true
-                || serviceType.IsAssignableTo(typeEnumerableServiceDescriptor)
-                || implementationType?.IsAssignableTo(typeEnumerableServiceDescriptor) == true
-            )
-            {
-                continue;
-            }
-
-            services.Add(descriptors);
-        }
-
-        return services;
-    }
-
-    /// <summary>
-    /// Marker class used to identify that core ForgingBlazor services have been registered.
-    /// </summary>
     private sealed class MarkerCoreServices : IStartUpMarker;
 
     /// <summary>

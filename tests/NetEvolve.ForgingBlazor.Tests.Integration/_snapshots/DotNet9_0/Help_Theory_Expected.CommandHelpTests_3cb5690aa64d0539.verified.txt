@@ -5,19 +5,19 @@
   ],
   output:
 Description:
-  Builds and generates the static content for a Forging Blazor application.
+  Builds and generates static content for a Forging Blazor application.
 
 Usage:
   NetEvolve.ForgingBlazor.Tests.Integration build [options]
 
 Options:
-  -E, --environment <environment>                                        Sets the environment (e.g., Development, Staging, Production) [default: Production]
-  -D, --include-drafts                                                   Includes draft content in the output
-  -F, --include-future                                                   Includes future content in the output
-  -L, --log-level <Critical|Debug|Error|Information|None|Trace|Warning>  Sets the logging level [default: Information]
-  -p, --project-path <project-path>
-  -o, --output-path <output-path>                                        Absolute or relative path for output
+  -e, --environment <environment>                                        Specifies the execution environment (e.g., Development, Staging, Production) [default: Production]
+  --include-drafts                                                       Includes draft pages in the build output
+  --include-future                                                       Includes pages with future publication dates in the build output
+  --project-path <project-path>                                          Specifies the path to the ForgingBlazor project to process
+  --output-path <output-path>                                            Specifies the absolute or relative path for the build output
   -?, -h, --help                                                         Show help and usage information
+  -l, --log-level <Critical|Debug|Error|Information|None|Trace|Warning>  Specifies the minimum logging level (Trace, Debug, Information, Warning, Error, Critical, None) [default: Information]
 
 
 }

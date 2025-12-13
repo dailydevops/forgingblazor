@@ -14,7 +14,7 @@ using NetEvolve.ForgingBlazor.Extensibility.Models;
 /// </remarks>
 /// <seealso cref="IContentRegistration"/>
 /// <seealso cref="DefaultContentRegistration{TPageType}"/>
-internal class ContentRegistration<TPageType> : IContentRegistration
+internal sealed class ContentRegistration<TPageType> : IContentRegistration
     where TPageType : PageBase
 {
     /// <summary>

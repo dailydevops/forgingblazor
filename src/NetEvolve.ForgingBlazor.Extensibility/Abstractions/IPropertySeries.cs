@@ -7,7 +7,7 @@
 /// Series are used to group related content that should be read or presented in a specific order,
 /// such as tutorial parts, article series, or multi-part guides.
 /// </remarks>
-public interface IPagePropertySeries
+public interface IPropertySeries
 {
     /// <summary>
     /// Gets or sets the name of the series this page belongs to.
