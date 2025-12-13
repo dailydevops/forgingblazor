@@ -1,17 +1,19 @@
 ﻿namespace NetEvolve.ForgingBlazor;
 
+using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
 using NetEvolve.ForgingBlazor.Extensibility.Models;
+using NetEvolve.ForgingBlazor.Services;
 
 /// <summary>
 /// Provides the default implementation of <see cref="IApplicationBuilder"/> for configuring and building ForgingBlazor applications.
 /// </summary>
 /// <remarks>
 /// <para>
-/// This sealed class implements the builder pattern to configure services and create <see cref="ForgingBlazorApplication"/> instances.
+/// This sealed class implements the builder pattern to configure services and create <see cref="Application"/> instances.
 /// The builder provides a fluent API for configuring dependency injection services before creating the final application instance.
 /// </para>
 /// <para>
@@ -22,18 +24,31 @@ using NetEvolve.ForgingBlazor.Extensibility.Models;
 /// </remarks>
 /// <example>
 /// <code>
-/// var builder = ForgingBlazorApplicationBuilder.CreateDefaultBuilder(args);
+/// var builder = ApplicationBuilder.CreateDefaultBuilder(args);
 /// builder.Services.AddSingleton&lt;IMyService, MyService&gt;();
 /// var app = builder.Build();
 /// await app.RunAsync();
 /// </code>
 /// </example>
 /// <seealso cref="IApplicationBuilder"/>
-/// <seealso cref="ForgingBlazorApplication"/>
+/// <seealso cref="Application"/>
 /// <seealso cref="IApplication"/>
-public sealed class ForgingBlazorApplicationBuilder : IApplicationBuilder
+public sealed class ApplicationBuilder : IApplicationBuilder
 {
+    /// <summary>
+    /// Stores the command-line arguments passed to the application.
+    /// </summary>
     private readonly string[] _args;
+
+    /// <summary>
+    /// Stores the type reference for <see cref="IContentRegistration"/> used for service discovery.
+    /// </summary>
+    private readonly Type _typeContentRegistration = typeof(IContentRegistration);
+
+    /// <summary>
+    /// Stores the generic type definition for <see cref="DefaultContentRegistration{TPageType}"/> used for validation.
+    /// </summary>
+    private readonly Type _typeDefaultContentRegistration = typeof(DefaultContentRegistration<>);
 
     /// <summary>
     /// Gets the service collection used to register services for dependency injection.
@@ -53,13 +68,13 @@ public sealed class ForgingBlazorApplicationBuilder : IApplicationBuilder
     public IServiceCollection Services { get; init; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ForgingBlazorApplicationBuilder"/> class with the specified command-line arguments.
+    /// Initializes a new instance of the <see cref="ApplicationBuilder"/> class with the specified command-line arguments.
     /// </summary>
     /// <param name="args">The command-line arguments passed to the application. Cannot be <see langword="null"/>.</param>
     /// <remarks>
     /// <para>
     /// This constructor initializes a new <see cref="ServiceCollection"/> for dependency injection and stores
-    /// the command-line arguments for later use when creating the <see cref="ForgingBlazorApplication"/> instance.
+    /// the command-line arguments for later use when creating the <see cref="Application"/> instance.
     /// </para>
     /// <para>
     /// It is recommended to use the static factory methods <see cref="CreateDefaultBuilder(string[])"/> or
@@ -68,7 +83,7 @@ public sealed class ForgingBlazorApplicationBuilder : IApplicationBuilder
     /// </remarks>
     /// <seealso cref="CreateDefaultBuilder(string[])"/>
     /// <seealso cref="CreateEmptyBuilder(string[])"/>
-    public ForgingBlazorApplicationBuilder(string[] args)
+    public ApplicationBuilder(string[] args)
     {
         _args = args;
 
@@ -79,14 +94,14 @@ public sealed class ForgingBlazorApplicationBuilder : IApplicationBuilder
     /// Builds and returns a configured <see cref="IApplication"/> instance based on the current builder state.
     /// </summary>
     /// <returns>
-    /// A fully configured <see cref="ForgingBlazorApplication"/> instance with all registered services available
+    /// A fully configured <see cref="Application"/> instance with all registered services available
     /// through dependency injection, ready to be run via <see cref="IApplication.RunAsync"/>.
     /// </returns>
     /// <remarks>
     /// <para>
     /// This method constructs a <see cref="IServiceProvider"/> from the registered services using
     /// <see cref="ServiceCollectionContainerBuilderExtensions.BuildServiceProvider(IServiceCollection)"/>
-    /// and creates a new <see cref="ForgingBlazorApplication"/> with the command-line arguments and service provider.
+    /// and creates a new <see cref="Application"/> with the command-line arguments and service provider.
     /// </para>
     /// <para>
     /// Call this method once after all service configuration is complete. After calling <see cref="Build"/>,
@@ -97,18 +112,11 @@ public sealed class ForgingBlazorApplicationBuilder : IApplicationBuilder
     /// Thrown if there are service configuration errors or dependency resolution failures.
     /// </exception>
     /// <seealso cref="Services"/>
-    /// <seealso cref="ForgingBlazorApplication"/>
+    /// <seealso cref="Application"/>
     /// <seealso cref="IApplication.RunAsync"/>
     public IApplication Build()
     {
-        // Check if logging is already registered
-        if (!Services.IsServiceTypeRegistered<ILoggerFactory>())
-        {
-            // Register NullLoggerFactory and NullLogger<T> as defaults
-            _ = Services
-                .AddSingleton<ILoggerFactory>(NullLoggerFactory.Instance)
-                .AddSingleton(typeof(ILogger<>), typeof(NullLogger<>));
-        }
+        ValidateConfiguration();
 
         var serviceProvider = Services
             // Little bit hacky, but we need to pass the service descriptors to the ServiceProvider
@@ -116,11 +124,11 @@ public sealed class ForgingBlazorApplicationBuilder : IApplicationBuilder
             .AddSingleton<IEnumerable<ServiceDescriptor>>(Services)
             .BuildServiceProvider();
 
-        return new ForgingBlazorApplication(_args, serviceProvider);
+        return new Application(_args, serviceProvider);
     }
 
     /// <summary>
-    /// Creates a new <see cref="ForgingBlazorApplicationBuilder"/> instance with the specified command-line arguments
+    /// Creates a new <see cref="ApplicationBuilder"/> instance with the specified command-line arguments
     /// and registers default services required for ForgingBlazor applications.
     /// </summary>
     /// <param name="args">The command-line arguments passed to the application. Cannot be <see langword="null"/>.</param>
@@ -143,7 +151,7 @@ public sealed class ForgingBlazorApplicationBuilder : IApplicationBuilder
     /// </remarks>
     /// <example>
     /// <code>
-    /// var builder = ForgingBlazorApplicationBuilder.CreateDefaultBuilder(args);
+    /// var builder = ApplicationBuilder.CreateDefaultBuilder(args);
     /// builder.Services.AddSingleton&lt;ICustomService, CustomService&gt;();
     /// var app = builder.Build();
     /// await app.RunAsync();
@@ -154,12 +162,12 @@ public sealed class ForgingBlazorApplicationBuilder : IApplicationBuilder
     /// <seealso cref="IApplicationBuilder"/>
     public static IApplicationBuilder CreateDefaultBuilder(string[] args)
     {
-        var builder = new ForgingBlazorApplicationBuilder(args);
-        return builder.WithDefaultPages();
+        var builder = new ApplicationBuilder(args);
+        return builder.AddDefaultContent();
     }
 
     /// <summary>
-    /// Creates a new <see cref="ForgingBlazorApplicationBuilder"/> instance with the specified command-line arguments,
+    /// Creates a new <see cref="ApplicationBuilder"/> instance with the specified command-line arguments,
     /// registers default services required for ForgingBlazor applications, and configures default pages with a custom page type.
     /// </summary>
     /// <typeparam name="TPageType">
@@ -193,7 +201,7 @@ public sealed class ForgingBlazorApplicationBuilder : IApplicationBuilder
     ///     // Custom page implementation
     /// }
     ///
-    /// var builder = ForgingBlazorApplicationBuilder.CreateDefaultBuilder&lt;CustomPage&gt;(args);
+    /// var builder = ApplicationBuilder.CreateDefaultBuilder&lt;CustomPage&gt;(args);
     /// builder.Services.AddSingleton&lt;ICustomService, CustomService&gt;();
     /// var app = builder.Build();
     /// await app.RunAsync();
@@ -207,12 +215,12 @@ public sealed class ForgingBlazorApplicationBuilder : IApplicationBuilder
     public static IApplicationBuilder CreateDefaultBuilder<TPageType>(string[] args)
         where TPageType : PageBase
     {
-        var builder = new ForgingBlazorApplicationBuilder(args);
-        return builder.WithDefaultPages<TPageType>();
+        var builder = new ApplicationBuilder(args);
+        return builder.AddDefaultContent<TPageType>();
     }
 
     /// <summary>
-    /// Creates a new <see cref="ForgingBlazorApplicationBuilder"/> instance with the specified command-line arguments
+    /// Creates a new <see cref="ApplicationBuilder"/> instance with the specified command-line arguments
     /// without registering any default services.
     /// </summary>
     /// <param name="args">The command-line arguments passed to the application. Cannot be <see langword="null"/>.</param>
@@ -236,7 +244,7 @@ public sealed class ForgingBlazorApplicationBuilder : IApplicationBuilder
     /// </remarks>
     /// <example>
     /// <code>
-    /// var builder = ForgingBlazorApplicationBuilder.CreateEmptyBuilder(args);
+    /// var builder = ApplicationBuilder.CreateEmptyBuilder(args);
     /// // Manually register all required services
     /// builder.Services.AddSingleton&lt;IMyService, MyService&gt;();
     /// var app = builder.Build();
@@ -246,5 +254,44 @@ public sealed class ForgingBlazorApplicationBuilder : IApplicationBuilder
     /// <seealso cref="CreateDefaultBuilder(string[])"/>
     /// <seealso cref="Build"/>
     /// <seealso cref="IApplicationBuilder"/>
-    internal static IApplicationBuilder CreateEmptyBuilder(string[] args) => new ForgingBlazorApplicationBuilder(args);
+    internal static IApplicationBuilder CreateEmptyBuilder(string[] args) => new ApplicationBuilder(args);
+
+    /// <summary>
+    /// Validates the builder configuration to ensure all required services are registered.
+    /// </summary>
+    /// <remarks>
+    /// This method verifies that:
+    /// <list type="bullet">
+    /// <item><description>At least one default content registration exists</description></item>
+    /// <item><description>Logging infrastructure is configured (or registers null loggers as fallback)</description></item>
+    /// </list>
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when no content registration is found in the service collection.
+    /// </exception>
+    private void ValidateConfiguration()
+    {
+        // If no DefaultContentRegistration is found, it means no pages were registered
+        if (
+            !Services.Any(x =>
+                x.ServiceType == _typeContentRegistration
+                && x.ImplementationType?.Name.Equals(_typeDefaultContentRegistration.Name, StringComparison.Ordinal)
+                    == true
+            )
+        )
+        {
+            throw new InvalidOperationException(
+                $"No content registration found. Please configure default pages using {ApplicationBuilderExtensions.AddDefaultContent}() or register custom content."
+            );
+        }
+
+        // Check if logging is already registered
+        if (!Services.IsServiceTypeRegistered<ILoggerFactory>())
+        {
+            // If not, register NullLoggerFactory and NullLogger<T> as defaults
+            _ = Services
+                .AddSingleton<ILoggerFactory>(NullLoggerFactory.Instance)
+                .AddSingleton(typeof(ILogger<>), typeof(NullLogger<>));
+        }
+    }
 }

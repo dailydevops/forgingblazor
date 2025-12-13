@@ -7,9 +7,9 @@ using NetEvolve.ForgingBlazor.Extensibility.Models;
 /// </summary>
 /// <typeparam name="TPageType">The type of page to validate. Must derive from <see cref="PageBase"/>.</typeparam>
 /// <remarks>
-/// Implementations of this interface perform validation logic on pages and report issues through the provided <see cref="IValidationContext"/>.
+/// Implementations of this interface perform validation logic on pages and report issues through the provided <see cref="IValidationContext{TPageType}"/>.
 /// </remarks>
-public interface IValidation<in TPageType>
+public interface IValidation<TPageType>
     where TPageType : PageBase
 {
     /// <summary>
@@ -17,5 +17,5 @@ public interface IValidation<in TPageType>
     /// </summary>
     /// <param name="page">The page instance to validate.</param>
     /// <param name="context">The validation context used to record errors and warnings discovered during validation.</param>
-    void Validate(TPageType page, IValidationContext context);
+    void Validate(TPageType page, IValidationContext<TPageType> context);
 }

@@ -12,10 +12,17 @@ using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
 /// It accepts command-line arguments and a service provider, orchestrating the parsing and invocation of registered commands.
 /// </remarks>
 /// <seealso cref="IApplication"/>
-/// <seealso cref="ForgingBlazorApplicationBuilder"/>
-internal sealed class ForgingBlazorApplication : IApplication
+/// <seealso cref="ApplicationBuilder"/>
+internal sealed class Application : IApplication
 {
+    /// <summary>
+    /// Stores the command-line arguments passed to the application.
+    /// </summary>
     private readonly string[] _args;
+
+    /// <summary>
+    /// Stores the service provider for resolving dependencies during command execution.
+    /// </summary>
     private readonly IServiceProvider _serviceProvider;
 
     /// <summary>
@@ -28,7 +35,7 @@ internal sealed class ForgingBlazorApplication : IApplication
     internal InvocationConfiguration? InvocationConfiguration { get; set; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ForgingBlazorApplication"/> class with command-line arguments and a service provider.
+    /// Initializes a new instance of the <see cref="Application"/> class with command-line arguments and a service provider.
     /// </summary>
     /// <param name="args">
     /// The command-line arguments passed to the application. Cannot be <see langword="null"/>.
@@ -39,10 +46,10 @@ internal sealed class ForgingBlazorApplication : IApplication
     /// This service provider is used to resolve dependencies for command execution.
     /// </param>
     /// <remarks>
-    /// This constructor should typically not be called directly. Instead, use <see cref="ForgingBlazorApplicationBuilder"/>
+    /// This constructor should typically not be called directly. Instead, use <see cref="ApplicationBuilder"/>
     /// to create and configure application instances.
     /// </remarks>
-    public ForgingBlazorApplication(string[] args, IServiceProvider serviceProvider)
+    public Application(string[] args, IServiceProvider serviceProvider)
     {
         _args = args;
         _serviceProvider = serviceProvider;

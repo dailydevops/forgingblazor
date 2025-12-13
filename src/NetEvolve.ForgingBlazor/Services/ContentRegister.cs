@@ -10,4 +10,4 @@ using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
 /// It is used to identify and filter content registration services during the startup phase.
 /// </remarks>
 /// <seealso cref="IContentRegister"/>
-internal sealed class ForgingBlazorContentRegister : IContentRegister { }
+internal sealed class ContentRegister : IContentRegister;

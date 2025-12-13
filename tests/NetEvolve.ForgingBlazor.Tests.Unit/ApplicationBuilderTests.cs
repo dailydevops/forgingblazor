@@ -1,12 +1,12 @@
 ﻿namespace NetEvolve.ForgingBlazor.Tests.Unit;
 
-public sealed class ForgingBlazorApplicationBuilderTests
+public sealed class ApplicationBuilderTests
 {
     [Test]
     public async Task CreateDefaultBuilder_EmptyArguments_ReturnsOne()
     {
         var args = Array.Empty<string>();
-        var builder = ForgingBlazorApplicationBuilder.CreateDefaultBuilder(args);
+        var builder = ApplicationBuilder.CreateDefaultBuilder(args);
         var app = builder.Build();
 
         var exitCode = await app.RunAsync();
@@ -18,7 +18,7 @@ public sealed class ForgingBlazorApplicationBuilderTests
     public async Task CreateEmptyBuilder_EmptyArguments_ReturnsOne()
     {
         var args = Array.Empty<string>();
-        var builder = ForgingBlazorApplicationBuilder.CreateEmptyBuilder(args).WithDefaultPages();
+        var builder = ApplicationBuilder.CreateEmptyBuilder(args).AddDefaultContent();
         var app = builder.Build();
 
         var exitCode = await app.RunAsync();

@@ -7,7 +7,7 @@
 /// Categories provide a hierarchical or high-level classification system for organizing content.
 /// Unlike tags, categories typically represent broader content groupings and are often used for navigation structure.
 /// </remarks>
-public interface IPagePropertyCategories
+public interface IPropertyCategories
 {
     /// <summary>
     /// Gets or sets the collection of categories assigned to this page.

@@ -3,8 +3,10 @@
 using System;
 using System.CommandLine;
 using Microsoft.Extensions.DependencyInjection;
+using NetEvolve.ForgingBlazor.Extensibility;
 using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
-using static NetEvolve.ForgingBlazor.Commands.CommandOptions;
+using NetEvolve.ForgingBlazor.Extensibility.Commands;
+using static NetEvolve.ForgingBlazor.Extensibility.Commands.CommandOptions;
 
 /// <summary>
 /// Provides the "example" command implementation for creating example pages based on ForgingBlazor configuration.
@@ -18,6 +20,9 @@ using static NetEvolve.ForgingBlazor.Commands.CommandOptions;
 /// <seealso cref="IStartUpMarker"/>
 internal sealed class CommandExample : Command, IStartUpMarker
 {
+    /// <summary>
+    /// Stores the service provider for transferring services during command execution.
+    /// </summary>
     private readonly IServiceProvider _serviceProvider;
 
     /// <summary>
@@ -28,10 +33,7 @@ internal sealed class CommandExample : Command, IStartUpMarker
     /// This is used to transfer services for command execution.
     /// </param>
     public CommandExample(IServiceProvider serviceProvider)
-        : base(
-            "example",
-            "Creates a folder structure with example pages based on the current ForgingBlazor configuration."
-        )
+        : base("example", "Creates a folder structure with example pages for a Forging Blazor application.")
     {
         _serviceProvider = serviceProvider;
 
@@ -41,6 +43,12 @@ internal sealed class CommandExample : Command, IStartUpMarker
         SetAction(ExecuteAsync);
     }
 
+    /// <summary>
+    /// Executes the example command asynchronously.
+    /// </summary>
+    /// <param name="parseResult">The parsed command-line arguments.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A task representing the asynchronous operation, with an exit code result.</returns>
     private Task<int> ExecuteAsync(ParseResult parseResult, CancellationToken cancellationToken)
     {
         _ = new ServiceCollection().TransferAllServices(_serviceProvider);
