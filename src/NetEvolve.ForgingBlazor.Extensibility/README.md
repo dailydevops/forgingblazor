@@ -1,4 +1,4 @@
-# NetEvolve.ForgingBlazor.Extensibility
+﻿# NetEvolve.ForgingBlazor.Extensibility
 
 [![NuGet](https://img.shields.io/nuget/v/NetEvolve.ForgingBlazor.Extensibility?logo=nuget)](https://www.nuget.org/packages/NetEvolve.ForgingBlazor.Extensibility/)
 [![NuGet](https://img.shields.io/nuget/dt/NetEvolve.ForgingBlazor.Extensibility?logo=nuget)](https://www.nuget.org/packages/NetEvolve.ForgingBlazor.Extensibility/)
@@ -218,5 +218,6 @@ This project is licensed under the MIT License. See the [LICENSE](https://github
 
 ---
 
-
 For questions, issues, or contributions, please visit the project repository.
+
+**Made with ❤️ by the NetEvolve Team**
