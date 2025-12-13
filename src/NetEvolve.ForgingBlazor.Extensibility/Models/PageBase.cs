@@ -61,4 +61,36 @@ public abstract record PageBase
         Description = "An optional shortened or alternative title used specifically for navigation links and breadcrumbs. When not specified, the main title is used as fallback. Useful for long titles that need truncation in UI elements."
     )]
     public string? LinkTitle { get; set; }
+
+    /// <summary>
+    /// Gets or sets the absolute URL of the page including the base URL.
+    /// </summary>
+    /// <value>
+    /// The fully qualified URL of the page, including the protocol, domain, and path.
+    /// This value is automatically set during page processing and includes the complete URL structure
+    /// (e.g., "https://example.com/blog/my-first-post").
+    /// </value>
+    /// <remarks>
+    /// This property is excluded from YAML serialization and is populated at runtime.
+    /// It provides the complete URL for use in metadata, canonical links, and social media sharing tags.
+    /// The absolute URL is constructed by combining the site's base URL with the page's relative path.
+    /// </remarks>
+    [YamlIgnore]
+    public string AbsoluteLink { get; internal set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the relative URL path of the page from the site root.
+    /// </summary>
+    /// <value>
+    /// The site-relative path of the page starting with a forward slash.
+    /// This value is automatically set during page processing and represents the path portion of the URL
+    /// without the protocol or domain (e.g., "/blog/my-first-post").
+    /// </value>
+    /// <remarks>
+    /// This property is excluded from YAML serialization and is populated at runtime.
+    /// It provides the relative path for use in internal navigation, routing, and link generation.
+    /// The relative URL is derived from the page type and slug, following the site's routing conventions.
+    /// </remarks>
+    [YamlIgnore]
+    public string RelativeLink { get; internal set; } = default!;
 }
