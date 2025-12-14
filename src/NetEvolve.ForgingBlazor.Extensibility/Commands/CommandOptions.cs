@@ -44,7 +44,7 @@ public static class CommandOptions
         {
             Description = "Specifies the absolute or relative path to the content directory",
             Arity = ArgumentArity.ZeroOrOne,
-            DefaultValueFactory = static _ => "content",
+            DefaultValueFactory = static _ => Defaults.PathContent,
         };
 
     /// <summary>
@@ -81,7 +81,7 @@ public static class CommandOptions
         {
             Description = "Specifies the execution environment (e.g., Development, Staging, Production)",
             Arity = ArgumentArity.ZeroOrOne,
-            DefaultValueFactory = static _ => "Production",
+            DefaultValueFactory = static _ => Defaults.Environment,
         };
 
     /// <summary>
@@ -124,7 +124,7 @@ public static class CommandOptions
     /// </summary>
     /// <value>
     /// An <see cref="Option{T}"/> of <see cref="Microsoft.Extensions.Logging.LogLevel"/> for the "--log-level" ("-l") flag
-    /// with a default value of <see cref="Microsoft.Extensions.Logging.LogLevel.Information"/>.
+    /// with a default value of <see cref="LogLevel.Information"/>.
     /// </value>
     /// <remarks>
     /// This option allows users to control the verbosity of logging output, from minimal (Error) to detailed (Trace) logs.
@@ -148,11 +148,12 @@ public static class CommandOptions
     /// <remarks>
     /// This option allows users to specify the path to the ForgingBlazor project to process.
     /// </remarks>
-    public static Option<string?> ProjectPath { get; } =
-        new Option<string?>("--project-path")
+    public static Option<string> ProjectPath { get; } =
+        new Option<string>("--project-path")
         {
             Description = "Specifies the path to the ForgingBlazor project to process",
             Arity = ArgumentArity.ZeroOrOne,
+            DefaultValueFactory = static _ => Directory.GetCurrentDirectory(),
         };
 
     /// <summary>
