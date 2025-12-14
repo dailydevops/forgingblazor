@@ -1,7 +1,6 @@
 ﻿namespace NetEvolve.ForgingBlazor.Extensibility.Commands;
 
 using System.CommandLine;
-using System.Reflection;
 using Microsoft.Extensions.Logging;
 
 /// <summary>
@@ -154,7 +153,7 @@ public static class CommandOptions
         {
             Description = "Specifies the path to the ForgingBlazor project to process",
             Arity = ArgumentArity.ZeroOrOne,
-            DefaultValueFactory = static _ => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
+            DefaultValueFactory = static _ => Directory.GetCurrentDirectory(),
         };
 
     /// <summary>
