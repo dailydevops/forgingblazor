@@ -7,7 +7,7 @@
 /// This interface is commonly used for blog posts, articles, and time-sensitive content where publication date is relevant.
 /// The date is stored with timezone information to accurately represent when content became available.
 /// </remarks>
-public interface IPropertyPublishedOn
+public interface IPropertyPublishedDate
 {
     /// <summary>
     /// Gets or sets the date and time when the blog post was published.
@@ -20,5 +20,5 @@ public interface IPropertyPublishedOn
     /// This property is used for sorting blog posts chronologically, displaying publication dates,
     /// and filtering content by date ranges.
     /// </remarks>
-    DateTimeOffset? PublishedOn { get; set; }
+    DateTimeOffset? PublishDate { get; set; }
 }
