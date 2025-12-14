@@ -3,6 +3,7 @@
     serve,
     --help
   ],
+  error: ,
   output:
 Description:
   Starts a development server for a Forging Blazor application.

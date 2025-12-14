@@ -3,6 +3,7 @@
     build,
     --help
   ],
+  error: ,
   output:
 Description:
   Builds and generates static content for a Forging Blazor application.
@@ -11,6 +12,7 @@ Usage:
   NetEvolve.ForgingBlazor.Tests.Integration build [options]
 
 Options:
+  --content-path <content-path>                                          Specifies the absolute or relative path to the content directory [default: content]
   -e, --environment <environment>                                        Specifies the execution environment (e.g., Development, Staging, Production) [default: Production]
   --include-drafts                                                       Includes draft pages in the build output
   --include-future                                                       Includes pages with future publication dates in the build output

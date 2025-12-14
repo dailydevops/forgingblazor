@@ -1,5 +1,9 @@
 ﻿{
   args: [],
+  error:
+Required command was not provided.
+
+,
   output:
 Description:
   Command-line interface for managing Forging Blazor applications.

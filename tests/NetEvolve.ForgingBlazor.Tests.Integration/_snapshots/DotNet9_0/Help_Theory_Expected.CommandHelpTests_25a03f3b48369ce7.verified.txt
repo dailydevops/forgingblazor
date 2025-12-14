@@ -3,6 +3,7 @@
     create,
     --help
   ],
+  error: ,
   output:
 Description:
   Creates a new page for a Forging Blazor application.

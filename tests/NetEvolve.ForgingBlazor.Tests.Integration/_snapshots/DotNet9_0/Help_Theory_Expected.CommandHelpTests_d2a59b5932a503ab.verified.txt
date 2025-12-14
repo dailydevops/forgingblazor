@@ -3,6 +3,7 @@
     example,
     --help
   ],
+  error: ,
   output:
 Description:
   Creates a folder structure with example pages for a Forging Blazor application.
