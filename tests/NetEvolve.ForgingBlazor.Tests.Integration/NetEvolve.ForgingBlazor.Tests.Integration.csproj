@@ -27,4 +27,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\NetEvolve.ForgingBlazor\NetEvolve.ForgingBlazor.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="_setup/**/*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>

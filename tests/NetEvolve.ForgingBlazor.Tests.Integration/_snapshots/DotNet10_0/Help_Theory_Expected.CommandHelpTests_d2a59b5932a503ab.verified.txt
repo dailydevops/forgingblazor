@@ -12,7 +12,7 @@ Usage:
   NetEvolve.ForgingBlazor.Tests.Integration example [options]
 
 Options:
-  --project-path <project-path>                                          Specifies the path to the ForgingBlazor project to process
+  --project-path <project-path>                                          Specifies the path to the ForgingBlazor project to process [default: {CurrentDirectory}]
   --output-path <output-path>                                            Specifies the absolute or relative path for the build output
   -?, -h, --help                                                         Show help and usage information
   -l, --log-level <Critical|Debug|Error|Information|None|Trace|Warning>  Specifies the minimum logging level (Trace, Debug, Information, Warning, Error, Critical, None) [default: Information]
