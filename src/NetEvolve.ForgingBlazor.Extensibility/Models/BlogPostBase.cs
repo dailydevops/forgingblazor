@@ -11,10 +11,10 @@ using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
 /// to provide publication date, author attribution, and tagging functionality.
 /// All blog post types should inherit from this class to ensure consistent blog-specific properties.
 /// </remarks>
-public abstract record BlogPostBase : PageBase, IPropertyPublishedOn, IPropertyAuthor, IPropertyTags
+public abstract record BlogPostBase : PageBase, IPropertyPublishedDate, IPropertyAuthor, IPropertyTags
 {
     /// <inheritdoc />
-    public DateTimeOffset? PublishedOn { get; set; }
+    public DateTimeOffset? PublishDate { get; set; }
 
     /// <inheritdoc />
     public string? Author { get; set; }
