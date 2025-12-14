@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>$(_ProjectTargetFrameworks)</TargetFrameworks>
     <PackageTags>$(PackageTags);extensibility</PackageTags>
+    <Description>`NetEvolve.ForgingBlazor.Extensibility` is the core extensibility package for the ForgingBlazor framework, providing the fundamental abstractions, interfaces, and base models required to build custom content processors and extend the framework's functionality. This package serves as the foundation for creating plugins, content handlers, and custom page types within the ForgingBlazor ecosystem.</Description>
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />

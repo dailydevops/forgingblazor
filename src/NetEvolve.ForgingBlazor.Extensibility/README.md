@@ -98,73 +98,6 @@ public record TutorialPost : BlogPostBase, IPropertySeries, IPropertyCategories
 }
 ```
 
-### Building a Content Validator
-
-```csharp
-using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
-
-public sealed class CustomPageValidator : IValidation
-{
-    public ValueTask<bool> ValidateAsync(
-        IValidationContext context,
-        CancellationToken cancellationToken = default)
-    {
-        // Implement validation logic
-        if (string.IsNullOrWhiteSpace(context.Content))
-        {
-            context.AddError("Content cannot be empty");
-            return ValueTask.FromResult(false);
-        }
-        
-        return ValueTask.FromResult(true);
-    }
-}
-```
-
-### Implementing a Content Registrar
-
-```csharp
-using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
-
-public sealed class CustomContentRegister : IContentRegister
-{
-    public async ValueTask RegisterAsync(
-        IContentRegistration registration,
-        CancellationToken cancellationToken = default)
-    {
-        // Discover and register custom content
-        var pages = await DiscoverPagesAsync(cancellationToken);
-        
-        foreach (var page in pages)
-        {
-            registration.RegisterPage(page);
-        }
-    }
-    
-    private async ValueTask<IEnumerable<CustomPage>> DiscoverPagesAsync(
-        CancellationToken cancellationToken)
-    {
-        // Implementation for content discovery
-        await Task.CompletedTask;
-        return Enumerable.Empty<CustomPage>();
-    }
-}
-```
-
-### Transferring Services Between Providers
-
-```csharp
-using Microsoft.Extensions.DependencyInjection;
-using NetEvolve.ForgingBlazor.Extensibility;
-
-// Create a child service collection with inherited services
-var childServices = new ServiceCollection();
-childServices.TransferAllServices(parentServiceProvider);
-
-// Build the child service provider
-var childProvider = childServices.BuildServiceProvider();
-```
-
 ## Architecture Considerations
 
 ### Extensibility Points
@@ -194,10 +127,6 @@ The package provides multiple extension points:
 5. **Respect Cancellation**: Always honor `CancellationToken` parameters in async methods
 6. **Keep Models Simple**: Avoid business logic in model classes; delegate to services or handlers
 
-## Internal Access
-
-The package declares internal visibility to the main `NetEvolve.ForgingBlazor` assembly, enabling tight integration while maintaining encapsulation for external consumers.
-
 ## Contributing
 
 Contributions are welcome! Please ensure that:
@@ -213,11 +142,9 @@ This project is licensed under the MIT License. See the [LICENSE](https://github
 
 ## Related Packages
 
-* **NetEvolve.ForgingBlazor**: Main framework implementation consuming this extensibility package
-* **NetEvolve.ForgingBlazor.Logging**: Logging extensions for the ForgingBlazor framework
+* [**NetEvolve.ForgingBlazor**](https://www.nuget.org/packages/NetEvolve.ForgingBlazor): Main framework implementation consuming this extensibility package
+* [**NetEvolve.ForgingBlazor.Logging**](https://www.nuget.org/packages/NetEvolve.ForgingBlazor.Logging): Logging extensions for the ForgingBlazor framework
 
 ---
-
-For questions, issues, or contributions, please visit the project repository.
 
 **Made with ❤️ by the NetEvolve Team**
