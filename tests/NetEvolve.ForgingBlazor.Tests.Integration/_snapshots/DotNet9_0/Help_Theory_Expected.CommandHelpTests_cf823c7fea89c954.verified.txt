@@ -2,6 +2,7 @@
   args: [
     -h
   ],
+  error: ,
   output:
 Description:
   Command-line interface for managing Forging Blazor applications.

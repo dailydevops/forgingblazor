@@ -9,7 +9,7 @@ internal static class Predefined
     [ModuleInitializer]
     public static void Init()
     {
-        Verifier.DerivePathInfo(
+        DerivePathInfo(
             (sourceFile, projectDirectory, method, type) =>
             {
                 var snapshots = Path.Combine(projectDirectory, "_snapshots", Namer.TargetFrameworkNameAndVersion);
@@ -17,6 +17,9 @@ internal static class Predefined
                 return new(snapshots, type.Name, method.Name);
             }
         );
+
+        VerifierSettings.SortJsonObjects();
+        VerifierSettings.SortPropertiesAlphabetically();
 
         VerifierSettings.AutoVerify(includeBuildServer: false, throwException: true);
     }

@@ -34,6 +34,7 @@ internal sealed class CommandBuild : Command, IStartUpMarker
     {
         _serviceProvider = serviceProvider;
 
+        Add(CommandOptions.ContentPath);
         Add(CommandOptions.Environment);
         Add(CommandOptions.IncludeDrafts);
         Add(CommandOptions.IncludeFuture);

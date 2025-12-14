@@ -10,12 +10,13 @@ public sealed class CommandBuildTests
 
         if (args is not null && args.Length != 0)
         {
-            args = [.. args, directory.Path];
+            args = [.. args, directory.Path, "--content-path", "_setup/content"];
         }
         else
         {
-            args = ["build"];
+            args = ["build", "--content-path", "_setup/Content"];
         }
+
         await Helper.VerifyStaticContent(directory.Path, args).ConfigureAwait(false);
     }
 
