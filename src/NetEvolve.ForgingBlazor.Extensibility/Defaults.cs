@@ -17,14 +17,17 @@ public static class Defaults
     /// The default relative path for asset files.
     /// </summary>
     public const string PathAssets = "assets";
+
     /// <summary>
     /// The default relative path for content files.
     /// </summary>
     public const string PathContent = "content";
+
     /// <summary>
     /// The default relative path for data files.
     /// </summary>
     public const string PathData = "data";
+
     /// <summary>
     /// The default relative path to the static web root.
     /// </summary>
