@@ -1,6 +1,8 @@
 ﻿namespace NetEvolve.ForgingBlazor;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using NetEvolve.ForgingBlazor.Builders;
 using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
 using NetEvolve.ForgingBlazor.Extensibility.Models;
 using NetEvolve.ForgingBlazor.Models;
@@ -26,8 +28,14 @@ public static class ApplicationBuilderExtensions
     /// An <see cref="IBlogSegmentBuilder{BlogPost}"/> instance for further blog configuration.
     /// </returns>
     /// <remarks>
+    /// <para>
     /// This is a convenience method that calls <see cref="AddBlogSegment{TBlogType}(IApplicationBuilder, string)"/>
     /// with <see cref="BlogPost"/> as the type parameter.
+    /// </para>
+    /// <para>
+    /// The segment parameter defines the URL path component where blog posts will be accessible.
+    /// For example, a segment of <c>blog</c> will place blog posts under the <c>/blog/</c> path.
+    /// </para>
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="builder"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentException">Thrown when <paramref name="segment"/> is <see langword="null"/> or whitespace.</exception>
@@ -75,28 +83,68 @@ public static class ApplicationBuilderExtensions
         ArgumentNullException.ThrowIfNull(builder);
         ArgumentException.ThrowIfNullOrWhiteSpace(segment);
 
-        return null!;
+        return new BlogSegmentBuilder<TBlogType>(builder, segment);
     }
 
     /// <summary>
     /// Configures the application with default pages using the standard <see cref="Page"/> implementation.
-    /// This method registers the necessary services and sets up the default page infrastructure for the application.
     /// </summary>
-    /// <param name="builder">The <see cref="IApplicationBuilder"/> instance to configure.</param>
-    /// <returns>The same <see cref="IApplicationBuilder"/> instance for method chaining.</returns>
+    /// <param name="builder">
+    /// The <see cref="IApplicationBuilder"/> instance to configure.
+    /// Cannot be <see langword="null"/>.
+    /// </param>
+    /// <returns>
+    /// The same <see cref="IApplicationBuilder"/> instance for method chaining.
+    /// </returns>
+    /// <remarks>
+    /// <para>
+    /// This is a convenience method that calls <see cref="AddDefaultContent{TPageType}(IApplicationBuilder)"/>
+    /// with <see cref="Page"/> as the type parameter, providing a quick way to set up default pages
+    /// without specifying a custom page type.
+    /// </para>
+    /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="builder"/> is <see langword="null"/>.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when default pages have already been registered.</exception>
+    /// <seealso cref="AddDefaultContent{TPageType}(IApplicationBuilder)"/>
     public static IApplicationBuilder AddDefaultContent(this IApplicationBuilder builder) =>
         builder.AddDefaultContent<Page>();
 
     /// <summary>
     /// Configures the application with default pages using a custom page type that derives from <see cref="PageBase"/>.
-    /// This generic method allows you to specify a custom page implementation while automatically registering all required ForgingBlazor services.
-    /// The method validates the builder argument and ensures the service collection is properly configured before returning.
     /// </summary>
-    /// <typeparam name="TPageType">The custom page type that must inherit from <see cref="PageBase"/>.</typeparam>
-    /// <param name="builder">The <see cref="IApplicationBuilder"/> instance to configure.</param>
-    /// <returns>The same <see cref="IApplicationBuilder"/> instance for method chaining.</returns>
+    /// <typeparam name="TPageType">
+    /// The custom page type that must inherit from <see cref="PageBase"/> and represent the default page implementation.
+    /// </typeparam>
+    /// <param name="builder">
+    /// The <see cref="IApplicationBuilder"/> instance to configure.
+    /// Cannot be <see langword="null"/>.
+    /// </param>
+    /// <returns>
+    /// The same <see cref="IApplicationBuilder"/> instance for method chaining.
+    /// </returns>
+    /// <remarks>
+    /// <para>
+    /// This method configures the application with default page infrastructure using a custom page type.
+    /// It performs the following steps:
+    /// <list type="number">
+    /// <item><description>Validates that the builder is not <see langword="null"/></description></item>
+    /// <item><description>Checks that default pages have not already been registered to prevent duplicates</description></item>
+    /// <item><description>Registers all ForgingBlazor core services via <see cref="ServiceCollectionExtensions.AddForgingBlazorServices"/></description></item>
+    /// <item><description>Registers the <see cref="DefaultContentMarker"/> singleton to track that defaults are configured</description></item>
+    /// <item><description>Registers the <see cref="DefaultContentRegistration{TPageType}"/> for content collection</description></item>
+    /// <item><description>Registers the <see cref="MarkdownContentCollector{TPageType}"/> as a keyed singleton service</description></item>
+    /// </list>
+    /// </para>
+    /// <para>
+    /// Once default pages are registered, you can add additional custom segments using
+    /// <see cref="AddSegment{TPageType}(IApplicationBuilder, string)"/> or <see cref="AddBlogSegment{TBlogType}(IApplicationBuilder, string)"/>.
+    /// </para>
+    /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="builder"/> is <see langword="null"/>.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when default pages have already been registered in the service collection.</exception>
+    /// <seealso cref="AddDefaultContent(IApplicationBuilder)"/>
+    /// <seealso cref="AddSegment{TPageType}(IApplicationBuilder, string)"/>
+    /// <seealso cref="ServiceCollectionExtensions.AddForgingBlazorServices"/>
     public static IApplicationBuilder AddDefaultContent<TPageType>(this IApplicationBuilder builder)
         where TPageType : PageBase
     {
@@ -111,8 +159,11 @@ public static class ApplicationBuilderExtensions
 
         _ = builder
             .Services.AddForgingBlazorServices()
+            .AddMarkdownServices()
             .AddSingleton<DefaultContentMarker>()
             .AddSingleton<IContentRegistration, DefaultContentRegistration<TPageType>>();
+
+        builder.Services.TryAddKeyedSingleton<IContentCollector, MarkdownContentCollector<TPageType>>(string.Empty);
 
         return builder;
     }
@@ -173,14 +224,32 @@ public static class ApplicationBuilderExtensions
     /// <seealso cref="PageBase"/>
     /// <seealso cref="ISegmentBuilder{TPageType}"/>
     public static ISegmentBuilder<TPageType> AddSegment<TPageType>(this IApplicationBuilder builder, string segment)
-        where TPageType : PageBase => null!;
+        where TPageType : PageBase
+    {
+        ArgumentNullException.ThrowIfNull(builder);
+        ArgumentException.ThrowIfNullOrWhiteSpace(segment);
+
+        _ = builder.Services.AddForgingBlazorServices();
+
+        var segmentBuilder = new SegmentBuilder<TPageType>(builder, segment);
+        return segmentBuilder;
+    }
 
     /// <summary>
     /// Internal marker class used to track that default content has been registered.
     /// </summary>
     /// <remarks>
-    /// This sealed class implements <see cref="IStartUpMarker"/> to identify that default pages
-    /// have been configured, preventing duplicate registrations.
+    /// <para>
+    /// This sealed class implements <see cref="IStartUpMarker"/> to provide a type-safe marker
+    /// for tracking that default pages have been configured in the service collection.
+    /// </para>
+    /// <para>
+    /// The marker is registered as a singleton in the service collection by <see cref="AddDefaultContent{TPageType}(IApplicationBuilder)"/>
+    /// to prevent duplicate default content registrations. Before registering defaults, the builder
+    /// checks if this marker already exists using <see cref="ServiceCollectionExtensions.IsServiceTypeRegistered{T}"/>.
+    /// </para>
     /// </remarks>
+    /// <seealso cref="AddDefaultContent{TPageType}(IApplicationBuilder)"/>
+    /// <seealso cref="IStartUpMarker"/>
     private sealed class DefaultContentMarker : IStartUpMarker;
 }

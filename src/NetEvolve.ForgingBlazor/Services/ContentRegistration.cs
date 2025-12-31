@@ -24,4 +24,43 @@ internal sealed class ContentRegistration<TPageType> : IContentRegistration
     /// A <see cref="Type"/> instance representing <typeparamref name="TPageType"/>.
     /// </value>
     public Type PageType { get; } = typeof(TPageType);
+
+    /// <summary>
+    /// Gets or sets the URL segment identifier for this content registration.
+    /// </summary>
+    /// <value>
+    /// A <see cref="string"/> representing the URL path segment where content is located.
+    /// Default value is an empty string.
+    /// </value>
+    /// <remarks>
+    /// The segment defines the subdirectory within the content path where files for this
+    /// page type are located. For example, a segment value of "blog" would look for content
+    /// in the "Content/blog" directory.
+    /// </remarks>
+    public string Segment { get; set; } = "";
+
+    /// <summary>
+    /// Gets or sets the list of paths to exclude from content collection for this registration.
+    /// </summary>
+    /// <value>
+    /// A read-only list of relative paths to exclude, or <see langword="null"/> if no exclusions are defined.
+    /// </value>
+    /// <remarks>
+    /// This property allows fine-grained control over which subdirectories within the segment
+    /// should be skipped during content collection.
+    /// </remarks>
+    public IReadOnlyList<string>? ExcludePaths { get; set; }
+
+    /// <summary>
+    /// Gets or sets the priority of this content registration in the collection pipeline.
+    /// </summary>
+    /// <value>
+    /// An integer value where higher numbers indicate higher priority.
+    /// Default value is 0.
+    /// </value>
+    /// <remarks>
+    /// Content registrations are processed in descending priority order. Higher priority registrations
+    /// are executed before lower priority ones, allowing specific content types to be collected first.
+    /// </remarks>
+    public int Priority { get; set; }
 }

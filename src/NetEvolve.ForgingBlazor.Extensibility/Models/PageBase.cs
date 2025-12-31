@@ -1,5 +1,6 @@
 ﻿namespace NetEvolve.ForgingBlazor.Extensibility.Models;
 
+using System;
 using YamlDotNet.Serialization;
 
 /// <summary>
@@ -93,4 +94,67 @@ public abstract record PageBase
     /// </remarks>
     [YamlIgnore]
     public string RelativeLink { get; internal set; } = default!;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether this page is an index page (_index.md).
+    /// </summary>
+    /// <value>
+    /// <see langword="true"/> if this is an index page; otherwise, <see langword="false"/>.
+    /// </value>
+    /// <remarks>
+    /// This property is excluded from YAML serialization and is set at runtime during content collection.
+    /// Index pages are special pages that represent directory-level content, typically named _index.md.
+    /// </remarks>
+    [YamlIgnore]
+    public bool IsIndexPage { get; internal set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether this page is the home page (root _index.md).
+    /// </summary>
+    /// <value>
+    /// <see langword="true"/> if this is the home page; otherwise, <see langword="false"/>.
+    /// </value>
+    /// <remarks>
+    /// This property is excluded from YAML serialization and is set at runtime during content collection.
+    /// The home page is the _index.md file located in the root of the content segment directory.
+    /// </remarks>
+    [YamlIgnore]
+    public bool IsHomePage { get; internal set; }
+
+    /// <summary>
+    /// Gets or sets the markdown content of the page (excluding YAML front matter).
+    /// </summary>
+    /// <value>
+    /// A <see cref="string"/> containing the markdown content, or <see langword="null"/> if no content is present.
+    /// </value>
+    /// <remarks>
+    /// This property is excluded from YAML serialization and is populated at runtime during content collection.
+    /// It contains the page's markdown content that appears after the YAML front matter delimiter.
+    /// </remarks>
+    [YamlIgnore]
+    public string? Content { get; internal set; }
+
+    /// <summary>
+    /// Gets or sets the date and time when the page was created.
+    /// </summary>
+    /// <value>
+    /// The creation date and time of the page, or <see langword="null"/> if not set.
+    /// </value>
+    /// <remarks>
+    /// This property is excluded from YAML serialization and is populated at runtime during content collection.
+    /// </remarks>
+    [YamlIgnore]
+    public DateTimeOffset? CreationDate { get; internal set; }
+
+    /// <summary>
+    /// Gets or sets the date and time when the page was last modified.
+    /// </summary>
+    /// <value>
+    /// The last modified date and time of the page, or <see langword="null"/> if not set.
+    /// </value>
+    /// <remarks>
+    /// This property is excluded from YAML serialization and is populated at runtime during content collection.
+    /// </remarks>
+    [YamlIgnore]
+    public DateTimeOffset? LastModifiedDate { get; internal set; }
 }

@@ -18,10 +18,13 @@
     <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="10.17.0.131074" />
   </ItemGroup>
   <ItemGroup>
+    <PackageVersion Include="Markdig" Version="0.44.0" />
     <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="10.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.FileSystemGlobbing" Version="10.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="10.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.1" />
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.1.0" />
+    <PackageVersion Include="NetEscapades.Configuration.Yaml" Version="3.1.0" />
     <PackageVersion Include="NetEvolve.Extensions.TUnit" Version="3.4.0" />
     <PackageVersion Include="System.CommandLine" Version="2.0.1" />
     <PackageVersion Include="TUnit" Version="1.7.7" />

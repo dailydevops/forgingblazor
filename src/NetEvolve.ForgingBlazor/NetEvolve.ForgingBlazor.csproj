@@ -6,6 +6,9 @@
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Markdig" />
+    <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" />
+    <PackageReference Include="NetEscapades.Configuration.Yaml" />
     <PackageReference Include="System.CommandLine" />
   </ItemGroup>
   <ItemGroup>

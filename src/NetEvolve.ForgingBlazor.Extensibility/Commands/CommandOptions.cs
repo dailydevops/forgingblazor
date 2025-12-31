@@ -44,7 +44,7 @@ public static class CommandOptions
         {
             Description = "Specifies the absolute or relative path to the content directory",
             Arity = ArgumentArity.ZeroOrOne,
-            DefaultValueFactory = static _ => Defaults.PathContent,
+            DefaultValueFactory = static _ => DefaultPaths.Content,
         };
 
     /// <summary>

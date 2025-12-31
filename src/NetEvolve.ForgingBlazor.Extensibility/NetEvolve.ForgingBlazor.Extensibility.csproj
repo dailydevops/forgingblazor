@@ -11,5 +11,6 @@
   </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="NetEvolve.ForgingBlazor" />
+    <InternalsVisibleTo Include="NetEvolve.ForgingBlazor.Tests.Console" />
   </ItemGroup>
 </Project>

@@ -20,6 +20,7 @@ public static class ApplicationBuilderExtensions
     /// <param name="builder">
     /// The <see cref="IApplicationBuilder"/> instance that represents the application being configured.
     /// This parameter serves as the entry point for adding logging services to the application's service collection.
+    /// Cannot be <see langword="null"/>.
     /// </param>
     /// <returns>
     /// The same <see cref="IApplicationBuilder"/> instance that was passed in, enabling method chaining
@@ -31,19 +32,20 @@ public static class ApplicationBuilderExtensions
     /// <remarks>
     /// <para>
     /// This method provides a convenient way to quickly set up logging with sensible defaults.
-    /// It automatically configures both console and debug logging providers, which are suitable
-    /// for most development and debugging scenarios.
+    /// It automatically configures both console and debug logging providers using the overload
+    /// <see cref="WithLogging(IApplicationBuilder, Action{ILoggingBuilder})"/>.
     /// </para>
     /// <para>
-    /// The console provider outputs log messages to the standard console output, while the debug provider
-    /// writes to the debug output window in development environments and attached debuggers.
+    /// The console provider outputs log messages to the standard console output via <see cref="ConsoleLoggerExtensions.AddConsole(ILoggingBuilder)"/>,
+    /// while the debug provider writes to the debug output window in development environments via <see cref="DebugLoggerFactoryExtensions.AddDebug(ILoggingBuilder)"/>.
     /// </para>
     /// <para>
-    /// For production scenarios or when specific logging providers are required, consider using the
-    /// overload that accepts an <see cref="Action{ILoggingBuilder}"/> delegate for custom configuration.
+    /// For production scenarios or when specific logging providers are required, consider using the overload
+    /// that accepts an <see cref="Action{ILoggingBuilder}"/> delegate for custom configuration.
     /// </para>
     /// </remarks>
     /// <example>
+    /// <para>Example usage:</para>
     /// <code>
     /// var builder = ApplicationBuilder.Create();
     /// builder.WithLogging();
@@ -59,18 +61,20 @@ public static class ApplicationBuilderExtensions
     /// <param name="builder">
     /// The <see cref="IApplicationBuilder"/> instance that represents the application being configured.
     /// This parameter serves as the entry point for adding logging services to the application's service collection.
+    /// Cannot be <see langword="null"/>.
     /// </param>
     /// <param name="configure">
     /// An <see cref="Action{ILoggingBuilder}"/> delegate that provides fine-grained control over the logging configuration.
     /// This delegate receives an <see cref="ILoggingBuilder"/> instance that can be used to add logging providers,
     /// set minimum log levels, add filters, and perform other logging-related configurations.
+    /// Cannot be <see langword="null"/>.
     /// </param>
     /// <returns>
     /// The same <see cref="IApplicationBuilder"/> instance that was passed in, enabling method chaining
     /// and fluent configuration of additional application features.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    /// Thrown when <paramref name="builder"/> is <see langword="null"/>.
+    /// Thrown when <paramref name="builder"/> or <paramref name="configure"/> is <see langword="null"/>.
     /// </exception>
     /// <remarks>
     /// <para>
@@ -97,7 +101,7 @@ public static class ApplicationBuilderExtensions
     ///     logging.SetMinimumLevel(LogLevel.Information);
     ///     logging.AddConsole();
     ///     logging.AddEventLog();
-    ///     logging.AddFilter("Microsoft", LogLevel.Warning);
+    ///     logging.AddFilter(<c>Microsoft</c>, LogLevel.Warning);
     /// });
     /// </code>
     /// </example>

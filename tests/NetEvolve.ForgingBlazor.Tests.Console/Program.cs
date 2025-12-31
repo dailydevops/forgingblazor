@@ -1,13 +1,16 @@
 ﻿using NetEvolve.ForgingBlazor;
+using NetEvolve.ForgingBlazor.Logging;
 
 var arguments = args;
 
 if (arguments.Length == 0)
 {
-    arguments = ["build"];
+    arguments = ["build", "--log-level", "trace"];
 }
 
-var builder = ApplicationBuilder.CreateDefaultBuilder(arguments);
+var builder = ApplicationBuilder.CreateDefaultBuilder(arguments).WithLogging();
+
+_ = builder.AddBlogSegment("posts");
 
 var app = builder.Build();
 
