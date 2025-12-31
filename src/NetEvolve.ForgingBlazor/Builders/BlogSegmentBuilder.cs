@@ -1,9 +1,11 @@
 ﻿namespace NetEvolve.ForgingBlazor.Builders;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using NetEvolve.ForgingBlazor;
 using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
 using NetEvolve.ForgingBlazor.Extensibility.Models;
+using NetEvolve.ForgingBlazor.Services;
 
 /// <summary>
 /// Provides the default implementation of <see cref="IBlogSegmentBuilder{TBlogPage}"/> for configuring blog segments in a ForgingBlazor application.
@@ -31,11 +33,18 @@ internal sealed class BlogSegmentBuilder<TBlogPage> : IBlogSegmentBuilder<TBlogP
     /// <summary>
     /// Stores the parent application builder instance.
     /// </summary>
+    /// <remarks>
+    /// This field holds a reference to the parent <see cref="IApplicationBuilder"/> for registering blog segment-specific services.
+    /// </remarks>
     private readonly IApplicationBuilder _builder;
 
     /// <summary>
     /// Stores the URL segment identifier for this blog section.
     /// </summary>
+    /// <remarks>
+    /// This field holds the segment identifier (e.g., <c>blog</c>, <c>posts</c>) that determines
+    /// the URL path and content directory for blog posts in this segment.
+    /// </remarks>
     private readonly string _segment;
 
     /// <summary>
@@ -54,18 +63,44 @@ internal sealed class BlogSegmentBuilder<TBlogPage> : IBlogSegmentBuilder<TBlogP
     /// Cannot be <see langword="null"/>.
     /// </param>
     /// <param name="segment">
-    /// The URL segment identifier for this blog section.
+    /// The URL segment identifier for this blog section (e.g., <c>blog</c>, <c>posts</c>).
     /// Cannot be <see langword="null"/> or whitespace.
     /// </param>
+    /// <param name="priority">
+    /// The priority level for this content registration. Higher values indicate higher priority.
+    /// Default value is 0. Must be greater than or equal to 0.
+    /// </param>
+    /// <remarks>
+    /// <para>
+    /// This constructor performs the following operations:
+    /// <list type="number">
+    /// <item><description>Validates that <paramref name="builder"/> is not <see langword="null"/></description></item>
+    /// <item><description>Validates that <paramref name="segment"/> is not <see langword="null"/> or whitespace</description></item>
+    /// <item><description>Validates that <paramref name="priority"/> is not less than 0</description></item>
+    /// <item><description>Registers a new <see cref="ContentRegistration{TBlogPage}"/> with segment and priority settings</description></item>
+    /// <item><description>Calls <see cref="ServiceCollectionExtensions.AddMarkdownServices"/> to register markdown services</description></item>
+    /// <item><description>Registers a keyed singleton <see cref="IContentCollector"/> instance with the segment as key</description></item>
+    /// </list>
+    /// </para>
+    /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="builder"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentException">Thrown when <paramref name="segment"/> is <see langword="null"/> or whitespace.</exception>
-    internal BlogSegmentBuilder(IApplicationBuilder builder, string segment)
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="priority"/> is less than 0.</exception>
+    internal BlogSegmentBuilder(IApplicationBuilder builder, string segment, int priority = 0)
     {
         ArgumentNullException.ThrowIfNull(builder);
         ArgumentException.ThrowIfNullOrWhiteSpace(segment);
+        ArgumentOutOfRangeException.ThrowIfLessThan(priority, 0);
 
         _builder = builder;
         _segment = segment;
+
+        Services
+            .AddSingleton<IContentRegistration>(
+                new ContentRegistration<TBlogPage> { Segment = segment, Priority = priority }
+            )
+            .AddMarkdownServices()
+            .TryAddKeyedSingleton<IContentCollector, MarkdownContentCollector<TBlogPage>>(segment);
     }
 
     /// <summary>

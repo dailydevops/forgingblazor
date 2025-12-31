@@ -9,9 +9,14 @@ using NetEvolve.ForgingBlazor.Extensibility.Commands;
 /// Provides the root CLI command for the ForgingBlazor command-line interface.
 /// </summary>
 /// <remarks>
+/// <para>
 /// This sealed class implements the root command that serves as the entry point for the ForgingBlazor CLI.
 /// It aggregates all registered sub-commands and provides access to the complete command hierarchy.
 /// All available sub-commands are automatically registered from the service provider during initialization.
+/// </para>
+/// <para>
+/// If no sub-commands are registered in the service provider, an <see cref="InvalidOperationException"/> is thrown during instantiation.
+/// </para>
 /// </remarks>
 /// <seealso cref="IStartUpMarker"/>
 internal sealed class CommandCli : RootCommand, IStartUpMarker
@@ -22,10 +27,16 @@ internal sealed class CommandCli : RootCommand, IStartUpMarker
     /// <param name="serviceProvider">
     /// The <see cref="IServiceProvider"/> instance providing access to registered sub-commands.
     /// Must contain registered <see cref="Command"/> instances to populate the root command.
+    /// Cannot be <see langword="null"/>.
     /// </param>
     /// <remarks>
-    /// This constructor retrieves all registered commands from the service provider and adds them as sub-commands.
-    /// If no commands are registered, an <see cref="InvalidOperationException"/> is thrown.
+    /// <para>
+    /// This constructor retrieves all registered commands from the service provider using <see cref="ServiceProviderServiceExtensions.GetServices{T}(IServiceProvider)"/>
+    /// and adds them as sub-commands to the root command.
+    /// </para>
+    /// <para>
+    /// Additionally, the <see cref="CommandOptions.LogLevel"/> option is added as a global option to all commands.
+    /// </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">Thrown when no sub-commands are registered in the service provider.</exception>
     public CommandCli(IServiceProvider serviceProvider)

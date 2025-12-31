@@ -20,5 +20,5 @@ public abstract record BlogPostBase : PageBase, IPropertyPublishedDate, IPropert
     public string? Author { get; set; }
 
     /// <inheritdoc />
-    public IReadOnlySet<string>? Tags { get; set; }
+    public IList<string>? Tags { get; set; }
 }

@@ -1,17 +1,24 @@
 ﻿namespace NetEvolve.ForgingBlazor.Commands;
 
+using System;
 using System.CommandLine;
 using Microsoft.Extensions.DependencyInjection;
+using NetEvolve.ForgingBlazor.Configurations;
 using NetEvolve.ForgingBlazor.Extensibility;
 using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
 using NetEvolve.ForgingBlazor.Extensibility.Commands;
 
 /// <summary>
-/// Provides the "build" command implementation for building and generating static content from a Forging Blazor application.
+/// Provides the <b>build</b> command implementation for building and generating static content from a Forging Blazor application.
 /// </summary>
 /// <remarks>
-/// This sealed class implements the build command that processes pages and generates static site output based on
+/// <para>
+/// This sealed class implements the <c>build</c> command that processes pages and generates static site output based on
 /// configuration options. It registers standard options for environment, drafts, future content, logging, and output paths.
+/// </para>
+/// <para>
+/// The command uses the service provider to transfer services and invokes the content register to collect and process all registered content.
+/// </para>
 /// </remarks>
 /// <seealso cref="CommandOptions"/>
 /// <seealso cref="IStartUpMarker"/>
@@ -45,15 +52,68 @@ internal sealed class CommandBuild : Command, IStartUpMarker
     }
 
     /// <summary>
-    /// Executes the build command asynchronously.
+    /// Executes the <c>build</c> command asynchronously.
     /// </summary>
-    /// <param name="parseResult">The parsed command-line arguments.</param>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>A task representing the asynchronous operation, with an exit code result.</returns>
-    private Task<int> ExecuteAsync(ParseResult parseResult, CancellationToken cancellationToken)
+    /// <param name="parseResult">
+    /// The <see cref="ParseResult"/> containing parsed command-line arguments.
+    /// Cannot be <see langword="null"/>.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// A token that can be used to request cancellation of the build operation.
+    /// Defaults to <see cref="CancellationToken.None"/> if not specified.
+    /// </param>
+    /// <returns>
+    /// A <see cref="Task{TResult}"/> that represents the asynchronous operation.
+    /// The task result contains an exit code: 0 for success, 1 for failure.
+    /// </returns>
+    /// <remarks>
+    /// <para>
+    /// This method performs the following steps:
+    /// <list type="number">
+    /// <item><description>Transfers all non-startup services from the parent service provider</description></item>
+    /// <item><description>Builds a new service provider from the transferred services</description></item>
+    /// <item><description>Retrieves the <see cref="IContentRegister"/> service</description></item>
+    /// <item><description>Invokes <see cref="IContentRegister.CollectAsync"/> asynchronously</description></item>
+    /// <item><description>Returns 0 on success, 1 on any exception</description></item>
+    /// </list>
+    /// </para>
+    /// </remarks>
+    private async Task<int> ExecuteAsync(ParseResult parseResult, CancellationToken cancellationToken)
     {
-        _ = new ServiceCollection().TransferAllServices(_serviceProvider);
+        var environment = parseResult.GetValue(CommandOptions.Environment);
+        var projectPath = parseResult.GetValue(CommandOptions.ProjectPath);
 
-        return Task.FromResult(0);
+        ArgumentException.ThrowIfNullOrWhiteSpace(environment);
+        ArgumentException.ThrowIfNullOrWhiteSpace(projectPath);
+
+        var services = new ServiceCollection()
+            .TransferAllServices(_serviceProvider)
+            .AddSingleton(_ => ConfigurationLoader.Load(environment, projectPath));
+
+        _ = services
+            .ConfigureOptions<SiteConfigurationConfigure>()
+            .Configure<SiteConfiguration>(siteconfig =>
+            {
+                var contentPath = parseResult.GetValue(CommandOptions.ContentPath);
+                if (!string.IsNullOrWhiteSpace(contentPath))
+                {
+                    siteconfig.ContentPath = contentPath;
+                }
+            });
+
+        var serviceProvider = services.BuildServiceProvider();
+
+        var register = serviceProvider.GetRequiredService<IContentRegister>();
+
+        try
+        {
+            await register.CollectAsync(cancellationToken).ConfigureAwait(false);
+
+            return 0;
+        }
+        catch (Exception)
+        {
+            return 1;
+        }
     }
 }

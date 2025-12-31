@@ -16,5 +16,5 @@ public interface IPropertyTags
     /// A read-only set of tag names or keywords. Using a set ensures each tag appears only once and provides efficient membership testing.
     /// Tags are commonly used for content discovery, related content recommendations, and SEO keywords.
     /// </value>
-    IReadOnlySet<string>? Tags { get; set; }
+    IList<string>? Tags { get; }
 }

@@ -38,16 +38,31 @@ public sealed class ApplicationBuilder : IApplicationBuilder
     /// <summary>
     /// Stores the command-line arguments passed to the application.
     /// </summary>
+    /// <remarks>
+    /// These arguments are passed from the application entry point and are later made available
+    /// to the <see cref="Application"/> instance when it is built via the <see cref="Build"/> method.
+    /// </remarks>
     private readonly string[] _args;
 
     /// <summary>
     /// Stores the type reference for <see cref="IContentRegistration"/> used for service discovery.
     /// </summary>
+    /// <remarks>
+    /// This type is cached during initialization for efficient service validation in the
+    /// <see cref="ValidateConfiguration"/> method. It represents the interface type that all
+    /// content registrations must implement, used to locate registered content providers.
+    /// </remarks>
     private readonly Type _typeContentRegistration = typeof(IContentRegistration);
 
     /// <summary>
     /// Stores the generic type definition for <see cref="DefaultContentRegistration{TPageType}"/> used for validation.
     /// </summary>
+    /// <remarks>
+    /// This generic type definition is cached during initialization and used in <see cref="ValidateConfiguration"/>
+    /// to check if any default content registration has been added to the service collection.
+    /// It is compared against the <c>ImplementationType</c> of registered services to determine if
+    /// at least one page type has been configured as default content.
+    /// </remarks>
     private readonly Type _typeDefaultContentRegistration = typeof(DefaultContentRegistration<>);
 
     /// <summary>
@@ -99,21 +114,27 @@ public sealed class ApplicationBuilder : IApplicationBuilder
     /// </returns>
     /// <remarks>
     /// <para>
-    /// This method constructs a <see cref="IServiceProvider"/> from the registered services using
-    /// <see cref="ServiceCollectionContainerBuilderExtensions.BuildServiceProvider(IServiceCollection)"/>
-    /// and creates a new <see cref="Application"/> with the command-line arguments and service provider.
+    /// This method performs the following steps:
+    /// <list type="number">
+    /// <item><description>Validates the builder configuration to ensure all required services are registered</description></item>
+    /// <item><description>Creates a copy of service descriptors for later service transfer to child scopes</description></item>
+    /// <item><description>Builds the service provider from the configured service collection</description></item>
+    /// <item><description>Creates and returns a new <see cref="Application"/> instance with the service provider</description></item>
+    /// </list>
     /// </para>
     /// <para>
-    /// Call this method once after all service configuration is complete. After calling <see cref="Build"/>,
-    /// the builder should not be reused, and any further service registrations will not affect the created application.
+    /// After calling this method, the builder should not be reused, and any further service registrations
+    /// will not affect the created application. The service provider is passed to the <see cref="Application"/>
+    /// where it can be transferred to child scopes through the <see cref="IServiceProvider"/>.
     /// </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    /// Thrown if there are service configuration errors or dependency resolution failures.
+    /// Thrown if there are service configuration errors, missing required content registrations, or dependency resolution failures.
     /// </exception>
     /// <seealso cref="Services"/>
     /// <seealso cref="Application"/>
     /// <seealso cref="IApplication.RunAsync"/>
+    /// <seealso cref="ValidateConfiguration"/>
     public IApplication Build()
     {
         ValidateConfiguration();
@@ -260,14 +281,23 @@ public sealed class ApplicationBuilder : IApplicationBuilder
     /// Validates the builder configuration to ensure all required services are registered.
     /// </summary>
     /// <remarks>
-    /// This method verifies that:
-    /// <list type="bullet">
-    /// <item><description>At least one default content registration exists</description></item>
-    /// <item><description>Logging infrastructure is configured (or registers null loggers as fallback)</description></item>
+    /// <para>
+    /// This method performs validation by checking for the following requirements:
+    /// <list type="number">
+    /// <item><description>At least one default content registration must exist in the service collection</description></item>
+    /// <item><description>Logging infrastructure must be configured; if not, <see cref="NullLoggerFactory"/> is registered as fallback</description></item>
     /// </list>
+    /// </para>
+    /// <para>
+    /// If no content registration is found, this method throws an <see cref="InvalidOperationException"/> instructing
+    /// the user to call <see cref="ApplicationBuilderExtensions.AddDefaultContent"/> or register custom content.
+    /// If logging is not registered, <see cref="ILoggerFactory"/> and <see cref="ILogger{T}"/> services are
+    /// automatically registered with null implementations to prevent resolution failures.
+    /// </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    /// Thrown when no content registration is found in the service collection.
+    /// Thrown when no content registration is found in the service collection, indicating that
+    /// no pages have been configured for the application.
     /// </exception>
     private void ValidateConfiguration()
     {

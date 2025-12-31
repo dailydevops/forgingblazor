@@ -8,11 +8,16 @@ using NetEvolve.ForgingBlazor.Extensibility.Commands;
 using static NetEvolve.ForgingBlazor.Extensibility.Commands.CommandOptions;
 
 /// <summary>
-/// Provides the "create" command implementation for creating new pages in a Forging Blazor application.
+/// Provides the <c>create</c> command implementation for creating new pages in a Forging Blazor application.
 /// </summary>
 /// <remarks>
-/// This sealed class implements the create command that generates new page files in the specified project.
+/// <para>
+/// This sealed class implements the <c>create</c> command that generates new page files in the specified project.
 /// It registers options for specifying the project path and output destination for the new page.
+/// </para>
+/// <para>
+/// The command transfers services from the parent provider to create a new service scope for page creation.
+/// </para>
 /// </remarks>
 /// <seealso cref="CommandOptions"/>
 /// <seealso cref="IStartUpMarker"/>
@@ -29,7 +34,18 @@ internal sealed class CommandCreate : Command, IStartUpMarker
     /// <param name="serviceProvider">
     /// The <see cref="IServiceProvider"/> instance providing access to registered application services.
     /// This is used to transfer services for command execution.
+    /// Cannot be <see langword="null"/>.
     /// </param>
+    /// <remarks>
+    /// <para>
+    /// This constructor initializes the <c>create</c> command with:
+    /// <list type="bullet">
+    /// <item><description><see cref="ProjectPath"/> option for specifying the project directory</description></item>
+    /// <item><description><see cref="OutputPath"/> option for specifying the output location for the new page</description></item>
+    /// <item><description>Action handler via <see cref="Command.SetAction(Func{ParseResult, CancellationToken, Task{int}})"/></description></item>
+    /// </list>
+    /// </para>
+    /// </remarks>
     public CommandCreate(IServiceProvider serviceProvider)
         : base("create", "Creates a new page for a Forging Blazor application.")
     {
@@ -42,11 +58,30 @@ internal sealed class CommandCreate : Command, IStartUpMarker
     }
 
     /// <summary>
-    /// Executes the create command asynchronously.
+    /// Executes the <c>create</c> command asynchronously.
     /// </summary>
-    /// <param name="parseResult">The parsed command-line arguments.</param>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>A task representing the asynchronous operation, with an exit code result.</returns>
+    /// <param name="parseResult">
+    /// The <see cref="ParseResult"/> containing parsed command-line arguments.
+    /// Cannot be <see langword="null"/>.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// A token that can be used to request cancellation of the create operation.
+    /// Defaults to <see cref="CancellationToken.None"/> if not specified.
+    /// </param>
+    /// <returns>
+    /// A <see cref="Task{TResult}"/> that represents the asynchronous operation.
+    /// The task result contains 0 on success or completion.
+    /// </returns>
+    /// <remarks>
+    /// <para>
+    /// This method performs the following steps:
+    /// <list type="number">
+    /// <item><description>Transfers all non-startup services from the parent service provider</description></item>
+    /// <item><description>Builds a new service provider from the transferred services</description></item>
+    /// <item><description>Executes page creation logic (currently returns 0)</description></item>
+    /// </list>
+    /// </para>
+    /// </remarks>
     private Task<int> ExecuteAsync(ParseResult parseResult, CancellationToken cancellationToken)
     {
         _ = new ServiceCollection().TransferAllServices(_serviceProvider);
