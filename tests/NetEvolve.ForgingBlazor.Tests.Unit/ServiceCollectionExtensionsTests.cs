@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Tests.Unit;
+﻿namespace NetEvolve.ForgingBlazor.Tests.Unit;
 
 using System.CommandLine;
 using Markdig;
@@ -33,7 +33,7 @@ public sealed class ServiceCollectionExtensionsTests
     {
         var services = new ServiceCollection();
 
-        services.AddForgingBlazorServices();
+        _ = services.AddForgingBlazorServices();
 
         var commandDescriptors = services.Where(x => x.ServiceType == typeof(Command)).ToList();
         _ = await Assert.That(commandDescriptors.Count).IsGreaterThanOrEqualTo(4);
@@ -44,10 +44,10 @@ public sealed class ServiceCollectionExtensionsTests
     {
         var services = new ServiceCollection();
 
-        services.AddForgingBlazorServices();
+        _ = services.AddForgingBlazorServices();
         var countAfterFirst = services.Count;
 
-        services.AddForgingBlazorServices();
+        _ = services.AddForgingBlazorServices();
         var countAfterSecond = services.Count;
 
         _ = await Assert.That(countAfterFirst).IsEqualTo(countAfterSecond);
@@ -77,7 +77,7 @@ public sealed class ServiceCollectionExtensionsTests
     {
         var services = new ServiceCollection();
 
-        services.AddMarkdownServices();
+        _ = services.AddMarkdownServices();
 
         var hasDeserializer = services.Any(x => x.ServiceType == typeof(IDeserializer));
         _ = await Assert.That(hasDeserializer).IsTrue();
@@ -88,10 +88,10 @@ public sealed class ServiceCollectionExtensionsTests
     {
         var services = new ServiceCollection();
 
-        services.AddMarkdownServices();
+        _ = services.AddMarkdownServices();
         var countAfterFirst = services.Count;
 
-        services.AddMarkdownServices();
+        _ = services.AddMarkdownServices();
         var countAfterSecond = services.Count;
 
         _ = await Assert.That(countAfterFirst).IsEqualTo(countAfterSecond);
@@ -101,7 +101,7 @@ public sealed class ServiceCollectionExtensionsTests
     public async Task IsServiceTypeRegistered_WithRegisteredService_ReturnsTrue()
     {
         var services = new ServiceCollection();
-        services.AddSingleton<ITestService, TestService>();
+        _ = services.AddSingleton<ITestService, TestService>();
 
         var result = services.IsServiceTypeRegistered<ITestService>();
 
@@ -133,7 +133,7 @@ public sealed class ServiceCollectionExtensionsTests
     {
         var services = new ServiceCollection();
 
-        services.AddMarkdownServices();
+        _ = services.AddMarkdownServices();
         using var provider = services.BuildServiceProvider();
         var pipeline = provider.GetService<MarkdownPipeline>();
 
@@ -145,7 +145,7 @@ public sealed class ServiceCollectionExtensionsTests
     {
         var services = new ServiceCollection();
 
-        services.AddMarkdownServices();
+        _ = services.AddMarkdownServices();
         using var provider = services.BuildServiceProvider();
         var deserializer = provider.GetService<IDeserializer>();
 

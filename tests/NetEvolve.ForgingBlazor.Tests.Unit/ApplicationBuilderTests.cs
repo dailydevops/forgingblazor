@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Tests.Unit;
+﻿namespace NetEvolve.ForgingBlazor.Tests.Unit;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -145,7 +145,7 @@ public sealed class ApplicationBuilderTests
         var args = Array.Empty<string>();
         var builder = ApplicationBuilder.CreateDefaultBuilder(args);
         using var customLoggerFactory = LoggerFactory.Create(b => b.AddConsole());
-        builder.Services.AddSingleton<ILoggerFactory>(customLoggerFactory);
+        _ = builder.Services.AddSingleton<ILoggerFactory>(customLoggerFactory);
 
         var app = builder.Build();
 
@@ -158,7 +158,7 @@ public sealed class ApplicationBuilderTests
         var args = Array.Empty<string>();
         var builder = ApplicationBuilder.CreateDefaultBuilder(args);
 
-        builder.Services.AddSingleton<ITestService, TestService>();
+        _ = builder.Services.AddSingleton<ITestService, TestService>();
 
         var hasTestService = builder.Services.Any(x => x.ServiceType == typeof(ITestService));
         _ = await Assert.That(hasTestService).IsTrue();

@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Tests.Unit;
+﻿namespace NetEvolve.ForgingBlazor.Tests.Unit;
 
 using Microsoft.Extensions.DependencyInjection;
 using NetEvolve.ForgingBlazor.Builders;
@@ -34,7 +34,7 @@ public sealed class ApplicationBuilderExtensionsTests
         var args = Array.Empty<string>();
         var builder = ApplicationBuilder.CreateEmptyBuilder(args);
 
-        builder.AddDefaultContent();
+        _ = builder.AddDefaultContent();
 
         var hasContentRegister = builder.Services.Any(x => x.ServiceType == typeof(IContentRegister));
         _ = await Assert.That(hasContentRegister).IsTrue();
@@ -46,7 +46,7 @@ public sealed class ApplicationBuilderExtensionsTests
         var args = Array.Empty<string>();
         var builder = ApplicationBuilder.CreateEmptyBuilder(args);
 
-        builder.AddDefaultContent();
+        _ = builder.AddDefaultContent();
 
         var hasMarkdownPipeline = builder.Services.Any(x => x.ServiceType == typeof(Markdig.MarkdownPipeline));
         _ = await Assert.That(hasMarkdownPipeline).IsTrue();
@@ -58,7 +58,7 @@ public sealed class ApplicationBuilderExtensionsTests
         var args = Array.Empty<string>();
         var builder = ApplicationBuilder.CreateEmptyBuilder(args);
 
-        builder.AddDefaultContent();
+        _ = builder.AddDefaultContent();
         _ = Assert.Throws<InvalidOperationException>(() => builder.AddDefaultContent());
     }
 
@@ -88,7 +88,7 @@ public sealed class ApplicationBuilderExtensionsTests
         var args = Array.Empty<string>();
         var builder = ApplicationBuilder.CreateEmptyBuilder(args);
 
-        builder.AddDefaultContent<TestPage>();
+        _ = builder.AddDefaultContent<TestPage>();
         _ = Assert.Throws<InvalidOperationException>(() => builder.AddDefaultContent<TestPage>());
     }
 
@@ -129,7 +129,7 @@ public sealed class ApplicationBuilderExtensionsTests
         var args = Array.Empty<string>();
         var builder = ApplicationBuilder.CreateEmptyBuilder(args);
 
-        builder.AddSegment("test");
+        _ = builder.AddSegment("test");
 
         var hasContentRegister = builder.Services.Any(x => x.ServiceType == typeof(IContentRegister));
         _ = await Assert.That(hasContentRegister).IsTrue();
@@ -234,7 +234,7 @@ public sealed class ApplicationBuilderExtensionsTests
         var args = Array.Empty<string>();
         var builder = ApplicationBuilder.CreateEmptyBuilder(args);
 
-        builder.AddDefaultContent();
+        _ = builder.AddDefaultContent();
 
         var hasContentCollector = builder.Services.Any(x => x.ServiceType == typeof(IContentCollector));
         _ = await Assert.That(hasContentCollector).IsTrue();
