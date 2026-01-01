@@ -3,6 +3,7 @@
 using System;
 using System.CommandLine;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NetEvolve.ForgingBlazor.Configurations;
 using NetEvolve.ForgingBlazor.Extensibility;
 using NetEvolve.ForgingBlazor.Extensibility.Abstractions;
@@ -22,12 +23,17 @@ using NetEvolve.ForgingBlazor.Extensibility.Commands;
 /// </remarks>
 /// <seealso cref="CommandOptions"/>
 /// <seealso cref="IStartUpMarker"/>
-internal sealed class CommandBuild : Command, IStartUpMarker
+internal sealed partial class CommandBuild : Command, IStartUpMarker
 {
     /// <summary>
     /// Stores the service provider for transferring services during command execution.
     /// </summary>
     private readonly IServiceProvider _serviceProvider;
+
+    /// <summary>
+    /// Stores the logger instance for logging command execution details.
+    /// </summary>
+    private readonly ILogger _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CommandBuild"/> class with the specified service provider.
@@ -36,10 +42,14 @@ internal sealed class CommandBuild : Command, IStartUpMarker
     /// The <see cref="IServiceProvider"/> instance providing access to registered application services.
     /// This is used to transfer services for command execution.
     /// </param>
-    public CommandBuild(IServiceProvider serviceProvider)
+    /// <param name="logger">
+    /// The <see cref="ILogger{T}"/> instance for logging command execution details.
+    /// </param>
+    public CommandBuild(IServiceProvider serviceProvider, ILogger<CommandBuild> logger)
         : base("build", "Builds and generates static content for a Forging Blazor application.")
     {
         _serviceProvider = serviceProvider;
+        _logger = logger;
 
         Add(CommandOptions.ContentPath);
         Add(CommandOptions.Environment);
@@ -111,9 +121,17 @@ internal sealed class CommandBuild : Command, IStartUpMarker
 
             return 0;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            LogUnhandledException(ex);
             return 1;
         }
     }
+
+    [LoggerMessage(
+        EventId = 1,
+        Level = LogLevel.Error,
+        Message = "An unhandled exception occurred during the build process."
+    )]
+    private partial void LogUnhandledException(Exception ex);
 }

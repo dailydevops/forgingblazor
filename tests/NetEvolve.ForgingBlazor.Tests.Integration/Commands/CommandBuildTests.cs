@@ -8,7 +8,7 @@ public sealed class CommandBuildTests
     {
         using var directory = new TempDirectory();
 
-        if (args is not null && args.Length != 0)
+        if (args is { Length: > 0 })
         {
             args = [.. args, directory.Path, "--content-path", "_setup/content"];
         }
