@@ -101,7 +101,7 @@ public sealed class ApplicationBuilderExtensionsTests
     [Arguments(null!)]
     [Arguments("")]
     [Arguments("   ")]
-    public void AddSegment_WithNullOrWhiteSpaceSegment_ThrowsArgumentException(string segment)
+    public void AddSegment_WithNullOrWhiteSpaceSegment_ThrowsArgumentException(string? segment)
     {
         var args = Array.Empty<string>();
         var builder = ApplicationBuilder.CreateDefaultBuilder(args);
@@ -144,7 +144,7 @@ public sealed class ApplicationBuilderExtensionsTests
     [Arguments(null!)]
     [Arguments("")]
     [Arguments("   ")]
-    public void AddSegmentGeneric_WithNullOrWhiteSpaceSegment_ThrowsArgumentException(string segment)
+    public void AddSegmentGeneric_WithNullOrWhiteSpaceSegment_ThrowsArgumentException(string? segment)
     {
         var args = Array.Empty<string>();
         var builder = ApplicationBuilder.CreateDefaultBuilder(args);
@@ -175,7 +175,7 @@ public sealed class ApplicationBuilderExtensionsTests
     [Arguments(null!)]
     [Arguments("")]
     [Arguments("   ")]
-    public void AddBlogSegment_WithNullOrWhiteSpaceSegment_ThrowsArgumentException(string segment)
+    public void AddBlogSegment_WithNullOrWhiteSpaceSegment_ThrowsArgumentException(string? segment)
     {
         var args = Array.Empty<string>();
         var builder = ApplicationBuilder.CreateDefaultBuilder(args);
@@ -206,7 +206,7 @@ public sealed class ApplicationBuilderExtensionsTests
     [Arguments(null!)]
     [Arguments("")]
     [Arguments("   ")]
-    public void AddBlogSegmentGeneric_WithNullOrWhiteSpaceSegment_ThrowsArgumentException(string segment)
+    public void AddBlogSegmentGeneric_WithNullOrWhiteSpaceSegment_ThrowsArgumentException(string? segment)
     {
         var args = Array.Empty<string>();
         var builder = ApplicationBuilder.CreateDefaultBuilder(args);

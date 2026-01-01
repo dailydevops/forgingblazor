@@ -134,7 +134,7 @@ public sealed class ServiceCollectionExtensionsTests
         var services = new ServiceCollection();
 
         _ = services.AddMarkdownServices();
-        using var provider = services.BuildServiceProvider();
+        await using var provider = services.BuildServiceProvider();
         var pipeline = provider.GetService<MarkdownPipeline>();
 
         _ = await Assert.That(pipeline).IsNotNull();
@@ -146,7 +146,7 @@ public sealed class ServiceCollectionExtensionsTests
         var services = new ServiceCollection();
 
         _ = services.AddMarkdownServices();
-        using var provider = services.BuildServiceProvider();
+        await using var provider = services.BuildServiceProvider();
         var deserializer = provider.GetService<IDeserializer>();
 
         _ = await Assert.That(deserializer).IsNotNull();
