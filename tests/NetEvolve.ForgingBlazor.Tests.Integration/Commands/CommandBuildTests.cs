@@ -8,13 +8,13 @@ public sealed class CommandBuildTests
     {
         using var directory = new TempDirectory();
 
-        if (args is not null && args.Length != 0)
+        if (args is { Length: > 0 })
         {
             args = [.. args, directory.Path, "--content-path", "_setup/content"];
         }
         else
         {
-            args = ["build", "--content-path", "_setup/Content"];
+            args = ["build", "--content-path", "_setup/content"];
         }
 
         await Helper.VerifyStaticContent(directory.Path, args).ConfigureAwait(false);

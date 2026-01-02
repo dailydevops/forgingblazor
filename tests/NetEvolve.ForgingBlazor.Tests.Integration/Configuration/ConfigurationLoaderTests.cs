@@ -11,7 +11,7 @@ public sealed class ConfigurationLoaderTests
     public async ValueTask Load_ConfigurationFile_Expected(string projectPath, string? environment)
     {
         var services = new ServiceCollection()
-            .AddSingleton(sp => ConfigurationLoader.Load(environment, projectPath))
+            .AddSingleton(_ => ConfigurationLoader.Load(environment, projectPath))
             .ConfigureOptions<SiteConfigurationConfigure>();
         var serviceProvider = services.BuildServiceProvider();
 

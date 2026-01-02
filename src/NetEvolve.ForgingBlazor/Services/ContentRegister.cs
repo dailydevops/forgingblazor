@@ -115,12 +115,12 @@ internal sealed partial class ContentRegister : IContentRegister
         {
             var collectors = contentCollectors.GetOrAdd(
                 registration.Segment,
-                (segment) => _serviceProvider.GetKeyedServices<IContentCollector>(segment)
+                _serviceProvider.GetKeyedServices<IContentCollector>
             );
 
             foreach (var collector in collectors)
             {
-                var collectorTypeFullName = collector.GetType().Name;
+                var collectorTypeFullName = GetCollectorName(collector);
                 LogStartingContentCollection(registration.Segment, collectorTypeFullName);
                 await collector.CollectAsync(this, registration, cancellationToken).ConfigureAwait(false);
                 LogCompletedContentCollection(registration.Segment, collectorTypeFullName);
@@ -178,6 +178,28 @@ internal sealed partial class ContentRegister : IContentRegister
         defaultRegistrations.SetExcludePaths(excludePaths);
 
         return [.. registrations.OrderByDescending(r => r.Priority)];
+    }
+
+    private readonly ConcurrentDictionary<Type, string> _collectorNameCache = new();
+
+    private string GetCollectorName(IContentCollector collector)
+    {
+        var collectorType = collector.GetType();
+
+        return _collectorNameCache.GetOrAdd(collectorType, GetTypeName);
+
+        static string GetTypeName(Type type)
+        {
+            if (type.IsGenericType)
+            {
+                return type.Name.Split('`')[0]
+                    + "<"
+                    + string.Join(", ", type.GetGenericArguments().Select(x => GetTypeName(x)).ToArray())
+                    + ">";
+            }
+
+            return type.Name;
+        }
     }
 
     /// <summary>

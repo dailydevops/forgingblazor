@@ -1,10 +1,15 @@
 ﻿namespace NetEvolve.ForgingBlazor.Tests.Integration;
 
+using Microsoft.Extensions.Logging;
+using NetEvolve.ForgingBlazor.Logging;
+
 internal static class Helper
 {
     public static async ValueTask VerifyStaticContent(string directoryPath, string[] args)
     {
-        var builder = ApplicationBuilder.CreateDefaultBuilder(args);
+        var builder = ApplicationBuilder
+            .CreateDefaultBuilder(args)
+            .WithLogging(loggingBuilder => loggingBuilder.AddConsole().SetMinimumLevel(LogLevel.Debug));
 
         var app = builder.Build();
 
