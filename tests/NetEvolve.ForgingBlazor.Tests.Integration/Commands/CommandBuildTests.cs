@@ -14,7 +14,7 @@ public sealed class CommandBuildTests
         }
         else
         {
-            args = ["build", "--content-path", "_setup/Content"];
+            args = ["build", "--content-path", "_setup/content"];
         }
 
         await Helper.VerifyStaticContent(directory.Path, args).ConfigureAwait(false);
