@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\NetEvolve.ForgingBlazor.Logging\NetEvolve.ForgingBlazor.Logging.csproj" />
     <ProjectReference Include="..\..\src\NetEvolve.ForgingBlazor\NetEvolve.ForgingBlazor.csproj" />
   </ItemGroup>
 
