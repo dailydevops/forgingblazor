@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Project settings">
+    <NoWarn>$(NoWarn);CS1591;S125;IDE0058</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.Testing" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NetEvolve.Extensions.TUnit" />
+    <PackageReference Include="TUnit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Xample.AppHost\Xample.AppHost.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="System.Net" />
+    <Using Include="Microsoft.Extensions.DependencyInjection" />
+    <Using Include="Aspire.Hosting.ApplicationModel" />
+    <Using Include="Aspire.Hosting.Testing" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="NetEvolve.Extensions.TUnit.IntegrationTestAttribute" />
+  </ItemGroup>
+</Project>

@@ -20,6 +20,17 @@
     <File Path="renovate.json" />
     <File Path="testEnvironments.json" />
   </Folder>
-  <Folder Name="/src/" />
-  <Folder Name="/tests/" />
+  <Folder Name="/src/">
+    <Project Path="src/Xample.AppHost/Xample.AppHost.csproj" Id="6fc35ee1-9a93-42dc-8ce8-3b7bf7ebe31e" />
+    <Project
+      Path="src/Xample.ServiceDefaults/Xample.ServiceDefaults.csproj"
+      Id="5477e685-9649-4178-97a5-f605c0dfe2bc"
+    />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project
+      Path="tests/Xample.AppHost.Tests.Integration/Xample.AppHost.Tests.Integration.csproj"
+      Id="3b4b521c-6b8c-4ddb-bed7-33b44f7b4b74"
+    />
+  </Folder>
 </Solution>
