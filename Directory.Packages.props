@@ -27,7 +27,7 @@
     <PackageVersion Include="NetEscapades.Configuration.Yaml" Version="3.1.0" />
     <PackageVersion Include="NetEvolve.Extensions.TUnit" Version="3.5.3" />
     <PackageVersion Include="System.CommandLine" Version="2.0.1" />
-    <PackageVersion Include="TUnit" Version="1.8.9" />
+    <PackageVersion Include="TUnit" Version="1.9.2" />
     <PackageVersion Include="Verify.ParametersHashing" Version="1.0.0" />
     <PackageVersion Include="Verify.TUnit" Version="31.9.3" />
     <PackageVersion Include="YamlDotNet" Version="16.3.0" />
