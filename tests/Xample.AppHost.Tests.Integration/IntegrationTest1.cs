@@ -1,0 +1,45 @@
+﻿namespace Xample.AppHost.Tests.Integration.Tests;
+
+using Microsoft.Extensions.Logging;
+
+public class IntegrationTest1
+{
+    private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(30);
+
+    [Test]
+    public async Task GetWebResourceRootReturnsOkStatusCode()
+    {
+        // Arrange
+        var cancellationToken = TestContext.Current!.Execution.CancellationToken;
+        var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.Xample_AppHost>(
+            cancellationToken
+        );
+        _ = appHost.Services.AddLogging(logging =>
+        {
+            _ = logging
+                .SetMinimumLevel(LogLevel.Debug)
+                // Override the logging filters from the app's configuration
+                .AddFilter(appHost.Environment.ApplicationName, LogLevel.Debug)
+                .AddFilter("Aspire.", LogLevel.Debug);
+            // To output logs to the xUnit.net ITestOutputHelper, consider adding a package from https://www.nuget.org/packages?q=xunit+logging
+        });
+        _ = appHost.Services.ConfigureHttpClientDefaults(clientBuilder =>
+        {
+            _ = clientBuilder.AddStandardResilienceHandler();
+        });
+
+        await using var app = await appHost.BuildAsync(cancellationToken).WaitAsync(DefaultTimeout, cancellationToken);
+        await app.StartAsync(cancellationToken).WaitAsync(DefaultTimeout, cancellationToken);
+
+        // Act
+        using var httpClient = app.CreateHttpClient("webfrontend");
+        _ = await app
+            .ResourceNotifications.WaitForResourceHealthyAsync("webfrontend", cancellationToken)
+            .WaitAsync(DefaultTimeout, cancellationToken)
+            .ConfigureAwait(false);
+        using var response = await httpClient.GetAsync(new Uri("/"), cancellationToken);
+
+        // Assert
+        _ = await Assert.That(response.StatusCode).EqualTo(HttpStatusCode.OK);
+    }
+}
