@@ -23,14 +23,14 @@
   <Folder Name="/src/">
     <Project Path="src/ForgingBlazor.Extensibility/ForgingBlazor.Extensibility.csproj" />
     <Project Path="src/ForgingBlazor/ForgingBlazor.csproj" />
-    <Project Path="src/Xample.AppHost/Xample.AppHost.csproj" Id="6fc35ee1-9a93-42dc-8ce8-3b7bf7ebe31e" />
-    <Project Path="src/Xample.ServiceDefaults/Xample.ServiceDefaults.csproj" Id="5477e685-9649-4178-97a5-f605c0dfe2bc" />
-    <Project Path="src/Xample/Xample.csproj" Id="57d92193-9c07-41f5-a441-74452115cc60" />
+    <Project Path="src/Xample.AppHost/Xample.AppHost.csproj" />
+    <Project Path="src/Xample.ServiceDefaults/Xample.ServiceDefaults.csproj" />
+    <Project Path="src/Xample/Xample.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/ForgingBlazor.Extensibility.Tests.Unit/ForgingBlazor.Extensibility.Tests.Unit.csproj" />
     <Project Path="tests/ForgingBlazor.Tests.Integration/ForgingBlazor.Tests.Integration.csproj" />
     <Project Path="tests/ForgingBlazor.Tests.Unit/ForgingBlazor.Tests.Unit.csproj" />
-    <Project Path="tests/Xample.AppHost.Tests.Integration/Xample.AppHost.Tests.Integration.csproj" Id="3b4b521c-6b8c-4ddb-bed7-33b44f7b4b74" />
+    <Project Path="tests/Xample.AppHost.Tests.Integration/Xample.AppHost.Tests.Integration.csproj" />
   </Folder>
 </Solution>
