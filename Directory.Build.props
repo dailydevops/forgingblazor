@@ -1,14 +1,18 @@
 <Project>
   <PropertyGroup Label="Package settings">
-    <AssemblyName>NetEvolve.ForgingBlazor.$(MSBuildProjectName)</AssemblyName>
-    <RootNamespace>NetEvolve.ForgingBlazor.$(MSBuildProjectName)</RootNamespace>
-    <Title>NetEvolve.ForgingBlazor.$(MSBuildProjectName)</Title>
-    <PackageId>NetEvolve.ForgingBlazor.$(MSBuildProjectName)</PackageId>
-    <Description></Description>
-    <RepositoryUrl></RepositoryUrl>
-    <PackageProjectUrl></PackageProjectUrl>
-    <PackageReleaseNotes>$(RepositoryUrl)/releases</PackageReleaseNotes>
-    <PackageTags></PackageTags>
+    <AssemblyName>NetEvolve.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>NetEvolve.$(MSBuildProjectName)</RootNamespace>
+    <Title>NetEvolve.$(MSBuildProjectName)</Title>
+    <PackageId>NetEvolve.$(MSBuildProjectName)</PackageId>
+    <Description>Forging Blazor - Blog Engine</Description>
+    <RepositoryUrl>https://github.com/dailydevops/forgingblazor.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/dailydevops/forgingblazor</PackageProjectUrl>
+    <PackageReleaseNotes>$(PackageProjectUrl)/releases</PackageReleaseNotes>
+    <PackageTags>forgingblazor;blogengine;blazor</PackageTags>
     <CopyrightYearStart>2026</CopyrightYearStart>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Runtime settings">
+    <ProjectTargetFramework>net10.0</ProjectTargetFramework>
   </PropertyGroup>
 </Project>

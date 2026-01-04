@@ -1,5 +1,8 @@
 ﻿namespace Xample.AppHost.Tests.Integration.Tests;
 
+using System.Net;
+using Aspire.Hosting.Testing;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 public class IntegrationTest1
@@ -32,12 +35,14 @@ public class IntegrationTest1
         await app.StartAsync(cancellationToken).WaitAsync(DefaultTimeout, cancellationToken);
 
         // Act
-        using var httpClient = app.CreateHttpClient("webfrontend");
+        using var httpClient = app.CreateHttpClient("xample");
         _ = await app
-            .ResourceNotifications.WaitForResourceHealthyAsync("webfrontend", cancellationToken)
+            .ResourceNotifications.WaitForResourceHealthyAsync("xample", cancellationToken)
             .WaitAsync(DefaultTimeout, cancellationToken)
             .ConfigureAwait(false);
-        using var response = await httpClient.GetAsync(new Uri("/"), cancellationToken);
+#pragma warning disable CA2234 // Pass system uri objects instead of strings
+        using var response = await httpClient.GetAsync("/", cancellationToken);
+#pragma warning restore CA2234 // Pass system uri objects instead of strings
 
         // Assert
         _ = await Assert.That(response.StatusCode).EqualTo(HttpStatusCode.OK);

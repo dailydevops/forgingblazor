@@ -1,11 +1,15 @@
-<Project Sdk="Aspire.AppHost.Sdk/13.1.0">
+﻿<Project Sdk="Aspire.AppHost.Sdk/13.1.0">
   <PropertyGroup Label="Runtime settings">
     <OutputType>Exe</OutputType>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>$(ProjectTargetFramework)</TargetFramework>
     <UserSecretsId>4a60edef-d84f-4ad1-8862-5c11dbd4721f</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Label="Project settings">
     <XampleProject>true</XampleProject>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Xample\Xample.csproj" />
+  </ItemGroup>
 </Project>
