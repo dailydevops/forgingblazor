@@ -13,9 +13,19 @@
   "automergeType": "pr",
   "automergeStrategy": "squash",
   "enabledManagers": [
-    "ci",
-    "nuget",
-    "custom.regex"
+    "custom.regex",
+    "dockerfile",
+    "github-actions",
+    "nuget"
+  ],
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/bower_components/**",
+    "**/vendor/**",
+    "**/examples/**",
+    "**/__tests__/**",
+    "**/test/**",
+    "**/__fixtures__/**"
   ],
   "customManagers": [
     {
@@ -26,11 +36,22 @@
       ],
       "matchStrings": [
         "<PackageReference\\s+Include=\"(?<depName>[^\"]+)\"\\s+Version=\"\\[(?<currentValue>[^,]+),.*\"",
-        "<Sdk\\s+Name=\"(?<depName>[^\"]+)\"\\s+Version=\"(?<currentValue>[^,]+)\" />",
-        "<Project Sdk=\"(?<depName>[^\"]+)/(?<currentValue>[^,]+)\">"
+        "<Sdk\\s+Name=\"(?<depName>[^\"]+)\"\\s+Version=\"(?<currentValue>[^,]+)\"",
+        "<Project\\s+Sdk=\"(?<depName>[^\"]+)/(?<currentValue>[^,]+)\""
       ],
       "datasourceTemplate": "nuget",
       "versioningTemplate": "nuget"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/\\.cs$/"
+      ],
+      "matchStrings": [
+        "/\\*\\s*dockerimage\\s*\\*/\\s*\"(?<depName>[^:]+):(?<currentValue>[^\"]+)\""
+      ],
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
     }
   ],
   "packageRules": [
@@ -51,16 +72,57 @@
     },
     {
       "matchManagers": [
-        "ci"
+        "github-actions"
       ],
       "labels": [
         "dependency:actions"
       ],
+      "automerge": true,
       "semanticCommits": "enabled",
       "semanticCommitType": "chore",
       "semanticCommitScope": "ci",
       "assignees": [
         "samtrion"
+      ]
+    },
+    {
+      "matchDatasources": [
+        "docker",
+        "custom.regex"
+      ],
+      "labels": [
+        "dependency:docker"
+      ],
+      "semanticCommits": "enabled",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "docker",
+      "assignees": [
+        "samtrion"
+      ],
+      "versioning": "loose"
+    },
+    {
+      "groupName": "Testcontainers packages",
+      "groupSlug": "testcontainers-packages",
+      "matchManagers": [
+        "nuget",
+        "custom.regex"
+      ],
+      "matchPackageNames": [
+        "Testcontainers",
+        "Testcontainers.*"
+      ]
+    },
+    {
+      "groupName": "TUnit packages",
+      "groupSlug": "tunit-packages",
+      "matchManagers": [
+        "nuget",
+        "custom.regex"
+      ],
+      "matchPackageNames": [
+        "TUnit",
+        "TUnit.*"
       ]
     }
   ]

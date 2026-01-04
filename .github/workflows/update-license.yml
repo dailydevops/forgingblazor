@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
 
 jobs:
@@ -15,11 +15,11 @@ jobs:
     steps:
 
     - name: Checkout repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
       with:
         fetch-depth: 0
 
-    - uses: FantasticFiasco/action-update-license-year@v3
+    - uses: FantasticFiasco/action-update-license-year@f180e962fa988db222d8f03ef4636750312d1b3d # v3
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         prTitle: 'chore: Updated LICENSE'
