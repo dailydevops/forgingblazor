@@ -77,9 +77,6 @@ public sealed class ForgingBlazorApplication : IForgingBlazorApplication
         [DynamicallyAccessedMembers((DynamicallyAccessedMemberTypes)(-1))] TRootComponent
     >(WebApplication app)
     {
-        var environment = app.Environment;
-        var optionsAdmin = app.Services.GetService<IOptions<AdministrationConfiguration>>();
-
         if (!app.Environment.IsDevelopment())
         {
             _ = app.UseExceptionHandler("/Error", createScopeForErrors: true);

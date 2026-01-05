@@ -26,9 +26,7 @@ public static class ForgingBlazorApplicationBuilderExtensions
         /// <summary>
         /// Adds hosting services required for running a Blazor application, including Razor pages, Razor components, and SignalR.
         /// </summary>
-        /// <param name="builder">The ForgingBlazor application builder.</param>
         /// <returns>The <see cref="IForgingBlazorApplicationBuilder"/> for method chaining.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="builder"/> is null.</exception>
         /// <exception cref="InvalidOperationException">Thrown when the builder is not of type <see cref="ForgingBlazorApplicationBuilder"/> or when hosting services have already been registered.</exception>
         public IForgingBlazorApplicationBuilder AddHostingServices()
         {
@@ -58,9 +56,7 @@ public static class ForgingBlazorApplicationBuilderExtensions
         /// <summary>
         /// Adds configuration services and validation for ForgingBlazor application settings.
         /// </summary>
-        /// <param name="builder">The ForgingBlazor application builder.</param>
         /// <returns>The <see cref="IForgingBlazorApplicationBuilder"/> for method chaining.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="builder"/> is null.</exception>
         /// <exception cref="InvalidOperationException">Thrown when the builder is not of type <see cref="ForgingBlazorApplicationBuilder"/> or when configuration services have already been registered.</exception>
         public IForgingBlazorApplicationBuilder AddConfigurations()
         {
