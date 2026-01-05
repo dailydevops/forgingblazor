@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using NetEvolve.ForgingBlazor.Components.Administration;
 using NetEvolve.ForgingBlazor.Configurations;
 using NetEvolve.ForgingBlazor.Extensibility;
 
@@ -90,5 +91,12 @@ public sealed class ForgingBlazorApplication : IForgingBlazorApplication
 
         _ = app.MapStaticAssets();
         _ = app.MapRazorComponents<TRootComponent>();
+
+        var adminOptions = app.Services.GetRequiredService<IOptions<AdministrationConfiguration>>();
+        if (adminOptions.Value.IsEnabled)
+        {
+            _ = app.MapRazorComponents<AdminApp>().AddInteractiveServerRenderMode();
+            _ = app.MapGroup($"/{adminOptions.Value.PathSegment}").RequireAuthorization();
+        }
     }
 }

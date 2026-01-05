@@ -1,0 +1,17 @@
+﻿<Router AppAssembly="typeof(AdminApp).Assembly" NotFoundPage="typeof(Pages.NotFound)">
+<Found Context="routeData">
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+            <NotAuthorized>
+                You are not authorized.
+            </NotAuthorized>
+            <Authorizing>
+                Authorizing in process...
+            </Authorizing>
+        </AuthorizeRouteView>
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <p>Sorry, there's nothing at this address.</p>
+        </LayoutView>
+    </NotFound>
+</Router>

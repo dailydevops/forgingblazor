@@ -35,7 +35,7 @@
 $projectNames = @(
   @( "ForgingBlazor.Extensibility", "src", "classlib" ),
   @( "ForgingBlazor.Extensibility.Tests.Unit", "tests", "TUnit" ),
-  @( "ForgingBlazor", "src", "classlib"),
+  @( "ForgingBlazor", "src", "razorclasslib"),
   @( "ForgingBlazor.Tests.Integration", "tests", "TUnit" ),
   @( "ForgingBlazor.Tests.Unit", "tests", "TUnit" )
 )
