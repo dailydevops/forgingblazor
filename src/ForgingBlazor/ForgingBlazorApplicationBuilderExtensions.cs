@@ -76,10 +76,13 @@ public static class ForgingBlazorApplicationBuilderExtensions
             services.ThrowIfAlreadyRegistered<MarkerConfigurationServicesRegistered>();
 
             _ = services
-                // Marker to prevent multiple registrations
-                .AddSingleton<MarkerConfigurationServicesRegistered>()
-                // Add AdministrationConfiguration
-                .ConfigureOptions<AdministrationConfigurationValidation>();
+            // Marker to prevent multiple registrations
+            .AddSingleton<MarkerConfigurationServicesRegistered>();
+
+            // Add AdministrationConfiguration
+            _ = services
+                .AddOptionsWithValidateOnStart<AdministrationConfiguration, AdministrationConfigurationValidation>()
+                .ValidateDataAnnotations();
 
             return builder;
         }

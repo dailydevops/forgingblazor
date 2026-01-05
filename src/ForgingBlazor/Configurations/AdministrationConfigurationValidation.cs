@@ -36,7 +36,7 @@ internal class AdministrationConfigurationValidation
     /// <returns>A <see cref="ValidateOptionsResult"/> indicating whether validation succeeded or failed.</returns>
     public ValidateOptionsResult Validate(string? name, AdministrationConfiguration options)
     {
-        if (!string.IsNullOrWhiteSpace(options.PathSegment))
+        if (string.IsNullOrWhiteSpace(options.PathSegment))
         {
             return Fail("PathSegment must be provided.");
         }
