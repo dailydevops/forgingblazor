@@ -34,7 +34,7 @@ internal sealed class ForgingBlazorApplicationBuilder : IForgingBlazorApplicatio
 
         _builder = WebApplication.CreateBuilder(args);
 
-        AddConfigurationSettings();
+        AddConfigurationSettings(_builder);
     }
 
     /// <summary>
@@ -46,12 +46,12 @@ internal sealed class ForgingBlazorApplicationBuilder : IForgingBlazorApplicatio
     /// <summary>
     /// Configures the application's configuration settings from various sources including JSON, YAML, environment variables, and user secrets.
     /// </summary>
-    private void AddConfigurationSettings()
+    private static void AddConfigurationSettings(WebApplicationBuilder builder)
     {
-        var environment = _builder.Environment.EnvironmentName;
+        var environment = builder.Environment.EnvironmentName;
         // Add configuration files and environment variables
         // The later sources override the earlier ones
-        _ = _builder
+        _ = builder
             .Configuration.AddJsonFile("forgingblazor.json", optional: true, reloadOnChange: true)
             .AddJsonFile($"forgingblazor.{environment}.json", optional: true, reloadOnChange: true)
             .AddYamlFile("forgingblazor.yaml", optional: true, reloadOnChange: true)
@@ -65,7 +65,7 @@ internal sealed class ForgingBlazorApplicationBuilder : IForgingBlazorApplicatio
         var entryAssembly = Assembly.GetEntryAssembly();
         if (entryAssembly is not null)
         {
-            _ = _builder.Configuration.AddUserSecrets(entryAssembly, optional: true, reloadOnChange: true);
+            _ = builder.Configuration.AddUserSecrets(entryAssembly, optional: true, reloadOnChange: true);
         }
     }
 }
