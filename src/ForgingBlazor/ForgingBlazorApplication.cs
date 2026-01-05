@@ -92,7 +92,7 @@ public sealed class ForgingBlazorApplication : IForgingBlazorApplication
         _ = app.MapStaticAssets();
         _ = app.MapRazorComponents<TRootComponent>();
 
-        var adminOptions = app.Services.GetRequiredService<IOptions<AdministrationConfiguration>>();
+        var adminOptions = app.Services.GetRequiredService<IOptions<AdministrationConfig>>();
         if (adminOptions.Value.IsEnabled)
         {
             _ = app.MapRazorComponents<AdminApp>().AddInteractiveServerRenderMode();

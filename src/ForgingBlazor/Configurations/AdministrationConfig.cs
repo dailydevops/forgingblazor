@@ -3,7 +3,7 @@
 /// <summary>
 /// Configuration settings for the administration area of the ForgingBlazor application.
 /// </summary>
-internal sealed class AdministrationConfiguration
+internal sealed class AdministrationConfig
 {
     /// <summary>
     /// Gets or sets a value indicating whether the administration area is enabled.
