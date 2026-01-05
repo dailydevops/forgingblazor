@@ -5,11 +5,11 @@ using Microsoft.Extensions.Options;
 using static Microsoft.Extensions.Options.ValidateOptionsResult;
 
 /// <summary>
-/// Provides configuration and validation for <see cref="AdministrationConfiguration"/> settings.
+/// Provides configuration and validation for <see cref="AdministrationConfig"/> settings.
 /// </summary>
-internal class AdministrationConfigurationValidation
-    : IConfigureOptions<AdministrationConfiguration>,
-        IValidateOptions<AdministrationConfiguration>
+internal class AdministrationConfigValidation
+    : IConfigureOptions<AdministrationConfig>,
+        IValidateOptions<AdministrationConfig>
 {
     /// <summary>
     /// The application configuration instance used to bind settings.
@@ -17,24 +17,24 @@ internal class AdministrationConfigurationValidation
     private readonly IConfiguration _configuration;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="AdministrationConfigurationValidation"/> class.
+    /// Initializes a new instance of the <see cref="AdministrationConfigValidation"/> class.
     /// </summary>
     /// <param name="configuration">The application configuration instance.</param>
-    public AdministrationConfigurationValidation(IConfiguration configuration) => _configuration = configuration;
+    public AdministrationConfigValidation(IConfiguration configuration) => _configuration = configuration;
 
     /// <summary>
-    /// Configures the <see cref="AdministrationConfiguration"/> options by binding values from the "administration" configuration section.
+    /// Configures the <see cref="AdministrationConfig"/> options by binding values from the "administration" configuration section.
     /// </summary>
     /// <param name="options">The options instance to configure.</param>
-    public void Configure(AdministrationConfiguration options) => _configuration.Bind("administration", options);
+    public void Configure(AdministrationConfig options) => _configuration.Bind("administration", options);
 
     /// <summary>
-    /// Validates the <see cref="AdministrationConfiguration"/> options to ensure required settings are provided.
+    /// Validates the <see cref="AdministrationConfig"/> options to ensure required settings are provided.
     /// </summary>
     /// <param name="name">The name of the options instance being validated.</param>
     /// <param name="options">The options instance to validate.</param>
     /// <returns>A <see cref="ValidateOptionsResult"/> indicating whether validation succeeded or failed.</returns>
-    public ValidateOptionsResult Validate(string? name, AdministrationConfiguration options)
+    public ValidateOptionsResult Validate(string? name, AdministrationConfig options)
     {
         if (string.IsNullOrWhiteSpace(options.PathSegment))
         {
