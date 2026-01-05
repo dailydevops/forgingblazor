@@ -1,4 +1,4 @@
-﻿namespace Xample.AppHost.Tests.Integration.Tests;
+﻿namespace NetEvolve.Xample.AppHost.Tests.Integration;
 
 using System.Net;
 using Aspire.Hosting.Testing;
@@ -27,9 +27,8 @@ public class IntegrationTest1
             // To output logs to the xUnit.net ITestOutputHelper, consider adding a package from https://www.nuget.org/packages?q=xunit+logging
         });
         _ = appHost.Services.ConfigureHttpClientDefaults(clientBuilder =>
-        {
-            _ = clientBuilder.AddStandardResilienceHandler();
-        });
+            _ = clientBuilder.AddStandardResilienceHandler()
+        );
 
         await using var app = await appHost.BuildAsync(cancellationToken).WaitAsync(DefaultTimeout, cancellationToken);
         await app.StartAsync(cancellationToken).WaitAsync(DefaultTimeout, cancellationToken);

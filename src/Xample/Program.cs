@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using NetEvolve.ForgingBlazor;
+using NetEvolve.Xample.Components;
 
-var app = WebApplication.CreateBuilder(args).Build();
-app.MapGet("/", () => "Hello World!");
+var builder = ForgingBlazorApplication.CreateDefaultBuilder(args);
 
-await app.RunAsync().ConfigureAwait(false);
+var app = builder.Build();
+
+await app.RunAsync<App>().ConfigureAwait(false);

@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Extensions.Hosting;
+﻿#pragma warning disable IDE0130 // Namespace does not match folder structure
+namespace Microsoft.Extensions.Hosting;
+
+#pragma warning restore IDE0130 // Namespace does not match folder structure
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -56,9 +59,8 @@ public static class AspireExtensions
         builder
             .Services.AddOpenTelemetry()
             .WithMetrics(metrics =>
-            {
-                metrics.AddAspNetCoreInstrumentation().AddHttpClientInstrumentation().AddRuntimeInstrumentation();
-            })
+                metrics.AddAspNetCoreInstrumentation().AddHttpClientInstrumentation().AddRuntimeInstrumentation()
+            )
             .WithTracing(tracing =>
             {
                 tracing
