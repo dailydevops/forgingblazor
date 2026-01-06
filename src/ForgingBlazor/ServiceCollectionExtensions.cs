@@ -2,6 +2,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 /// <summary>
 /// Provides extension methods for <see cref="IServiceCollection"/> to support service registration validation.
@@ -22,6 +23,27 @@ internal static class ServiceCollectionExtensions
         {
             ThrowAlreadyRegistered(typeOfTMarker.Name);
         }
+    }
+
+    /// <summary>
+    /// Registers a configuration of type <typeparamref name="TConfiguration"/> with validation of type <typeparamref name="TValidation"/>.
+    /// </summary>
+    /// <typeparam name="TConfiguration">The configuration type to register. Must be a reference type.</typeparam>
+    /// <typeparam name="TValidation">The validation type that implements <see cref="IConfigureOptions{TOptions}"/> and <see cref="IValidateOptions{TOptions}"/>. Must be a reference type.</typeparam>
+    /// <param name="services">The service collection to register the configuration with.</param>
+    /// <returns>The <see cref="IServiceCollection"/> for method chaining.</returns>
+    internal static IServiceCollection RegisterConfiguration<TConfiguration, TValidation>(
+        this IServiceCollection services
+    )
+        where TConfiguration : class
+        where TValidation : class, IConfigureOptions<TConfiguration>, IValidateOptions<TConfiguration>
+    {
+        _ = services
+            .ConfigureOptions<TValidation>()
+            .AddOptionsWithValidateOnStart<TConfiguration, TValidation>()
+            .ValidateDataAnnotations();
+
+        return services;
     }
 
     /// <summary>

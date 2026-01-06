@@ -53,10 +53,10 @@ internal sealed class ForgingBlazorApplicationBuilder : IForgingBlazorApplicatio
         // The later sources override the earlier ones
         _ = builder
             .Configuration.AddJsonFile("forgingblazor.json", optional: true, reloadOnChange: true)
-            .AddJsonFile($"forgingblazor.{environment}.json", optional: true, reloadOnChange: true)
             .AddYamlFile("forgingblazor.yaml", optional: true, reloadOnChange: true)
-            .AddYamlFile($"forgingblazor.{environment}.yaml", optional: true, reloadOnChange: true)
             .AddYamlFile("forgingblazor.yml", optional: true, reloadOnChange: true)
+            .AddJsonFile($"forgingblazor.{environment}.json", optional: true, reloadOnChange: true)
+            .AddYamlFile($"forgingblazor.{environment}.yaml", optional: true, reloadOnChange: true)
             .AddYamlFile($"forgingblazor.{environment}.yml", optional: true, reloadOnChange: true)
             // Prefix all environment variables with "FORGINGBLAZOR_"
             .AddEnvironmentVariables("FORGINGBLAZOR_");

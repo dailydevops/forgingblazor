@@ -34,9 +34,9 @@ public class IntegrationTest1
         await app.StartAsync(cancellationToken).WaitAsync(DefaultTimeout, cancellationToken);
 
         // Act
-        using var httpClient = app.CreateHttpClient("xample");
+        using var httpClient = app.CreateHttpClient(ProjectNames.Xample);
         _ = await app
-            .ResourceNotifications.WaitForResourceHealthyAsync("xample", cancellationToken)
+            .ResourceNotifications.WaitForResourceHealthyAsync(ProjectNames.Xample, cancellationToken)
             .WaitAsync(DefaultTimeout, cancellationToken)
             .ConfigureAwait(false);
 #pragma warning disable CA2234 // Pass system uri objects instead of strings

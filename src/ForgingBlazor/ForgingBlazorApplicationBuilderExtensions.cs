@@ -21,79 +21,69 @@ using NetEvolve.ForgingBlazor.Extensibility;
 )]
 public static class ForgingBlazorApplicationBuilderExtensions
 {
-    extension(IForgingBlazorApplicationBuilder builder)
+    /// <summary>
+    /// Adds hosting services required for running a Blazor application, including Razor pages, Razor components, and SignalR.
+    /// </summary>
+    /// <param name="builder">The ForgingBlazor application builder to configure.</param>
+    /// <returns>The <see cref="IForgingBlazorApplicationBuilder"/> for method chaining.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="builder"/> is null.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the builder is not of type <see cref="ForgingBlazorApplicationBuilder"/> or when hosting services have already been registered.</exception>
+    public static IForgingBlazorApplicationBuilder AddHostingServices(this IForgingBlazorApplicationBuilder builder)
     {
-        /// <summary>
-        /// Adds hosting services required for running a Blazor application, including Razor pages, Razor components, and SignalR.
-        /// </summary>
-        /// <returns>The <see cref="IForgingBlazorApplicationBuilder"/> for method chaining.</returns>
-        /// <exception cref="InvalidOperationException">Thrown when the builder is not of type <see cref="ForgingBlazorApplicationBuilder"/> or when hosting services have already been registered.</exception>
-        public IForgingBlazorApplicationBuilder AddHostingServices()
+        ArgumentNullException.ThrowIfNull(builder);
+        if (builder is not ForgingBlazorApplicationBuilder forgingBlazorApplicationBuilder)
         {
-            ArgumentNullException.ThrowIfNull(builder);
-            if (builder is not ForgingBlazorApplicationBuilder forgingBlazorApplicationBuilder)
-            {
-                // BUG: If we call ThrowInvalidBuilderTypeException() here, the compiler complains that it cannot prove
-                // that the method will not return, even though it is annotated with [DoesNotReturn].
-                // ThrowInvalidBuilderTypeException();
-                throw new InvalidOperationException(
-                    $"The {nameof(AddHostingServices)} extension method can only be used with the `{nameof(ForgingBlazorApplicationBuilder)}` type."
-                );
-            }
-
-            var services = forgingBlazorApplicationBuilder.Services;
-
-            services.ThrowIfAlreadyRegistered<MarkerHostingServicesRegistered>();
-
-            _ = services.AddSingleton<MarkerHostingServicesRegistered>().AddRazorPages();
-            _ = services.AddRazorComponents().AddInteractiveServerComponents();
-
-            _ = services.AddSignalR(o => o.StreamBufferCapacity = 1024 * 1024);
-
-            return builder;
+            // BUG: If we call ThrowInvalidBuilderTypeException() here, the compiler complains that it cannot prove
+            // that the method will not return, even though it is annotated with [DoesNotReturn].
+            // ThrowInvalidBuilderTypeException();
+            throw new InvalidOperationException(
+                $"The {nameof(AddHostingServices)} extension method can only be used with the `{nameof(ForgingBlazorApplicationBuilder)}` type."
+            );
         }
 
-        /// <summary>
-        /// Adds configuration services and validation for ForgingBlazor application settings.
-        /// </summary>
-        /// <returns>The <see cref="IForgingBlazorApplicationBuilder"/> for method chaining.</returns>
-        /// <exception cref="InvalidOperationException">Thrown when the builder is not of type <see cref="ForgingBlazorApplicationBuilder"/> or when configuration services have already been registered.</exception>
-        public IForgingBlazorApplicationBuilder AddConfigurations()
+        var services = forgingBlazorApplicationBuilder.Services;
+
+        services.ThrowIfAlreadyRegistered<MarkerHostingServicesRegistered>();
+
+        _ = services.AddSingleton<MarkerHostingServicesRegistered>().AddRazorPages();
+        _ = services.AddRazorComponents().AddInteractiveServerComponents();
+
+        _ = services.AddSignalR(o => o.StreamBufferCapacity = 1024 * 1024);
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Adds configuration services and validation for ForgingBlazor application settings.
+    /// </summary>
+    /// <param name="builder">The ForgingBlazor application builder to configure.</param>
+    /// <returns>The <see cref="IForgingBlazorApplicationBuilder"/> for method chaining.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="builder"/> is null.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the builder is not of type <see cref="ForgingBlazorApplicationBuilder"/> or when configuration services have already been registered.</exception>
+    public static IForgingBlazorApplicationBuilder AddConfigurations(this IForgingBlazorApplicationBuilder builder)
+    {
+        ArgumentNullException.ThrowIfNull(builder);
+        if (builder is not ForgingBlazorApplicationBuilder forgingBlazorApplicationBuilder)
         {
-            ArgumentNullException.ThrowIfNull(builder);
-            if (builder is not ForgingBlazorApplicationBuilder forgingBlazorApplicationBuilder)
-            {
-                // BUG: If we call ThrowInvalidBuilderTypeException() here, the compiler complains that it cannot prove
-                // that the method will not return, even though it is annotated with [DoesNotReturn].
-                // ThrowInvalidBuilderTypeException();
-                throw new InvalidOperationException(
-                    $"The {nameof(AddHostingServices)} extension method can only be used with the `{nameof(ForgingBlazorApplicationBuilder)}` type."
-                );
-            }
-
-            var services = forgingBlazorApplicationBuilder.Services;
-
-            services.ThrowIfAlreadyRegistered<MarkerConfigurationServicesRegistered>();
-
-            _ = services
-            // Marker to prevent multiple registrations
-            .AddSingleton<MarkerConfigurationServicesRegistered>();
-
-            // Add AdministrationConfig
-            _ = services
-                .AddOptionsWithValidateOnStart<AdministrationConfig, AdministrationConfigValidation>()
-                .ValidateDataAnnotations();
-
-            // Add PaginationConfig
-            _ = services
-                .AddOptionsWithValidateOnStart<PaginationConfig, PaginationConfigValidation>()
-                .ValidateDataAnnotations();
-
-            // Add SiteConfig
-            _ = services.AddOptionsWithValidateOnStart<SiteConfig, SiteConfigValidation>().ValidateDataAnnotations();
-
-            return builder;
+            // BUG: If we call ThrowInvalidBuilderTypeException() here, the compiler complains that it cannot prove
+            // that the method will not return, even though it is annotated with [DoesNotReturn].
+            // ThrowInvalidBuilderTypeException();
+            throw new InvalidOperationException(
+                $"The {nameof(AddConfigurations)} extension method can only be used with the `{nameof(ForgingBlazorApplicationBuilder)}` type."
+            );
         }
+
+        var services = forgingBlazorApplicationBuilder.Services;
+
+        services.ThrowIfAlreadyRegistered<MarkerConfigurationServicesRegistered>();
+
+        _ = services
+            .AddSingleton<MarkerConfigurationServicesRegistered>() // Marker to prevent multiple registrations
+            .RegisterConfiguration<AdministrationConfig, AdministrationConfigValidation>() // Add AdministrationConfig
+            .RegisterConfiguration<PaginationConfig, PaginationConfigValidation>() // Add PaginationConfig
+            .RegisterConfiguration<SiteConfig, SiteConfigValidation>(); // Add SiteConfig
+
+        return builder;
     }
 
     /// <summary>
