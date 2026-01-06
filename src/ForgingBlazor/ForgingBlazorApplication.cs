@@ -36,14 +36,6 @@ public sealed class ForgingBlazorApplication : IForgingBlazorApplication
         new ForgingBlazorApplicationBuilder(args).AddHostingServices().AddConfigurations();
 
     /// <summary>
-    /// Creates an empty ForgingBlazor application builder without any pre-configured services.
-    /// </summary>
-    /// <param name="args">The command-line arguments passed to the application.</param>
-    /// <returns>A bare <see cref="IForgingBlazorApplicationBuilder"/> instance for manual configuration.</returns>
-    public static IForgingBlazorApplicationBuilder CreateEmptyBuilder(string[] args) =>
-        new ForgingBlazorApplicationBuilder(args);
-
-    /// <summary>
     /// Runs the ForgingBlazor application with the specified root component.
     /// </summary>
     /// <typeparam name="TRootComponent">The type of the root component to render. All members are dynamically accessed.</typeparam>

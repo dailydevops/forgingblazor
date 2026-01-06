@@ -49,19 +49,24 @@ internal sealed class SiteConfigValidation : IConfigureOptions<SiteConfig>, IVal
     {
         ArgumentNullException.ThrowIfNull(options);
 
-        if (!Uri.IsWellFormedUriString(options.BaseUrl, UriKind.Absolute))
+        if (!Uri.TryCreate(options.BaseUrl, UriKind.Absolute, out var baseUrl))
         {
-            return Fail("Configuration(BaseUrl): The base URL must be a valid absolute URI.");
+            return Fail("Configuration(Site.BaseUrl): The base URL must be a valid absolute URI.");
+        }
+
+        if (baseUrl.Scheme != Uri.UriSchemeHttp && baseUrl.Scheme != Uri.UriSchemeHttps)
+        {
+            return Fail("Configuration(Site.BaseUrl): The base URL must use either HTTP or HTTPS scheme.");
         }
 
         if (string.IsNullOrWhiteSpace(options.LanguageCode))
         {
-            return Fail("Configuration(LanguageCode): The language code must be provided.");
+            return Fail("Configuration(Site.LanguageCode): The language code must be provided.");
         }
 
         if (string.IsNullOrWhiteSpace(options.Title))
         {
-            return Fail("Configuration(Title): The site title must be provided.");
+            return Fail("Configuration(Site.Title): The site title must be provided.");
         }
 
         return Success;
