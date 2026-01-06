@@ -33,11 +33,12 @@
 # - TargetDirectory: The folder where the project will be created (e.g., 'src' or 'tests')
 # - ProjectType: The .NET project template to use (e.g., 'classlib', 'xunit', 'webapi')
 $projectNames = @(
-  @( "ForgingBlazor.Extensibility", "src", "classlib" ),
-  @( "ForgingBlazor.Extensibility.Tests.Unit", "tests", "TUnit" ),
   @( "ForgingBlazor", "src", "razorclasslib"),
   @( "ForgingBlazor.Tests.Integration", "tests", "TUnit" ),
-  @( "ForgingBlazor.Tests.Unit", "tests", "TUnit" )
+  @( "ForgingBlazor.Tests.Unit", "tests", "TUnit" ),
+  @( "ForgingBlazor.Extensibility", "src", "classlib" ),
+  @( "ForgingBlazor.Extensibility.Tests.Integration", "tests", "TUnit" ),
+  @( "ForgingBlazor.Extensibility.Tests.Unit", "tests", "TUnit" )
 )
 $solutionFile = ".\ForgingBlazor.slnx"
 

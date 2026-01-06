@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor;
+namespace NetEvolve.ForgingBlazor.Extensibility.Tests.Unit;
 
 public class CheckTests
 {

@@ -1,4 +1,6 @@
-namespace NetEvolve.ForgingBlazor.Configurations;
+﻿using NetEvolve.ForgingBlazor.Configurations;
+
+namespace NetEvolve.ForgingBlazor.Tests.Unit.Configurations;
 
 using Microsoft.Extensions.Configuration;
 
@@ -117,7 +119,9 @@ public class AdministrationConfigValidationTests
 
         // Assert
         _ = await Assert.That(result.Failed).EqualTo(true);
-        _ = await Assert.That(result.FailureMessage).Contains("The path segment contains invalid characters.");
+        _ = await Assert
+            .That(result.FailureMessage)
+            .EndsWith("The pagination path must be a valid URL path segment.", StringComparison.Ordinal);
     }
 
     [Test]

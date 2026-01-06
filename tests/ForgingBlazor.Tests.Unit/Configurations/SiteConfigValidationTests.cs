@@ -1,4 +1,6 @@
-namespace NetEvolve.ForgingBlazor.Configurations;
+using NetEvolve.ForgingBlazor.Configurations;
+
+namespace NetEvolve.ForgingBlazor.Tests.Unit.Configurations;
 
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Configuration;

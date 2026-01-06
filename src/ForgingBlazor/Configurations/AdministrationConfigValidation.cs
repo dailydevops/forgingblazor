@@ -58,7 +58,9 @@ internal sealed class AdministrationConfigValidation
 
         if (!Check.IsValidAdminSegment(options.PathSegment))
         {
-            return Fail("Configuration(Administration.PathSegment): The path segment contains invalid characters.");
+            return Fail(
+                "Configuration(Administration.PathSegment): The pagination path must be a valid URL path segment."
+            );
         }
 
         return Success;
