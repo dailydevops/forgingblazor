@@ -20,13 +20,25 @@ internal class AdministrationConfigValidation
     /// Initializes a new instance of the <see cref="AdministrationConfigValidation"/> class.
     /// </summary>
     /// <param name="configuration">The application configuration instance.</param>
-    public AdministrationConfigValidation(IConfiguration configuration) => _configuration = configuration;
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="configuration"/> is null.</exception>
+    public AdministrationConfigValidation(IConfiguration configuration)
+    {
+        ArgumentNullException.ThrowIfNull(configuration);
+
+        _configuration = configuration;
+    }
 
     /// <summary>
     /// Configures the <see cref="AdministrationConfig"/> options by binding values from the "administration" configuration section.
     /// </summary>
     /// <param name="options">The options instance to configure.</param>
-    public void Configure(AdministrationConfig options) => _configuration.Bind("administration", options);
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is null.</exception>
+    public void Configure(AdministrationConfig options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+
+        _configuration.Bind("administration", options);
+    }
 
     /// <summary>
     /// Validates the <see cref="AdministrationConfig"/> options to ensure required settings are provided.
@@ -34,8 +46,11 @@ internal class AdministrationConfigValidation
     /// <param name="name">The name of the options instance being validated.</param>
     /// <param name="options">The options instance to validate.</param>
     /// <returns>A <see cref="ValidateOptionsResult"/> indicating whether validation succeeded or failed.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is null.</exception>
     public ValidateOptionsResult Validate(string? name, AdministrationConfig options)
     {
+        ArgumentNullException.ThrowIfNull(options);
+
         if (string.IsNullOrWhiteSpace(options.PathSegment))
         {
             return Fail("PathSegment must be provided.");
