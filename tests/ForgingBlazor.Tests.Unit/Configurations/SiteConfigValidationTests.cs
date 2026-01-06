@@ -1,7 +1,8 @@
-namespace NetEvolve.ForgingBlazor.Configurations;
+namespace NetEvolve.ForgingBlazor.Tests.Unit.Configurations;
 
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Configuration;
+using NetEvolve.ForgingBlazor.Configurations;
 
 [SuppressMessage("Design", "CA1054:URI-like properties should not be strings", Justification = "Test parameter")]
 public class SiteConfigValidationTests

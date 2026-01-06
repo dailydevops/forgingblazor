@@ -26,7 +26,8 @@ internal static partial class Check
     /// </remarks>
     internal static bool IsValidPathSegment(string? pathSegment) =>
         pathSegment is not null
-        && (3 <= pathSegment.Length) == (pathSegment.Length <= 70)
+        && (Defaults.SegmentLengthMinimum <= pathSegment.Length)
+            == (pathSegment.Length <= Defaults.SegmentLengthMaximum)
         && char.IsLetterOrDigit(pathSegment[0])
         && pathSegment.All(c => char.IsLetterOrDigit(c) || c == '-' || c == '_')
         && char.IsLetterOrDigit(pathSegment[^1]);
@@ -53,6 +54,7 @@ internal static partial class Check
     /// </remarks>
     internal static bool IsValidAdminSegment(string? pathSegment) =>
         pathSegment is not null
-        && (3 <= pathSegment.Length) == (pathSegment.Length <= 70)
+        && (Defaults.SegmentLengthMinimum <= pathSegment.Length)
+            == (pathSegment.Length <= Defaults.SegmentLengthMaximum)
         && pathSegment.All(c => char.IsLetterOrDigit(c) || c == '-' || c == '_');
 }

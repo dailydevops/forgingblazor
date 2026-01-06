@@ -28,6 +28,7 @@
     <Project Path="src/Xample/Xample.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/ForgingBlazor.Extensibility.Tests.Integration/ForgingBlazor.Extensibility.Tests.Integration.csproj" />
     <Project Path="tests/ForgingBlazor.Extensibility.Tests.Unit/ForgingBlazor.Extensibility.Tests.Unit.csproj" />
     <Project Path="tests/ForgingBlazor.Tests.Integration/ForgingBlazor.Tests.Integration.csproj" />
     <Project Path="tests/ForgingBlazor.Tests.Unit/ForgingBlazor.Tests.Unit.csproj" />

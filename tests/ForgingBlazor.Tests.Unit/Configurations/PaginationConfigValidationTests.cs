@@ -1,6 +1,7 @@
-namespace NetEvolve.ForgingBlazor.Configurations;
+namespace NetEvolve.ForgingBlazor.Tests.Unit.Configurations;
 
 using Microsoft.Extensions.Configuration;
+using NetEvolve.ForgingBlazor.Configurations;
 
 public class PaginationConfigValidationTests
 {

@@ -52,6 +52,16 @@ internal sealed class PaginationConfigValidation
     {
         ArgumentNullException.ThrowIfNull(options);
 
+        if ((Defaults.PageSizeMinimum <= options.PageSize) != (options.PageSize <= Defaults.PageSizeMaximum))
+        {
+            return Fail("Configuration(Pagination.PageSize): The page size must be between 1 and 100.");
+        }
+
+        if (!string.IsNullOrWhiteSpace(options.Path) && !Check.IsValidPathSegment(options.Path))
+        {
+            return Fail("Configuration(Pagination.Path): The pagination path must be a valid URL path segment.");
+        }
+
         return Success;
     }
 
