@@ -10,4 +10,8 @@
     <ProjectReference Include="..\ForgingBlazor\ForgingBlazor.csproj" />
     <ProjectReference Include="..\Xample.ServiceDefaults\Xample.ServiceDefaults.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="forgingblazor.*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>

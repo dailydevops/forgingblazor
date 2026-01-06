@@ -1,4 +1,4 @@
-﻿<Router AppAssembly="typeof(AdminApp).Assembly" NotFoundPage="typeof(Pages.NotFound)">
+﻿<Router AppAssembly="typeof(AdminApp).Assembly">
 <Found Context="routeData">
         <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
             <NotAuthorized>
@@ -11,7 +11,8 @@
     </Found>
     <NotFound>
         <LayoutView Layout="@typeof(MainLayout)">
-            <p>Sorry, there's nothing at this address.</p>
+            <h3>Not Found</h3>
+            <p>Sorry, the content you are looking for does not exist.</p>
         </LayoutView>
     </NotFound>
 </Router>

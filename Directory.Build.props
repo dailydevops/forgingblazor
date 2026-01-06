@@ -15,4 +15,9 @@
   <PropertyGroup Label="Runtime settings">
     <ProjectTargetFramework>net10.0</ProjectTargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="$(AssemblyName).Tests.Integration" />
+    <InternalsVisibleTo Include="$(AssemblyName).Tests.Unit" />
+  </ItemGroup>
 </Project>

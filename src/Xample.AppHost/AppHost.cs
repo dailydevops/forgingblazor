@@ -1,5 +1,7 @@
-﻿var builder = DistributedApplication.CreateBuilder(args);
+﻿using NetEvolve.Xample.AppHost;
 
-_ = builder.AddProject<Projects.Xample>("xample");
+var builder = DistributedApplication.CreateBuilder(args);
+
+_ = builder.AddProject<Projects.Xample>(ProjectNames.Xample);
 
 await builder.Build().RunAsync().ConfigureAwait(false);
