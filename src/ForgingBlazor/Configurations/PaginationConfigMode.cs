@@ -3,7 +3,7 @@
 /// <summary>
 /// Defines how paginated routes are formatted when generating navigation links.
 /// </summary>
-public enum PaginationMode
+public enum PaginationConfigMode
 {
     /// <summary>
     /// Uses the default format without a prefix or folder: <c>/{0}</c>.

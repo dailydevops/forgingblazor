@@ -5,6 +5,8 @@
 /// </summary>
 public static class Defaults
 {
+    public const int PageSizeDefault = 10;
+
     /// <summary>
     /// Defines the minimum allowed page size for pagination operations.
     /// </summary>

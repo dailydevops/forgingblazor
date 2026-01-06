@@ -4,9 +4,11 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NetEvolve.ForgingBlazor.Extensibility;
+using NetEvolve.ForgingBlazor.Routing;
 
 /// <summary>
 /// Internal implementation of <see cref="IForgingBlazorApplicationBuilder"/> that configures and builds a ForgingBlazor application.
@@ -35,6 +37,21 @@ internal sealed class ForgingBlazorApplicationBuilder : IForgingBlazorApplicatio
         _builder = WebApplication.CreateBuilder(args);
 
         AddConfigurationSettings(_builder);
+    }
+
+    public IForgingBlazorApplicationBuilder AddRouting(Action<ISegmentBuilder> rootBuilder, Type rootPageType)
+    {
+        ArgumentNullException.ThrowIfNull(rootBuilder);
+        ArgumentNullException.ThrowIfNull(rootPageType);
+
+        if (!rootPageType.IsAssignableFrom(typeof(IComponent)))
+        {
+            throw new ArgumentException("The root page type must implement IComponent.", nameof(rootPageType));
+        }
+
+
+
+        return this;
     }
 
     /// <summary>
