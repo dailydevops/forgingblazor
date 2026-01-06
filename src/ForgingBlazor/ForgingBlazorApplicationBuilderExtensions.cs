@@ -89,6 +89,9 @@ public static class ForgingBlazorApplicationBuilderExtensions
                 .AddOptionsWithValidateOnStart<PaginationConfig, PaginationConfigValidation>()
                 .ValidateDataAnnotations();
 
+            // Add SiteConfig
+            _ = services.AddOptionsWithValidateOnStart<SiteConfig, SiteConfigValidation>().ValidateDataAnnotations();
+
             return builder;
         }
     }
