@@ -7,7 +7,7 @@ using static Microsoft.Extensions.Options.ValidateOptionsResult;
 /// <summary>
 /// Provides configuration and validation for <see cref="AdministrationConfig"/> settings.
 /// </summary>
-internal class AdministrationConfigValidation
+internal sealed class AdministrationConfigValidation
     : IConfigureOptions<AdministrationConfig>,
         IValidateOptions<AdministrationConfig>
 {
@@ -53,7 +53,12 @@ internal class AdministrationConfigValidation
 
         if (string.IsNullOrWhiteSpace(options.PathSegment))
         {
-            return Fail("PathSegment must be provided.");
+            return Fail("Configuration(Administration.PathSegment): The path segment must be provided.");
+        }
+
+        if (!Check.IsValidAdminSegment(options.PathSegment))
+        {
+            return Fail("Configuration(Administration.PathSegment): The path segment contains invalid characters.");
         }
 
         return Success;

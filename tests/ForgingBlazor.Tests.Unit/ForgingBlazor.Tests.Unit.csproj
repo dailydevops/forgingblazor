@@ -12,4 +12,8 @@
   <ItemGroup>
     <AssemblyAttribute Include="NetEvolve.Extensions.TUnit.UnitTestAttribute" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\ForgingBlazor\ForgingBlazor.csproj" />
+  </ItemGroup>
 </Project>
