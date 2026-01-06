@@ -16,6 +16,7 @@ internal static class ServiceCollectionExtensions
     /// <param name="services">The service collection to validate.</param>
     /// <exception cref="InvalidOperationException">Thrown when the marker type has already been registered.</exception>
     internal static void ThrowIfAlreadyRegistered<TMarker>(this IServiceCollection services)
+        where TMarker : class
     {
         var typeOfTMarker = typeof(TMarker);
         var alreadyRegistered = services.Any(sd => sd.ServiceType == typeOfTMarker);
@@ -23,6 +24,8 @@ internal static class ServiceCollectionExtensions
         {
             ThrowAlreadyRegistered(typeOfTMarker.Name);
         }
+
+        _ = services.AddSingleton<TMarker>();
     }
 
     /// <summary>

@@ -45,7 +45,7 @@ public static class ForgingBlazorApplicationBuilderExtensions
 
         services.ThrowIfAlreadyRegistered<MarkerHostingServicesRegistered>();
 
-        _ = services.AddSingleton<MarkerHostingServicesRegistered>().AddRazorPages();
+        _ = services.AddRazorPages();
         _ = services.AddRazorComponents().AddInteractiveServerComponents();
 
         _ = services.AddSignalR(o => o.StreamBufferCapacity = 1024 * 1024);
@@ -78,7 +78,6 @@ public static class ForgingBlazorApplicationBuilderExtensions
         services.ThrowIfAlreadyRegistered<MarkerConfigurationServicesRegistered>();
 
         _ = services
-            .AddSingleton<MarkerConfigurationServicesRegistered>() // Marker to prevent multiple registrations
             .RegisterConfiguration<AdministrationConfig, AdministrationConfigValidation>() // Add AdministrationConfig
             .RegisterConfiguration<PaginationConfig, PaginationConfigValidation>() // Add PaginationConfig
             .RegisterConfiguration<SiteConfig, SiteConfigValidation>(); // Add SiteConfig
