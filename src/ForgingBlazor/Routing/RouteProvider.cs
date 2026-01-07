@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Components;
 
 internal sealed class RouteProvider : IRouteProvider
@@ -16,11 +15,9 @@ internal sealed class RouteProvider : IRouteProvider
         _routes = rootBuilder.Build();
     }
 
-    public bool TryGetRoute(Type pageType, [NotNullWhen(true)] out string? route) =>
-        throw new NotImplementedException();
+    public bool TryGetRoute(Type pageType, out string? route) => throw new NotImplementedException();
 
-    public bool TryGetRouteData(Type pageType, [NotNullWhen(true)] out Route? routeData) =>
-        throw new NotImplementedException();
-    public bool TryGetRouteData(Type pageType, [NotNullWhen(true)] out Route? routeData) => throw new NotImplementedException();
+    public bool TryGetRouteData(Type pageType, out Route? routeData) => throw new NotImplementedException();
+
     public bool TryMatch(string localPath, out RouteData routeData) => throw new NotImplementedException();
 }
