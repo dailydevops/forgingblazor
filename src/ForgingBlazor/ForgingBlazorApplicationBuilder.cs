@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NetEvolve.ForgingBlazor.Extensibility;
@@ -44,12 +45,21 @@ internal sealed class ForgingBlazorApplicationBuilder : IForgingBlazorApplicatio
         ArgumentNullException.ThrowIfNull(rootBuilder);
         ArgumentNullException.ThrowIfNull(rootPageType);
 
-        if (!rootPageType.IsAssignableFrom(typeof(IComponent)))
+        if (!rootPageType.IsAssignableTo(typeof(IComponent)))
         {
             throw new ArgumentException("The root page type must implement IComponent.", nameof(rootPageType));
         }
 
+        _ = Services
+            .AddSingleton<IRouteMatchingProvider, RouteMatchingProvider>()
+            .AddSingleton<IRouteProvider>(sp =>
+            {
+                var rootMatcher = sp.GetRequiredService<IRouteMatchingProvider>();
+                var rootSegment = new SegmentBuilder(rootPageType, Defaults.RootSegment, rootMatcher);
+                rootBuilder.Invoke(rootSegment);
 
+                return new RouteProvider(rootSegment);
+            });
 
         return this;
     }

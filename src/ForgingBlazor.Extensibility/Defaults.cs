@@ -19,6 +19,8 @@ public static class Defaults
     /// <value>The maximum page size is 100.</value>
     public const int PageSizeMaximum = 100;
 
+    public const string RootSegment = "/";
+
     /// <summary>
     /// Defines the maximum allowed length for URL or route segments.
     /// </summary>
