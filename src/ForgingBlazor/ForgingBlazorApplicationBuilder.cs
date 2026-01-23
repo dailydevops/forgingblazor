@@ -6,7 +6,6 @@ using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NetEvolve.ForgingBlazor.Extensibility;
 
 /// <summary>
 /// Internal implementation of <see cref="IForgingBlazorApplicationBuilder"/> that configures and builds a ForgingBlazor application.
