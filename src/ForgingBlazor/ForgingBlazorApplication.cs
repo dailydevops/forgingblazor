@@ -9,7 +9,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using NetEvolve.ForgingBlazor.Components.Administration;
 using NetEvolve.ForgingBlazor.Configurations;
-using NetEvolve.ForgingBlazor.Extensibility;
 
 /// <summary>
 /// Represents a ForgingBlazor application that can be configured and executed.

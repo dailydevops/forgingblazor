@@ -3,7 +3,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using NetEvolve.ForgingBlazor.Configurations;
-using NetEvolve.ForgingBlazor.Extensibility;
 
 /// <summary>
 /// Provides extension methods for <see cref="IForgingBlazorApplicationBuilder"/> to configure hosting and application services.
