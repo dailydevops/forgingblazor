@@ -18,6 +18,7 @@
     <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="10.18.0.131500" />
   </ItemGroup>
   <ItemGroup>
+    <PackageVersion Include="Markdig" Version="0.41.0" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.2.0" />
     <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="10.2.0" />
     <PackageVersion Include="NetEscapades.Configuration.Yaml" Version="3.1.0" />
@@ -29,5 +30,6 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.15.0" />
     <PackageVersion Include="Aspire.Hosting.Testing" Version="13.1.0" />
     <PackageVersion Include="TUnit" Version="1.12.65" />
+    <PackageVersion Include="YamlDotNet" Version="16.3.0" />
   </ItemGroup>
 </Project>
