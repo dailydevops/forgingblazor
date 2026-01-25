@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor;
+﻿namespace NetEvolve.ForgingBlazor;
 
 using System;
 

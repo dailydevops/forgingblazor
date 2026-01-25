@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor;
+﻿namespace NetEvolve.ForgingBlazor;
 
 /// <summary>
 /// Determines whether canonical URLs include the culture as a prefix segment.

@@ -57,4 +57,88 @@ internal static partial class Check
         && (Defaults.SegmentLengthMinimum <= pathSegment.Length)
             == (pathSegment.Length <= Defaults.SegmentLengthMaximum)
         && pathSegment.All(c => char.IsLetterOrDigit(c) || c == '-' || c == '_');
+
+    /// <summary>
+    /// Determines whether the specified slug value matches the required slug pattern.
+    /// </summary>
+    /// <param name="slug">The slug to validate.</param>
+    /// <returns><see langword="true"/> when the slug is valid; otherwise, <see langword="false"/>.</returns>
+    /// <remarks>
+    /// A valid slug must:
+    /// <list type="bullet">
+    /// <item><description>Be between 3 and 70 characters (inclusive)</description></item>
+    /// <item><description>Start and end with an ASCII letter</description></item>
+    /// <item><description>Contain only ASCII letters, digits, or single hyphen characters (<c>-</c>)</description></item>
+    /// <item><description>Not contain consecutive hyphen characters</description></item>
+    /// </list>
+    /// </remarks>
+    internal static bool IsValidSlug(string? slug)
+    {
+        if (slug is null)
+        {
+            return false;
+        }
+
+        var length = slug.Length;
+        if ((Defaults.SegmentLengthMinimum <= length) != (length <= Defaults.SegmentLengthMaximum))
+        {
+            return false;
+        }
+
+        if (!IsAsciiLetter(slug[0]) || !IsAsciiLetter(slug[^1]))
+        {
+            return false;
+        }
+
+        var previousWasHyphen = false;
+        for (var index = 0; index < length; index++)
+        {
+            var character = slug[index];
+            if (IsAsciiLetter(character) || IsAsciiDigit(character))
+            {
+                previousWasHyphen = false;
+                continue;
+            }
+
+            if (character == '-')
+            {
+                if (previousWasHyphen)
+                {
+                    return false;
+                }
+
+                previousWasHyphen = true;
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Validates the specified slug and throws an <see cref="ArgumentException"/> if it is invalid.
+    /// </summary>
+    /// <param name="slug">The slug to validate.</param>
+    /// <param name="parameterName">The optional parameter name for exception reporting.</param>
+    /// <returns>The validated slug.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="slug"/> is invalid.</exception>
+    internal static string ValidateSlug(string? slug, string? parameterName = null)
+    {
+        if (IsValidSlug(slug))
+        {
+            return slug!;
+        }
+
+        var name = string.IsNullOrWhiteSpace(parameterName) ? nameof(slug) : parameterName;
+        throw new ArgumentException(
+            $"The slug '{slug}' is not valid. Slugs must start and end with a letter, may contain letters, digits, and single hyphens, and must be between {Defaults.SegmentLengthMinimum} and {Defaults.SegmentLengthMaximum} characters.",
+            name
+        );
+    }
+
+    private static bool IsAsciiLetter(char value) => ('A' <= value && value <= 'Z') || ('a' <= value && value <= 'z');
+
+    private static bool IsAsciiDigit(char value) => '0' <= value && value <= '9';
 }

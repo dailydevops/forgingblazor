@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Extensibility.Tests.Unit;
+﻿namespace NetEvolve.ForgingBlazor.Extensibility.Tests.Unit;
 
 public class Phase1InterfaceContractTests
 {

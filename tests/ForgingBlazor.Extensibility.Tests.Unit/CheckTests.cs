@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Extensibility.Tests.Unit;
+﻿namespace NetEvolve.ForgingBlazor.Extensibility.Tests.Unit;
 
 public class CheckTests
 {
@@ -23,6 +23,21 @@ public class CheckTests
         // Assert
         _ = await Assert.That(result).EqualTo(expected);
     }
+
+    [Test]
+    [MethodDataSource(nameof(IsValidSlug_Theory_Expected_Data))]
+    public async Task IsValidSlug_Theory_Expected(string? slug, bool expected)
+    {
+        // Act
+        var result = Check.IsValidSlug(slug);
+
+        // Assert
+        _ = await Assert.That(result).EqualTo(expected);
+    }
+
+    [Test]
+    public async Task ValidateSlug_Invalid_ThrowsArgumentException() =>
+        _ = await Assert.That(() => Check.ValidateSlug("invalid_slug", "slug")).Throws<ArgumentException>();
 
     public static IEnumerable<(string?, bool)> IsValidPathSegment_Theory_Expected_Data =>
         [
@@ -62,5 +77,24 @@ public class CheckTests
             ("abc-", true),
             ("ab$c", false),
             ("ab c", false),
+        ];
+
+    public static IEnumerable<(string?, bool)> IsValidSlug_Theory_Expected_Data =>
+        [
+            (null, false),
+            ("", false),
+            ("ab", false),
+            ("abc", true),
+            ("my-article", true),
+            ("My-Article", true),
+            ("a123-post", true),
+            ("my_article", false),
+            ("one--double", false),
+            ("trailing-", false),
+            ("-leading", false),
+            ("trailing-123", false),
+            ("123-leading", false),
+            ("a".PadRight(70, 'a'), true),
+            ("a".PadRight(71, 'a'), false),
         ];
 }
