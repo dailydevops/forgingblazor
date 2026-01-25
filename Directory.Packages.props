@@ -18,6 +18,8 @@
     <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="10.18.0.131500" />
   </ItemGroup>
   <ItemGroup>
+    <PackageVersion Include="Aspire.Hosting.Testing" Version="13.1.0" />
+    <PackageVersion Include="bunit" Version="1.33.4" />
     <PackageVersion Include="Markdig" Version="0.41.0" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.2.0" />
     <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="10.2.0" />

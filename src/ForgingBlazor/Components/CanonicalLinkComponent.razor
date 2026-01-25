@@ -1,0 +1,22 @@
+@namespace NetEvolve.ForgingBlazor.Components
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+
+<link rel="canonical" href="@CanonicalUrl" />
+
+@code {
+    /// <summary>
+    /// Gets or sets the canonical URL for the current page.
+    /// </summary>
+    [Parameter]
+    public string? CanonicalUrl { get; set; }
+
+    /// <inheritdoc />
+    protected override void OnParametersSet()
+    {
+        // If CanonicalUrl is not provided, use the current URL
+        if (string.IsNullOrWhiteSpace(CanonicalUrl))
+        {
+            CanonicalUrl = NavigationManager.Uri;
+        }
+    }
+}
