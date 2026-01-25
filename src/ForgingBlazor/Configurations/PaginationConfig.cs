@@ -10,8 +10,8 @@ public sealed class PaginationConfig
     /// <summary>
     /// Gets or sets the routing mode that controls how page links are composed.
     /// </summary>
-    [DefaultValue(PaginationConfigMode.Default)]
-    public PaginationConfigMode Mode { get; set; } = PaginationConfigMode.Default;
+    [DefaultValue(PaginationMode.Numeric)]
+    public PaginationMode Mode { get; set; } = PaginationMode.Numeric;
 
     /// <summary>
     /// Gets or sets the number of items returned per page.

@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Tests.Unit.Configurations;
+﻿namespace NetEvolve.ForgingBlazor.Tests.Unit.Configurations;
 
 using Microsoft.Extensions.Configuration;
 using NetEvolve.ForgingBlazor.Configurations;
@@ -41,7 +41,7 @@ public class PaginationConfigValidationTests
         validation.Configure(options);
 
         // Assert
-        _ = await Assert.That(options.Mode).EqualTo(PaginationMode.Prefix);
+        _ = await Assert.That(options.Mode).EqualTo(PaginationMode.Prefixed);
         _ = await Assert.That(options.PageSize).EqualTo(25);
         _ = await Assert.That(options.Path).EqualTo("page");
     }
