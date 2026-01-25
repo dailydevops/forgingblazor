@@ -139,5 +139,5 @@ public sealed class PaginationConfigurationTests
 
     [Test]
     public void Constructor_WhenStateNull_ThrowsArgumentNullException() =>
-        _ = Assert.Throws<ArgumentNullException>("pagination", () => new PaginationConfiguration(null!));
+        _ = Assert.Throws<ArgumentNullException>("pagination", () => _ = new PaginationConfiguration(null!));
 }

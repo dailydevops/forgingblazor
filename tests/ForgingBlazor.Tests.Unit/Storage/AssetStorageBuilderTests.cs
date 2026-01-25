@@ -46,7 +46,7 @@ public sealed class AssetStorageBuilderTests
 
     [Test]
     public void Constructor_WhenServicesNull_ThrowsArgumentNullException() =>
-        _ = Assert.Throws<ArgumentNullException>("services", () => new AssetStorageBuilder(null!));
+        _ = Assert.Throws<ArgumentNullException>("services", () => _ = new AssetStorageBuilder(null!));
 
     [Test]
     public async Task UseFileSystem_RegistersFileSystemAssetStorageProvider()

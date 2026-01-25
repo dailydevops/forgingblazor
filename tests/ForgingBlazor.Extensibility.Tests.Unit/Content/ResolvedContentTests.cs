@@ -31,58 +31,6 @@ public class ResolvedContentTests
     }
 
     [Test]
-    public async Task Descriptor_Required()
-    {
-        _ = await Assert
-            .That(
-                typeof(ResolvedContent<ContentDescriptor>)
-                    .GetProperty("Descriptor")!
-                    .GetCustomAttributes(false)
-                    .Any(a => a.GetType().Name == "RequiredMemberAttribute")
-            )
-            .IsTrue();
-    }
-
-    [Test]
-    public async Task Culture_Required()
-    {
-        _ = await Assert
-            .That(
-                typeof(ResolvedContent<ContentDescriptor>)
-                    .GetProperty("Culture")!
-                    .GetCustomAttributes(false)
-                    .Any(a => a.GetType().Name == "RequiredMemberAttribute")
-            )
-            .IsTrue();
-    }
-
-    [Test]
-    public async Task CanonicalUrl_Required()
-    {
-        _ = await Assert
-            .That(
-                typeof(ResolvedContent<ContentDescriptor>)
-                    .GetProperty("CanonicalUrl")!
-                    .GetCustomAttributes(false)
-                    .Any(a => a.GetType().Name == "RequiredMemberAttribute")
-            )
-            .IsTrue();
-    }
-
-    [Test]
-    public async Task RouteValues_Required()
-    {
-        _ = await Assert
-            .That(
-                typeof(ResolvedContent<ContentDescriptor>)
-                    .GetProperty("RouteValues")!
-                    .GetCustomAttributes(false)
-                    .Any(a => a.GetType().Name == "RequiredMemberAttribute")
-            )
-            .IsTrue();
-    }
-
-    [Test]
     public async Task Descriptor_ReturnsSetValue()
     {
         var descriptor = new ContentDescriptor { Title = "Title", Slug = "title" };

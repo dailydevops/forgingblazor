@@ -37,31 +37,25 @@ public sealed class CanonicalUrlGeneratorTests
     }
 
     [Test]
-    public void Generate_WithNullPathPattern_ThrowsArgumentNullException()
-    {
+    public void Generate_WithNullPathPattern_ThrowsArgumentNullException() =>
         _ = Assert.Throws<ArgumentNullException>(
             "pathPattern",
             () => CanonicalUrlGenerator.Generate(null!, _german, CultureCanonical.WithPrefix, _english)
         );
-    }
 
     [Test]
-    public void Generate_WithNullCulture_ThrowsArgumentNullException()
-    {
+    public void Generate_WithNullCulture_ThrowsArgumentNullException() =>
         _ = Assert.Throws<ArgumentNullException>(
             "culture",
             () => CanonicalUrlGenerator.Generate("/blog", null!, CultureCanonical.WithPrefix, _english)
         );
-    }
 
     [Test]
-    public void Generate_WithNullDefaultCulture_ThrowsArgumentNullException()
-    {
+    public void Generate_WithNullDefaultCulture_ThrowsArgumentNullException() =>
         _ = Assert.Throws<ArgumentNullException>(
             "defaultCulture",
             () => CanonicalUrlGenerator.Generate("/blog", _german, CultureCanonical.WithPrefix, null!)
         );
-    }
 
     [Test]
     public async Task Generate_WithTrailingSlash_RemovesTrailingSlash()

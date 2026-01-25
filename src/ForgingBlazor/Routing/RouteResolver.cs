@@ -91,11 +91,9 @@ internal sealed class RouteResolver
     /// <param name="requestPath">The normalized request path.</param>
     /// <param name="pattern">The route pattern to match against.</param>
     /// <returns><see langword="true"/> if the path matches the pattern; otherwise, <see langword="false"/>.</returns>
-    private static bool IsMatch(string requestPath, string pattern)
-    {
+    private static bool IsMatch(string requestPath, string pattern) =>
         // For now, simple string comparison
         // TODO: Implement proper pattern matching with culture prefix and pagination patterns
-        return requestPath.Equals(pattern, StringComparison.OrdinalIgnoreCase)
-            || requestPath.StartsWith(pattern + "/", StringComparison.OrdinalIgnoreCase);
-    }
+        requestPath.Equals(pattern, StringComparison.OrdinalIgnoreCase)
+        || requestPath.StartsWith(pattern + "/", StringComparison.OrdinalIgnoreCase);
 }

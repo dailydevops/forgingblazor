@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Pagination;
+﻿namespace NetEvolve.ForgingBlazor.Pagination;
 
 /// <summary>
 /// Represents pagination settings for a route or segment.

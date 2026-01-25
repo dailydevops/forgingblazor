@@ -53,9 +53,8 @@ internal sealed class CanonicalUrlGenerator
         CultureInfo culture,
         CultureCanonical canonicalFormat,
         CultureInfo defaultCulture
-    )
-    {
-        return canonicalFormat switch
+    ) =>
+        canonicalFormat switch
         {
             CultureCanonical.WithPrefix => true,
             CultureCanonical.WithoutPrefix => !culture.Equals(defaultCulture)
@@ -65,7 +64,6 @@ internal sealed class CanonicalUrlGenerator
                 ),
             _ => false,
         };
-    }
 
     /// <summary>
     /// Normalizes a path by ensuring it starts with a forward slash and removing trailing slashes.

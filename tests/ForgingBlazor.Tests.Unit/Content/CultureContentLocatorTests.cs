@@ -28,7 +28,7 @@ public sealed class CultureContentLocatorTests
 
         _ = Assert.Throws<ArgumentNullException>(
             "fallbackChain",
-            () => new CultureContentLocator(null!, storageProvider)
+            () => _ = new CultureContentLocator(null!, storageProvider)
         );
     }
 
@@ -39,7 +39,7 @@ public sealed class CultureContentLocatorTests
 
         _ = Assert.Throws<ArgumentNullException>(
             "storageProvider",
-            () => new CultureContentLocator(fallbackChain, null!)
+            () => _ = new CultureContentLocator(fallbackChain, null!)
         );
     }
 

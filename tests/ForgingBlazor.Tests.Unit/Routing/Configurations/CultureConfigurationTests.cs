@@ -136,5 +136,5 @@ public sealed class CultureConfigurationTests
 
     [Test]
     public void Constructor_WhenStateNull_ThrowsArgumentNullException() =>
-        _ = Assert.Throws<ArgumentNullException>("state", () => new CultureConfiguration(null!));
+        _ = Assert.Throws<ArgumentNullException>("state", () => _ = new CultureConfiguration(null!));
 }

@@ -107,10 +107,8 @@ public sealed class CultureResolverTests
     }
 
     [Test]
-    public void FromCultureName_WithNullName_ThrowsArgumentNullException()
-    {
+    public void FromCultureName_WithNullName_ThrowsArgumentNullException() =>
         _ = Assert.Throws<ArgumentNullException>("cultureName", () => CultureResolver.FromCultureName(null!));
-    }
 
     [Test]
     [Arguments("")]
@@ -159,10 +157,8 @@ public sealed class CultureResolverTests
     }
 
     [Test]
-    public async Task Resolve_WithNullString_ThrowsArgumentNullException()
-    {
+    public async Task Resolve_WithNullString_ThrowsArgumentNullException() =>
         _ = Assert.Throws<ArgumentNullException>("cultureString", () => CultureResolver.Resolve(null!));
-    }
 
     [Test]
     [Arguments("")]

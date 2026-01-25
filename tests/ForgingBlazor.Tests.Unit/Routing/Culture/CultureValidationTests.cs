@@ -34,7 +34,7 @@ public sealed class CultureValidationTests
 
         _ = Assert.Throws<ArgumentNullException>(
             "supportedCultures",
-            () => new CultureValidation(null!, defaultCulture)
+            () => _ = new CultureValidation(null!, defaultCulture)
         );
     }
 
@@ -45,7 +45,7 @@ public sealed class CultureValidationTests
 
         _ = Assert.Throws<ArgumentNullException>(
             "defaultCulture",
-            () => new CultureValidation(supportedCultures, null!)
+            () => _ = new CultureValidation(supportedCultures, null!)
         );
     }
 
@@ -57,7 +57,7 @@ public sealed class CultureValidationTests
 
         _ = Assert.Throws<ArgumentException>(
             "supportedCultures",
-            () => new CultureValidation(supportedCultures, defaultCulture)
+            () => _ = new CultureValidation(supportedCultures, defaultCulture)
         );
     }
 
@@ -103,9 +103,6 @@ public sealed class CultureValidationTests
         var validation = new CultureValidation(supportedCultures, defaultCulture);
 
         validation.ValidateDefaultCulture();
-
-        // No exception thrown - test passes
-        _ = await Assert.That(true).IsTrue();
     }
 
     [Test]
@@ -126,9 +123,6 @@ public sealed class CultureValidationTests
         var validation = new CultureValidation(supportedCultures, culture);
 
         validation.ThrowIfUnsupported(culture);
-
-        // No exception thrown - test passes
-        _ = await Assert.That(true).IsTrue();
     }
 
     [Test]

@@ -93,22 +93,18 @@ public sealed class ContentValidationExceptionTests
     }
 
     [Test]
-    public async Task Constructor_WhenFieldNameNull_ThrowsArgumentNullException()
-    {
-        _ = await Assert
-            .That(() => new ContentValidationException(null!, typeof(string), "value"))
-            .ThrowsExactly<ArgumentNullException>()
-            .WithParameterName("fieldName");
-    }
+    public void Constructor_WhenFieldNameNull_ThrowsArgumentNullException() =>
+        _ = Assert.Throws<ArgumentNullException>(
+            "fieldName",
+            () => _ = new ContentValidationException(null!, typeof(string), "value")
+        );
 
     [Test]
-    public async Task Constructor_WhenExpectedTypeNull_ThrowsArgumentNullException()
-    {
-        _ = await Assert
-            .That(() => new ContentValidationException("field", null!, "value"))
-            .ThrowsExactly<ArgumentNullException>()
-            .WithParameterName("expectedType");
-    }
+    public void Constructor_WhenExpectedTypeNull_ThrowsArgumentNullException() =>
+        _ = Assert.Throws<ArgumentNullException>(
+            "expectedType",
+            () => _ = new ContentValidationException("field", null!, "value")
+        );
 
     [Test]
     public async Task FieldName_WhenSetViaConstructor_ReturnsValue()

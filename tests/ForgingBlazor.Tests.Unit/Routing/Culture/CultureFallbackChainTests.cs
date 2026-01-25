@@ -75,7 +75,7 @@ public sealed class CultureFallbackChainTests
         using (Assert.Multiple())
         {
             _ = await Assert.That(result[0]?.Name).IsEqualTo("en-US");
-            _ = await Assert.That(result.Where(c => c?.Name == "en-US").Count()).IsEqualTo(1);
+            _ = await Assert.That(result.Count(c => c?.Name == "en-US")).IsEqualTo(1);
         }
     }
 

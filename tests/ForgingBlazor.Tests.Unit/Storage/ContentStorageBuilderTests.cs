@@ -46,7 +46,7 @@ public sealed class ContentStorageBuilderTests
 
     [Test]
     public void Constructor_WhenServicesNull_ThrowsArgumentNullException() =>
-        _ = Assert.Throws<ArgumentNullException>("services", () => new ContentStorageBuilder(null!));
+        _ = Assert.Throws<ArgumentNullException>("services", () => _ = new ContentStorageBuilder(null!));
 
     [Test]
     public async Task UseFileSystem_RegistersFileSystemContentStorageProvider()

@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Tests.Unit.Routing;
+﻿namespace NetEvolve.ForgingBlazor.Tests.Unit.Routing;
 
 using System;
 using global::NetEvolve.ForgingBlazor.Routing;
@@ -67,10 +67,8 @@ public sealed class RouteResolverTests
     }
 
     [Test]
-    public void Constructor_WithNullRegistry_ThrowsArgumentNullException()
-    {
-        _ = Assert.Throws<ArgumentNullException>("registry", () => new RouteResolver(null!));
-    }
+    public void Constructor_WithNullRegistry_ThrowsArgumentNullException() =>
+        _ = Assert.Throws<ArgumentNullException>("registry", () => _ = new RouteResolver(null!));
 
     [Test]
     public async Task TryResolve_WithRootPath_NormalizesToSlash()

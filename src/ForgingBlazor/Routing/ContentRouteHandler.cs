@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Routing;
+﻿namespace NetEvolve.ForgingBlazor.Routing;
 
 using System;
 using System.Threading.Tasks;
@@ -24,10 +24,7 @@ internal sealed class ContentRouteHandler : IComponent
     }
 
     /// <inheritdoc />
-    public void Attach(RenderHandle renderHandle)
-    {
-        _renderHandle = renderHandle;
-    }
+    public void Attach(RenderHandle renderHandle) => _renderHandle = renderHandle;
 
     /// <inheritdoc />
     public Task SetParametersAsync(ParameterView parameters)
