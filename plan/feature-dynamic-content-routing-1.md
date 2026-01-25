@@ -166,6 +166,10 @@ After completing each phase, provide a summary:
 **Notes**: [any observations or issues encountered]
 ```
 
+### Per-Phase Testing Rule
+
+Each implementation phase MUST end with tasks that add unit and, where applicable, integration tests for any new elements introduced in that phase. This ensures the test suite grows continuously alongside the implementation.
+
 ---
 
 ## 1. Requirements & Constraints
@@ -440,57 +444,72 @@ After completing each phase, provide a summary:
 | TASK-074 | Create `AddValidationServices()` internal method in `ServiceCollectionExtensions` registering: `IValidateOptions<>` implementations, `StartupValidationHostedService`                                                                              |           |      |
 | TASK-075 | Create `AddCultureServices()` internal method in `ServiceCollectionExtensions` registering: `CultureResolver`, `CultureFallbackChain`, `CultureValidation`                                                                                         |           |      |
 
-### Phase 11: Azure Blob Storage Package
+### Phase 11: Router Drop-in Components
 
-- GOAL-011: Create separate NuGet package for Azure Blob Storage provider
+- GOAL-011: Implement drop-in `ForgingRouter` and `ForgingRouteView` compatible with default Blazor Router/RouteView and integrated with Dynamic Content Routing.
+
+| Task     | Description                                                                                                                                                                                                                                                   | Completed | Date |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
+| TASK-076 | Add component shells `src/ForgingBlazor/Components/ForgingRouteView.razor` and `src/ForgingBlazor/Components/ForgingRouteView.razor.cs` exposing public parameters/events equivalent to `Microsoft.AspNetCore.Components.RouteView`                           |           |      |
+| TASK-077 | Implement `ForgingRouteView` rendering semantics: bind `RouteData`, honor layout selection consistent with `RouteView`, support NotFound content, and pass `ResolvedContent<ContentDescriptor>` when content routes are resolved (REQ-CMP-011)                |           |      |
+| TASK-078 | Add component shells `src/ForgingBlazor/Components/ForgingRouter.razor` and `src/ForgingBlazor/Components/ForgingRouter.razor.cs` exposing `AppAssembly`, `AdditionalAssemblies`, `Found`, `NotFound`, `Navigating`, and `OnNavigateAsync` parity with Router |           |      |
+| TASK-079 | Implement `ForgingRouter` pipeline: resolve Dynamic Content routes first using `RouteResolver`; when matched, render via `ForgingRouteView`; otherwise, fall back to default component routing with standard `Router`-compatible behavior (REQ-RTE-001..005)  |           |      |
+| TASK-080 | Enforce slug constraint `[A-Za-z][A-Za-z0-9-]{1,68}[A-Za-z]` and validate cultures based on root configuration during resolution; ensure non-canonical URLs render with canonical link (no redirects) (REQ-RTE-002, REQ-CUL-001..005, REQ-PAG-005)            |           |      |
+| TASK-081 | Unit tests `tests/ForgingBlazor.Tests.Unit/Components/ForgingRouteViewTests.cs`: layout selection, NotFound rendering, passing `ResolvedContent<ContentDescriptor>` parameters                                                                                |           |      |
+| TASK-082 | Unit tests `tests/ForgingBlazor.Tests.Unit/Components/ForgingRouterTests.cs`: content-first resolution, fallback to component routes, slug/culture constraint enforcement, canonical link behavior                                                            |           |      |
+| TASK-083 | Integration tests `tests/Xample.AppHost.Tests.Integration/Routing/ForgingRouterSmokeTests.cs`: verify `ForgingRouter` is used in sample app, resolves content routes, and falls back correctly to component routes                                            |           |      |
+
+### Phase 12: Azure Blob Storage Package
+
+- GOAL-012: Create separate NuGet package for Azure Blob Storage provider
 
 | Task     | Description                                                                                                                                                                                                                      | Completed | Date |
 | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
-| TASK-076 | Create new project `src/ForgingBlazor.Storage.AzureBlob/ForgingBlazor.Storage.AzureBlob.csproj` with `OutputType` Library, referencing `ForgingBlazor.Extensibility`                                                             |           |      |
-| TASK-077 | Add `Azure.Storage.Blobs` package reference to `Directory.Packages.props` with latest stable version                                                                                                                             |           |      |
-| TASK-078 | Add package reference to `ForgingBlazor.Storage.AzureBlob.csproj` for `Azure.Storage.Blobs` without version attribute                                                                                                            |           |      |
-| TASK-079 | Create `IAzureBlobStorageOptions` interface in `src/ForgingBlazor.Storage.AzureBlob/IAzureBlobStorageOptions.cs` with methods: `WithConnectionString()`, `WithContainerName()`, `AsPublishingTarget()`                           |           |      |
-| TASK-080 | Create `AzureBlobStorageOptions` class in `src/ForgingBlazor.Storage.AzureBlob/AzureBlobStorageOptions.cs` implementing `IAzureBlobStorageOptions` with `ConnectionString`, `ContainerName`, and `IsPublishingTarget` properties |           |      |
-| TASK-081 | Create `AzureBlobContentStorageProvider` class in `src/ForgingBlazor.Storage.AzureBlob/AzureBlobContentStorageProvider.cs` implementing `IContentStorageProvider` using `BlobContainerClient` for async blob operations          |           |      |
-| TASK-082 | Create `AzureBlobAssetStorageProvider` class in `src/ForgingBlazor.Storage.AzureBlob/AzureBlobAssetStorageProvider.cs` implementing `IAssetStorageProvider` using `BlobContainerClient`                                          |           |      |
-| TASK-083 | Create `ContentStorageBuilderExtensions` static class in `src/ForgingBlazor.Storage.AzureBlob/ContentStorageBuilderExtensions.cs` with `UseAzureBlobStorage()` extension method on `IContentStorageBuilder`                      |           |      |
-| TASK-084 | Create `AssetStorageBuilderExtensions` static class in `src/ForgingBlazor.Storage.AzureBlob/AssetStorageBuilderExtensions.cs` with `UseAzureBlobStorage()` extension method on `IAssetStorageBuilder`                            |           |      |
+| TASK-084 | Create new project `src/ForgingBlazor.Storage.AzureBlob/ForgingBlazor.Storage.AzureBlob.csproj` with `OutputType` Library, referencing `ForgingBlazor.Extensibility`                                                             |           |      |
+| TASK-085 | Add `Azure.Storage.Blobs` package reference to `Directory.Packages.props` with latest stable version                                                                                                                             |           |      |
+| TASK-086 | Add package reference to `ForgingBlazor.Storage.AzureBlob.csproj` for `Azure.Storage.Blobs` without version attribute                                                                                                            |           |      |
+| TASK-087 | Create `IAzureBlobStorageOptions` interface in `src/ForgingBlazor.Storage.AzureBlob/IAzureBlobStorageOptions.cs` with methods: `WithConnectionString()`, `WithContainerName()`, `AsPublishingTarget()`                           |           |      |
+| TASK-088 | Create `AzureBlobStorageOptions` class in `src/ForgingBlazor.Storage.AzureBlob/AzureBlobStorageOptions.cs` implementing `IAzureBlobStorageOptions` with `ConnectionString`, `ContainerName`, and `IsPublishingTarget` properties |           |      |
+| TASK-089 | Create `AzureBlobContentStorageProvider` class in `src/ForgingBlazor.Storage.AzureBlob/AzureBlobContentStorageProvider.cs` implementing `IContentStorageProvider` using `BlobContainerClient` for async blob operations          |           |      |
+| TASK-090 | Create `AzureBlobAssetStorageProvider` class in `src/ForgingBlazor.Storage.AzureBlob/AzureBlobAssetStorageProvider.cs` implementing `IAssetStorageProvider` using `BlobContainerClient`                                          |           |      |
+| TASK-091 | Create `ContentStorageBuilderExtensions` static class in `src/ForgingBlazor.Storage.AzureBlob/ContentStorageBuilderExtensions.cs` with `UseAzureBlobStorage()` extension method on `IContentStorageBuilder`                      |           |      |
+| TASK-092 | Create `AssetStorageBuilderExtensions` static class in `src/ForgingBlazor.Storage.AzureBlob/AssetStorageBuilderExtensions.cs` with `UseAzureBlobStorage()` extension method on `IAssetStorageBuilder`                            |           |      |
 
-### Phase 12: Unit Tests - Core Interfaces
+### Phase 13: Unit Tests - Core Interfaces
 
-- GOAL-012: Implement unit tests for core interfaces and abstractions
+- GOAL-013: Implement unit tests for core interfaces and abstractions
 
 | Task     | Description                                                                                                                                                                    | Completed | Date |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ---- |
-| TASK-085 | Create test file `tests/ForgingBlazor.Extensibility.Tests.Unit/Content/ContentDescriptorTests.cs` testing: property initialization, required field validation, default values  |           |      |
-| TASK-086 | Create test file `tests/ForgingBlazor.Extensibility.Tests.Unit/Content/ResolvedContentTests.cs` testing: wrapping descriptor, culture info, canonical URL                      |           |      |
-| TASK-087 | Create test file `tests/ForgingBlazor.Extensibility.Tests.Unit/CheckSlugTests.cs` testing `IsValidSlug()` and `ValidateSlug()` methods with edge cases from spec section 9.5.3 |           |      |
+| TASK-093 | Create test file `tests/ForgingBlazor.Extensibility.Tests.Unit/Content/ContentDescriptorTests.cs` testing: property initialization, required field validation, default values  |           |      |
+| TASK-094 | Create test file `tests/ForgingBlazor.Extensibility.Tests.Unit/Content/ResolvedContentTests.cs` testing: wrapping descriptor, culture info, canonical URL                      |           |      |
+| TASK-095 | Create test file `tests/ForgingBlazor.Extensibility.Tests.Unit/CheckSlugTests.cs` testing `IsValidSlug()` and `ValidateSlug()` methods with edge cases from spec section 9.5.3 |           |      |
 
-### Phase 13: Unit Tests - Routing
+### Phase 14: Unit Tests - Routing
 
-- GOAL-013: Implement unit tests for routing configuration and resolution
+- GOAL-014: Implement unit tests for routing configuration and resolution
 
 | Task     | Description                                                                                                                                                                                                          | Completed | Date |
 | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
-| TASK-088 | Create test file `tests/ForgingBlazor.Tests.Unit/Routing/RoutingBuilderTests.cs` testing: FluentAPI chain methods, configuration accumulation, nested segment support                                                |           |      |
-| TASK-089 | Create test file `tests/ForgingBlazor.Tests.Unit/Routing/SlugRouteConstraintTests.cs` testing: valid slug patterns, invalid patterns, edge cases (length limits, consecutive hyphens, leading/trailing restrictions) |           |      |
-| TASK-090 | Create test file `tests/ForgingBlazor.Tests.Unit/Routing/RouteResolverTests.cs` testing: path matching, culture prefix handling, pagination pattern matching                                                         |           |      |
-| TASK-091 | Create test file `tests/ForgingBlazor.Tests.Unit/Routing/CanonicalUrlGeneratorTests.cs` testing: WithPrefix vs WithoutPrefix generation, culture variations                                                          |           |      |
+| TASK-096 | Create test file `tests/ForgingBlazor.Tests.Unit/Routing/RoutingBuilderTests.cs` testing: FluentAPI chain methods, configuration accumulation, nested segment support                                                |           |      |
+| TASK-097 | Create test file `tests/ForgingBlazor.Tests.Unit/Routing/SlugRouteConstraintTests.cs` testing: valid slug patterns, invalid patterns, edge cases (length limits, consecutive hyphens, leading/trailing restrictions) |           |      |
+| TASK-098 | Create test file `tests/ForgingBlazor.Tests.Unit/Routing/RouteResolverTests.cs` testing: path matching, culture prefix handling, pagination pattern matching                                                         |           |      |
+| TASK-099 | Create test file `tests/ForgingBlazor.Tests.Unit/Routing/CanonicalUrlGeneratorTests.cs` testing: WithPrefix vs WithoutPrefix generation, culture variations                                                          |           |      |
 
-### Phase 14: Unit Tests - Content Parsing
+### Phase 15: Unit Tests - Content Parsing
 
-- GOAL-014: Implement unit tests for content parsing with 100% validation coverage
+- GOAL-015: Implement unit tests for content parsing with 100% validation coverage
 
 | Task     | Description                                                                                                                                                               | Completed | Date |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
-| TASK-092 | Create test file `tests/ForgingBlazor.Tests.Unit/Content/FrontmatterParserTests.cs` testing: valid YAML extraction, missing delimiters, empty frontmatter, malformed YAML |           |      |
-| TASK-093 | Create test file `tests/ForgingBlazor.Tests.Unit/Content/MarkdownRendererTests.cs` testing: basic Markdown, code blocks, tables, task lists, edge cases                   |           |      |
-| TASK-094 | Create test file `tests/ForgingBlazor.Tests.Unit/Content/ContentParserTests.cs` testing: full parsing pipeline, descriptor instantiation, custom metadata mapping         |           |      |
-| TASK-095 | Create test file `tests/ForgingBlazor.Tests.Unit/Content/FrontmatterValidationTests.cs` testing: required field validation (100% coverage), slug validation, date parsing |           |      |
+| TASK-100 | Create test file `tests/ForgingBlazor.Tests.Unit/Content/FrontmatterParserTests.cs` testing: valid YAML extraction, missing delimiters, empty frontmatter, malformed YAML |           |      |
+| TASK-101 | Create test file `tests/ForgingBlazor.Tests.Unit/Content/MarkdownRendererTests.cs` testing: basic Markdown, code blocks, tables, task lists, edge cases                   |           |      |
+| TASK-102 | Create test file `tests/ForgingBlazor.Tests.Unit/Content/ContentParserTests.cs` testing: full parsing pipeline, descriptor instantiation, custom metadata mapping         |           |      |
+| TASK-103 | Create test file `tests/ForgingBlazor.Tests.Unit/Content/FrontmatterValidationTests.cs` testing: required field validation (100% coverage), slug validation, date parsing |           |      |
 
-### Phase 15: Unit Tests - Culture
+### Phase 16: Unit Tests - Culture
 
-- GOAL-015: Implement unit tests for culture resolution with 100% fallback coverage
+- GOAL-016: Implement unit tests for culture resolution with 100% fallback coverage
 
 | Task     | Description                                                                                                                                                                                             | Completed | Date |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
@@ -498,160 +517,160 @@ After completing each phase, provide a summary:
 | TASK-097 | Create test file `tests/ForgingBlazor.Tests.Unit/Routing/Culture/CultureFallbackChainTests.cs` testing: complete fallback hierarchy (de-DE → de → en-US → en → none), all documented fallback scenarios |           |      |
 | TASK-098 | Create test file `tests/ForgingBlazor.Tests.Unit/Content/CultureContentLocatorTests.cs` testing: content file lookup order from spec section 4.5, missing file handling                                 |           |      |
 
-### Phase 16: Unit Tests - Pagination
+### Phase 17: Unit Tests - Pagination
 
-- GOAL-016: Implement unit tests for pagination system
+- GOAL-017: Implement unit tests for pagination system
 
 | Task     | Description                                                                                                                                                                 | Completed | Date |
 | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
-| TASK-099 | Create test file `tests/ForgingBlazor.Tests.Unit/Pagination/PaginationServiceTests.cs` testing: page calculation, out-of-range handling, edge cases from spec section 9.5.2 |           |      |
-| TASK-100 | Create test file `tests/ForgingBlazor.Tests.Unit/Pagination/PaginationUrlParserTests.cs` testing: Numeric format parsing, Prefixed format parsing, invalid inputs           |           |      |
+| TASK-107 | Create test file `tests/ForgingBlazor.Tests.Unit/Pagination/PaginationServiceTests.cs` testing: page calculation, out-of-range handling, edge cases from spec section 9.5.2 |           |      |
+| TASK-108 | Create test file `tests/ForgingBlazor.Tests.Unit/Pagination/PaginationUrlParserTests.cs` testing: Numeric format parsing, Prefixed format parsing, invalid inputs           |           |      |
 
-### Phase 17: Unit Tests - Storage
+### Phase 18: Unit Tests - Storage
 
-- GOAL-017: Implement unit tests for storage providers
+- GOAL-018: Implement unit tests for storage providers
 
 | Task     | Description                                                                                                                                                     | Completed | Date |
 | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
-| TASK-101 | Create test file `tests/ForgingBlazor.Tests.Unit/Storage/FileSystemContentStorageProviderTests.cs` using temporary directories for file operations testing      |           |      |
-| TASK-102 | Create test file `tests/ForgingBlazor.Tests.Unit/Storage/FileSystemWatcherServiceTests.cs` testing: file change detection, debouncing behavior, filter patterns |           |      |
-| TASK-103 | Create test file `tests/ForgingBlazor.Tests.Unit/Storage/ContentCacheServiceTests.cs` testing: cache hit/miss, culture-aware keys, invalidation                 |           |      |
+| TASK-109 | Create test file `tests/ForgingBlazor.Tests.Unit/Storage/FileSystemContentStorageProviderTests.cs` using temporary directories for file operations testing      |           |      |
+| TASK-110 | Create test file `tests/ForgingBlazor.Tests.Unit/Storage/FileSystemWatcherServiceTests.cs` testing: file change detection, debouncing behavior, filter patterns |           |      |
+| TASK-111 | Create test file `tests/ForgingBlazor.Tests.Unit/Storage/ContentCacheServiceTests.cs` testing: cache hit/miss, culture-aware keys, invalidation                 |           |      |
 
-### Phase 18: Unit Tests - Validation
+### Phase 19: Unit Tests - Validation
 
-- GOAL-018: Implement unit tests for startup validation with 100% coverage
+- GOAL-019: Implement unit tests for startup validation with 100% coverage
 
 | Task     | Description                                                                                                                                                                   | Completed | Date |
 | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
-| TASK-104 | Create test file `tests/ForgingBlazor.Tests.Unit/Routing/Validation/RoutingConfigurationValidationTests.cs` testing: all validation rules, error messages                     |           |      |
-| TASK-105 | Create test file `tests/ForgingBlazor.Tests.Unit/Content/Validation/ContentStructureValidationTests.cs` testing: missing \_index.md detection, missing page content detection |           |      |
-| TASK-106 | Create test file `tests/ForgingBlazor.Tests.Unit/Storage/Validation/StorageConfigurationValidationTests.cs` testing: provider configuration validation, path accessibility    |           |      |
+| TASK-112 | Create test file `tests/ForgingBlazor.Tests.Unit/Routing/Validation/RoutingConfigurationValidationTests.cs` testing: all validation rules, error messages                     |           |      |
+| TASK-113 | Create test file `tests/ForgingBlazor.Tests.Unit/Content/Validation/ContentStructureValidationTests.cs` testing: missing \_index.md detection, missing page content detection |           |      |
+| TASK-114 | Create test file `tests/ForgingBlazor.Tests.Unit/Storage/Validation/StorageConfigurationValidationTests.cs` testing: provider configuration validation, path accessibility    |           |      |
 
-### Phase 19: Integration Tests
+### Phase 20: Integration Tests
 
-- GOAL-019: Implement integration tests for end-to-end scenarios
+- GOAL-020: Implement integration tests for end-to-end scenarios
 
 | Task     | Description                                                                                                                                                                      | Completed | Date |
 | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
-| TASK-107 | Create test project `tests/ForgingBlazor.Storage.AzureBlob.Tests.Unit/ForgingBlazor.Storage.AzureBlob.Tests.Unit.csproj` referencing `ForgingBlazor.Storage.AzureBlob`           |           |      |
-| TASK-108 | Create test file `tests/ForgingBlazor.Storage.AzureBlob.Tests.Unit/AzureBlobContentStorageProviderTests.cs` using Azurite emulator for blob operations                           |           |      |
-| TASK-109 | Create test file `tests/ForgingBlazor.Tests.Integration/Routing/ContentRoutingIntegrationTests.cs` testing: full request/response cycle, content resolution, component rendering |           |      |
-| TASK-110 | Create test file `tests/ForgingBlazor.Tests.Integration/Storage/PublishingWorkflowIntegrationTests.cs` testing: draft → publish workflow, expiration handling                    |           |      |
-| TASK-111 | Create test fixture `tests/ForgingBlazor.Tests.Integration/Fixtures/TestContentFixture.cs` providing sample Markdown content files for integration tests                         |           |      |
+| TASK-115 | Create test project `tests/ForgingBlazor.Storage.AzureBlob.Tests.Unit/ForgingBlazor.Storage.AzureBlob.Tests.Unit.csproj` referencing `ForgingBlazor.Storage.AzureBlob`           |           |      |
+| TASK-116 | Create test file `tests/ForgingBlazor.Storage.AzureBlob.Tests.Unit/AzureBlobContentStorageProviderTests.cs` using Azurite emulator for blob operations                           |           |      |
+| TASK-117 | Create test file `tests/ForgingBlazor.Tests.Integration/Routing/ContentRoutingIntegrationTests.cs` testing: full request/response cycle, content resolution, component rendering |           |      |
+| TASK-118 | Create test file `tests/ForgingBlazor.Tests.Integration/Storage/PublishingWorkflowIntegrationTests.cs` testing: draft → publish workflow, expiration handling                    |           |      |
+| TASK-119 | Create test fixture `tests/ForgingBlazor.Tests.Integration/Fixtures/TestContentFixture.cs` providing sample Markdown content files for integration tests                         |           |      |
 
-### Phase 20: Documentation and Examples
+### Phase 21: Documentation and Examples
 
-- GOAL-020: Create documentation and usage examples
+- GOAL-021: Create documentation and usage examples
 
 | Task     | Description                                                                                                                                                       | Completed | Date |
 | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
-| TASK-112 | Create README file `src/ForgingBlazor.Storage.AzureBlob/README.md` following template from `templates/readme-project.md` with installation and usage instructions |           |      |
-| TASK-113 | Update `src/ForgingBlazor/README.md` adding section for Dynamic Content Routing with FluentAPI examples                                                           |           |      |
+| TASK-120 | Create README file `src/ForgingBlazor.Storage.AzureBlob/README.md` following template from `templates/readme-project.md` with installation and usage instructions |           |      |
+| TASK-121 | Update `src/ForgingBlazor/README.md` adding section for Dynamic Content Routing with FluentAPI examples                                                           |           |      |
 
-### Phase 21: Xample Demonstration Application
+### Phase 22: Xample Demonstration Application
 
-- GOAL-021: Build comprehensive demonstration application in Xample project showcasing all features with edge cases and pitfalls
+- GOAL-022: Build comprehensive demonstration application in Xample project showcasing all features with edge cases and pitfalls
 
 | Task     | Description                                                                                                                                                                                                                                       | Completed | Date |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
-| TASK-114 | Update `src/Xample/Program.cs` with complete FluentAPI configuration demonstrating: `AddRouting()` with `ConfigureRoot()`, multiple cultures (en-US, de-DE, fr-FR), `CultureCanonical.WithoutPrefix`, default component/layout, home page mapping |           |      |
-| TASK-115 | Add storage configuration to `src/Xample/Program.cs` with `AddContentStorage()` using FileSystem provider with `WatchForChanges()` enabled for development hot-reload                                                                             |           |      |
-| TASK-116 | Add asset storage configuration to `src/Xample/Program.cs` with `AddAssetStorage()` using FileSystem provider with separate base path for images/media                                                                                            |           |      |
-| TASK-117 | Create `BlogPostDescriptor` class in `src/Xample/Content/BlogPostDescriptor.cs` extending `ContentDescriptor` with custom properties: `Author`, `Tags`, `ReadingTimeMinutes`, `FeaturedImage`                                                     |           |      |
-| TASK-118 | Create `TutorialDescriptor` class in `src/Xample/Content/TutorialDescriptor.cs` extending `ContentDescriptor` with: `Difficulty` (enum), `Prerequisites` (string[]), `EstimatedDuration`                                                          |           |      |
-| TASK-119 | Configure segment mapping for `/posts` in `src/Xample/Program.cs` with: `BlogPostDescriptor` content type, pagination (PageSize: 5, Prefixed format with "page-"), custom index/page components                                                   |           |      |
-| TASK-120 | Configure nested segment mapping for `/posts/tutorials` in `src/Xample/Program.cs` with: `TutorialDescriptor` content type, pagination (PageSize: 3, Numeric format), separate components                                                         |           |      |
-| TASK-121 | Configure segment mapping for `/blog` in `src/Xample/Program.cs` demonstrating alternative segment with different pagination settings (PageSize: 10, Numeric format)                                                                              |           |      |
-| TASK-122 | Configure page mapping for `/about` in `src/Xample/Program.cs` as standalone page with custom component and layout override                                                                                                                       |           |      |
-| TASK-123 | Configure page mapping for `/contact` in `src/Xample/Program.cs` as folder-style page (`contact/index.md`) with form layout                                                                                                                       |           |      |
-| TASK-124 | Configure page mapping for `/legal/privacy` in `src/Xample/Program.cs` demonstrating nested standalone page without pagination                                                                                                                    |           |      |
-| TASK-125 | Create `PostIndexComponent.razor` in `src/Xample/Components/Content/PostIndexComponent.razor` displaying paginated post list with `PaginatedResult<BlogPostDescriptor>` parameter                                                                 |           |      |
-| TASK-126 | Create `PostDetailComponent.razor` in `src/Xample/Components/Content/PostDetailComponent.razor` displaying single post with `ResolvedContent<BlogPostDescriptor>` parameter, including canonical link rendering                                   |           |      |
-| TASK-127 | Create `TutorialIndexComponent.razor` in `src/Xample/Components/Content/TutorialIndexComponent.razor` displaying tutorial list with difficulty badges and prerequisites                                                                           |           |      |
-| TASK-128 | Create `TutorialDetailComponent.razor` in `src/Xample/Components/Content/TutorialDetailComponent.razor` displaying tutorial with estimated duration and difficulty indicator                                                                      |           |      |
-| TASK-129 | Create `PageComponent.razor` in `src/Xample/Components/Content/PageComponent.razor` as generic page component for standalone pages with `ResolvedContent<ContentDescriptor>`                                                                      |           |      |
-| TASK-130 | Create `ContentLayout.razor` in `src/Xample/Components/Layout/ContentLayout.razor` as default layout for content pages with sidebar navigation and breadcrumbs                                                                                    |           |      |
+| TASK-130 | Update `src/Xample/Program.cs` with complete FluentAPI configuration demonstrating: `AddRouting()` with `ConfigureRoot()`, multiple cultures (en-US, de-DE, fr-FR), `CultureCanonical.WithoutPrefix`, default component/layout, home page mapping |           |      |
+| TASK-131 | Add storage configuration to `src/Xample/Program.cs` with `AddContentStorage()` using FileSystem provider with `WatchForChanges()` enabled for development hot-reload                                                                             |           |      |
+| TASK-132 | Add asset storage configuration to `src/Xample/Program.cs` with `AddAssetStorage()` using FileSystem provider with separate base path for images/media                                                                                            |           |      |
+| TASK-133 | Create `BlogPostDescriptor` class in `src/Xample/Content/BlogPostDescriptor.cs` extending `ContentDescriptor` with custom properties: `Author`, `Tags`, `ReadingTimeMinutes`, `FeaturedImage`                                                     |           |      |
+| TASK-134 | Create `TutorialDescriptor` class in `src/Xample/Content/TutorialDescriptor.cs` extending `ContentDescriptor` with: `Difficulty` (enum), `Prerequisites` (string[]), `EstimatedDuration`                                                          |           |      |
+| TASK-135 | Configure segment mapping for `/posts` in `src/Xample/Program.cs` with: `BlogPostDescriptor` content type, pagination (PageSize: 5, Prefixed format with "page-"), custom index/page components                                                   |           |      |
+| TASK-136 | Configure nested segment mapping for `/posts/tutorials` in `src/Xample/Program.cs` with: `TutorialDescriptor` content type, pagination (PageSize: 3, Numeric format), separate components                                                         |           |      |
+| TASK-137 | Configure segment mapping for `/blog` in `src/Xample/Program.cs` demonstrating alternative segment with different pagination settings (PageSize: 10, Numeric format)                                                                              |           |      |
+| TASK-138 | Configure page mapping for `/about` in `src/Xample/Program.cs` as standalone page with custom component and layout override                                                                                                                       |           |      |
+| TASK-139 | Configure page mapping for `/contact` in `src/Xample/Program.cs` as folder-style page (`contact/index.md`) with form layout                                                                                                                       |           |      |
+| TASK-140 | Configure page mapping for `/legal/privacy` in `src/Xample/Program.cs` demonstrating nested standalone page without pagination                                                                                                                    |           |      |
+| TASK-141 | Create `PostIndexComponent.razor` in `src/Xample/Components/Content/PostIndexComponent.razor` displaying paginated post list with `PaginatedResult<BlogPostDescriptor>` parameter                                                                 |           |      |
+| TASK-142 | Create `PostDetailComponent.razor` in `src/Xample/Components/Content/PostDetailComponent.razor` displaying single post with `ResolvedContent<BlogPostDescriptor>` parameter, including canonical link rendering                                   |           |      |
+| TASK-143 | Create `TutorialIndexComponent.razor` in `src/Xample/Components/Content/TutorialIndexComponent.razor` displaying tutorial list with difficulty badges and prerequisites                                                                           |           |      |
+| TASK-144 | Create `TutorialDetailComponent.razor` in `src/Xample/Components/Content/TutorialDetailComponent.razor` displaying tutorial with estimated duration and difficulty indicator                                                                      |           |      |
+| TASK-145 | Create `PageComponent.razor` in `src/Xample/Components/Content/PageComponent.razor` as generic page component for standalone pages with `ResolvedContent<ContentDescriptor>`                                                                      |           |      |
+| TASK-146 | Create `ContentLayout.razor` in `src/Xample/Components/Layout/ContentLayout.razor` as default layout for content pages with sidebar navigation and breadcrumbs                                                                                    |           |      |
 
-### Phase 22: Xample Content Files - Standard Cases
+### Phase 23: Xample Content Files - Standard Cases
 
-- GOAL-022: Create standard content files demonstrating proper usage patterns
+- GOAL-023: Create standard content files demonstrating proper usage patterns
 
 | Task     | Description                                                                                                                                                                              | Completed | Date |
 | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
-| TASK-131 | Create `src/Xample/content/_index.md` as home page with full frontmatter (title, slug, publishedDate) in default culture (en-US)                                                         |           |      |
-| TASK-132 | Create `src/Xample/content/_index.de-DE.md` as German translation of home page with identical slug                                                                                       |           |      |
-| TASK-133 | Create `src/Xample/content/_index.fr-FR.md` as French translation of home page with identical slug                                                                                       |           |      |
-| TASK-134 | Create `src/Xample/content/about.md` as standalone about page with author bio and contact information                                                                                    |           |      |
-| TASK-135 | Create `src/Xample/content/about.de-DE.md` as German translation of about page                                                                                                           |           |      |
-| TASK-136 | Create `src/Xample/content/contact/index.md` as folder-style contact page demonstrating alternative file organization                                                                    |           |      |
-| TASK-137 | Create `src/Xample/content/legal/privacy.md` as nested standalone page for privacy policy                                                                                                |           |      |
-| TASK-138 | Create `src/Xample/content/posts/_index.md` as posts segment index page with segment description                                                                                         |           |      |
-| TASK-139 | Create `src/Xample/content/posts/_index.de-DE.md` as German posts segment index                                                                                                          |           |      |
-| TASK-140 | Create `src/Xample/content/posts/getting-started.md` (existing folder) with complete `BlogPostDescriptor` frontmatter including custom fields (author, tags, readingTimeMinutes)         |           |      |
-| TASK-141 | Create `src/Xample/content/posts/getting-started.de-DE.md` as German translation with localized content                                                                                  |           |      |
-| TASK-142 | Create `src/Xample/content/posts/multi-language-support.md` (existing folder) demonstrating multi-culture content workflow                                                               |           |      |
-| TASK-143 | Create 10 additional posts in `src/Xample/content/posts/` to demonstrate pagination across multiple pages (post-three through post-twelve)                                               |           |      |
-| TASK-144 | Create `src/Xample/content/posts/tutorials/_index.md` as nested segment index for tutorials                                                                                              |           |      |
-| TASK-145 | Create `src/Xample/content/posts/tutorials/beginner-guide.md` with `TutorialDescriptor` frontmatter (difficulty: Beginner, prerequisites: [], estimatedDuration: 30)                     |           |      |
-| TASK-146 | Create `src/Xample/content/posts/tutorials/advanced-patterns.md` with `TutorialDescriptor` frontmatter (difficulty: Advanced, prerequisites: ["beginner-guide"], estimatedDuration: 120) |           |      |
-| TASK-147 | Create `src/Xample/content/blog/_index.md` as alternative blog segment demonstrating multiple segments with different configurations                                                     |           |      |
+| TASK-147 | Create `src/Xample/content/_index.md` as home page with full frontmatter (title, slug, publishedDate) in default culture (en-US)                                                         |           |      |
+| TASK-148 | Create `src/Xample/content/_index.de-DE.md` as German translation of home page with identical slug                                                                                       |           |      |
+| TASK-149 | Create `src/Xample/content/_index.fr-FR.md` as French translation of home page with identical slug                                                                                       |           |      |
+| TASK-150 | Create `src/Xample/content/about.md` as standalone about page with author bio and contact information                                                                                    |           |      |
+| TASK-151 | Create `src/Xample/content/about.de-DE.md` as German translation of about page                                                                                                           |           |      |
+| TASK-152 | Create `src/Xample/content/contact/index.md` as folder-style contact page demonstrating alternative file organization                                                                    |           |      |
+| TASK-153 | Create `src/Xample/content/legal/privacy.md` as nested standalone page for privacy policy                                                                                                |           |      |
+| TASK-154 | Create `src/Xample/content/posts/_index.md` as posts segment index page with segment description                                                                                         |           |      |
+| TASK-155 | Create `src/Xample/content/posts/_index.de-DE.md` as German posts segment index                                                                                                          |           |      |
+| TASK-156 | Create `src/Xample/content/posts/getting-started.md` (existing folder) with complete `BlogPostDescriptor` frontmatter including custom fields (author, tags, readingTimeMinutes)         |           |      |
+| TASK-157 | Create `src/Xample/content/posts/getting-started.de-DE.md` as German translation with localized content                                                                                  |           |      |
+| TASK-158 | Create `src/Xample/content/posts/multi-language-support.md` (existing folder) demonstrating multi-culture content workflow                                                               |           |      |
+| TASK-159 | Create 10 additional posts in `src/Xample/content/posts/` to demonstrate pagination across multiple pages (post-three through post-twelve)                                               |           |      |
+| TASK-160 | Create `src/Xample/content/posts/tutorials/_index.md` as nested segment index for tutorials                                                                                              |           |      |
+| TASK-161 | Create `src/Xample/content/posts/tutorials/beginner-guide.md` with `TutorialDescriptor` frontmatter (difficulty: Beginner, prerequisites: [], estimatedDuration: 30)                     |           |      |
+| TASK-162 | Create `src/Xample/content/posts/tutorials/advanced-patterns.md` with `TutorialDescriptor` frontmatter (difficulty: Advanced, prerequisites: ["beginner-guide"], estimatedDuration: 120) |           |      |
+| TASK-163 | Create `src/Xample/content/blog/_index.md` as alternative blog segment demonstrating multiple segments with different configurations                                                     |           |      |
 
-### Phase 23: Xample Content Files - Edge Cases and Pitfalls
+### Phase 24: Xample Content Files - Edge Cases and Pitfalls
 
-- GOAL-023: Create content files demonstrating edge cases, boundary conditions, and potential pitfalls
+- GOAL-024: Create content files demonstrating edge cases, boundary conditions, and potential pitfalls
 
 | Task     | Description                                                                                                                                                                            | Completed | Date |
 | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
-| TASK-148 | Create `src/Xample/content/posts/minimum-slug.md` with shortest valid slug (3 characters: "abc") testing REQ-RTE-002 minimum boundary                                                  |           |      |
-| TASK-149 | Create `src/Xample/content/posts/maximum-length-slug-that-is-exactly-seventy-characters-long-boundary.md` with maximum valid slug (70 characters) testing REQ-RTE-002 maximum boundary |           |      |
-| TASK-150 | Create `src/Xample/content/posts/mixed-case-slug-test.md` with `slug: MiXeD-CaSe-SlUg-TeSt` demonstrating case handling in slugs                                                       |           |      |
-| TASK-151 | Create `src/Xample/content/posts/numbers-in-middle-123-test.md` with `slug: numbers-in-middle-123-test` demonstrating numbers in slug middle (valid)                                   |           |      |
-| TASK-152 | Create `src/Xample/content/posts/special-post-draft.md` with `draft: true` demonstrating draft content filtering (should not appear in production)                                     |           |      |
-| TASK-153 | Create `src/Xample/content/posts/expired-content-example.md` with `expiredAt: 2025-01-01T00:00:00+00:00` demonstrating soft-deleted expired content                                    |           |      |
-| TASK-154 | Create `src/Xample/content/posts/future-publish-date.md` with `publishedDate` set to future date (2027-01-01) demonstrating scheduled content handling                                 |           |      |
-| TASK-155 | Create `src/Xample/content/posts/timezone-edge-case.md` with `publishedDate: 2026-01-25T23:59:59-12:00` demonstrating extreme timezone handling                                        |           |      |
-| TASK-156 | Create `src/Xample/content/posts/unicode-content-test.md` with content containing: emoji (🚀), Chinese characters (你好), Arabic text (مرحبا), special symbols (™©®)                   |           |      |
-| TASK-157 | Create `src/Xample/content/posts/markdown-edge-cases.md` with complex Markdown: nested code blocks, tables with special characters, HTML entities, task lists, footnotes               |           |      |
-| TASK-158 | Create `src/Xample/content/posts/yaml-special-characters.md` with frontmatter containing: colons in strings, quotes, multiline values, special YAML characters that need escaping      |           |      |
-| TASK-159 | Create `src/Xample/content/posts/empty-optional-fields.md` with explicitly null optional fields (`expiredAt: null`, `draft: false`) and empty tags array                               |           |      |
-| TASK-160 | Create `src/Xample/content/posts/whitespace-handling.md` with content containing: leading/trailing whitespace, multiple blank lines, tabs vs spaces                                    |           |      |
-| TASK-161 | Create `src/Xample/content/fallback-only-default.md` as page existing only in default culture to test culture fallback (no translations)                                               |           |      |
-| TASK-162 | Create `src/Xample/content/posts/partial-translation.md` with only `en-US` and `de-DE` translations, no `fr-FR` - testing partial translation fallback                                 |           |      |
-| TASK-163 | Create test content demonstrating culture fallback chain: file exists as `.de.md` (two-letter) but not `.de-DE.md` (full culture)                                                      |           |      |
+| TASK-164 | Create `src/Xample/content/posts/minimum-slug.md` with shortest valid slug (3 characters: "abc") testing REQ-RTE-002 minimum boundary                                                  |           |      |
+| TASK-165 | Create `src/Xample/content/posts/maximum-length-slug-that-is-exactly-seventy-characters-long-boundary.md` with maximum valid slug (70 characters) testing REQ-RTE-002 maximum boundary |           |      |
+| TASK-166 | Create `src/Xample/content/posts/mixed-case-slug-test.md` with `slug: MiXeD-CaSe-SlUg-TeSt` demonstrating case handling in slugs                                                       |           |      |
+| TASK-167 | Create `src/Xample/content/posts/numbers-in-middle-123-test.md` with `slug: numbers-in-middle-123-test` demonstrating numbers in slug middle (valid)                                   |           |      |
+| TASK-168 | Create `src/Xample/content/posts/special-post-draft.md` with `draft: true` demonstrating draft content filtering (should not appear in production)                                     |           |      |
+| TASK-169 | Create `src/Xample/content/posts/expired-content-example.md` with `expiredAt: 2025-01-01T00:00:00+00:00` demonstrating soft-deleted expired content                                    |           |      |
+| TASK-170 | Create `src/Xample/content/posts/future-publish-date.md` with `publishedDate` set to future date (2027-01-01) demonstrating scheduled content handling                                 |           |      |
+| TASK-171 | Create `src/Xample/content/posts/timezone-edge-case.md` with `publishedDate: 2026-01-25T23:59:59-12:00` demonstrating extreme timezone handling                                        |           |      |
+| TASK-172 | Create `src/Xample/content/posts/unicode-content-test.md` with content containing: emoji (🚀), Chinese characters (你好), Arabic text (مرحبا), special symbols (™©®)                   |           |      |
+| TASK-173 | Create `src/Xample/content/posts/markdown-edge-cases.md` with complex Markdown: nested code blocks, tables with special characters, HTML entities, task lists, footnotes               |           |      |
+| TASK-174 | Create `src/Xample/content/posts/yaml-special-characters.md` with frontmatter containing: colons in strings, quotes, multiline values, special YAML characters that need escaping      |           |      |
+| TASK-175 | Create `src/Xample/content/posts/empty-optional-fields.md` with explicitly null optional fields (`expiredAt: null`, `draft: false`) and empty tags array                               |           |      |
+| TASK-176 | Create `src/Xample/content/posts/whitespace-handling.md` with content containing: leading/trailing whitespace, multiple blank lines, tabs vs spaces                                    |           |      |
+| TASK-177 | Create `src/Xample/content/fallback-only-default.md` as page existing only in default culture to test culture fallback (no translations)                                               |           |      |
+| TASK-178 | Create `src/Xample/content/posts/partial-translation.md` with only `en-US` and `de-DE` translations, no `fr-FR` - testing partial translation fallback                                 |           |      |
+| TASK-179 | Create test content demonstrating culture fallback chain: file exists as `.de.md` (two-letter) but not `.de-DE.md` (full culture)                                                      |           |      |
 
-### Phase 24: Xample AppHost Integration Tests
+### Phase 25: Xample AppHost Integration Tests
 
-- GOAL-024: Create comprehensive integration tests in Xample.AppHost.Tests.Integration verifying all routing, content, and edge case scenarios
+- GOAL-025: Create comprehensive integration tests in Xample.AppHost.Tests.Integration verifying all routing, content, and edge case scenarios
 
 | Task     | Description                                                                                                                                                                                                                          | Completed | Date |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ---- |
-| TASK-164 | Create `tests/Xample.AppHost.Tests.Integration/Routing/HomePageRoutingTests.cs` testing: `/` returns home page, `/en-US` returns home with canonical to `/`, `/de-DE` returns German home page                                       |           |      |
-| TASK-165 | Create `tests/Xample.AppHost.Tests.Integration/Routing/CultureRoutingTests.cs` testing: all supported cultures return content, unsupported culture `/es-ES` returns 404, culture fallback from `de-DE` → `de` → `en-US`              |           |      |
-| TASK-166 | Create `tests/Xample.AppHost.Tests.Integration/Routing/SegmentRoutingTests.cs` testing: `/posts` returns paginated index, `/posts/getting-started` returns post detail, nested `/posts/tutorials/beginner-guide` works               |           |      |
-| TASK-167 | Create `tests/Xample.AppHost.Tests.Integration/Routing/PageRoutingTests.cs` testing: `/about` returns standalone page, `/contact` resolves folder-style page, `/legal/privacy` resolves nested page                                  |           |      |
-| TASK-168 | Create `tests/Xample.AppHost.Tests.Integration/Routing/CanonicalUrlTests.cs` testing: canonical link present in HTML head, non-canonical URLs (e.g., `/en-US`) include canonical link to `/`, no HTTP redirects occur                |           |      |
-| TASK-169 | Create `tests/Xample.AppHost.Tests.Integration/Pagination/PaginationRoutingTests.cs` testing: `/posts` shows page 1, `/posts/page-2` shows page 2, `/posts/page-1` canonical to `/posts`, out-of-range `/posts/page-999` returns 404 |           |      |
-| TASK-170 | Create `tests/Xample.AppHost.Tests.Integration/Pagination/NumericPaginationTests.cs` testing: `/posts/tutorials` with Numeric format, `/posts/tutorials/2` works, `/posts/tutorials/1` canonical to `/posts/tutorials`               |           |      |
-| TASK-171 | Create `tests/Xample.AppHost.Tests.Integration/Pagination/PaginationBoundaryTests.cs` testing: exactly PageSize items shows single page, PageSize+1 items creates page 2, empty segment shows no results message                     |           |      |
-| TASK-172 | Create `tests/Xample.AppHost.Tests.Integration/Content/ContentResolutionTests.cs` testing: frontmatter correctly parsed, custom descriptor fields populated, Markdown body rendered to HTML                                          |           |      |
-| TASK-173 | Create `tests/Xample.AppHost.Tests.Integration/Content/DraftContentTests.cs` testing: `draft: true` content returns 404 in production mode, draft content accessible in development mode if configured                               |           |      |
-| TASK-174 | Create `tests/Xample.AppHost.Tests.Integration/Content/ExpiredContentTests.cs` testing: content with past `expiredAt` returns 404, content with future `expiredAt` renders normally, null `expiredAt` never expires                  |           |      |
-| TASK-175 | Create `tests/Xample.AppHost.Tests.Integration/Content/FutureDateContentTests.cs` testing: content with future `publishedDate` behavior (may be hidden or shown based on configuration)                                              |           |      |
-| TASK-176 | Create `tests/Xample.AppHost.Tests.Integration/Slug/SlugValidationTests.cs` testing: valid slugs resolve correctly, requests for invalid slug patterns return 404, slug case sensitivity handling                                    |           |      |
-| TASK-177 | Create `tests/Xample.AppHost.Tests.Integration/Slug/SlugBoundaryTests.cs` testing: minimum slug length (3 chars) works, maximum slug length (70 chars) works, 2-char slug returns 404, 71-char slug returns 404                      |           |      |
-| TASK-178 | Create `tests/Xample.AppHost.Tests.Integration/Culture/CultureFallbackTests.cs` testing: full fallback chain `de-DE` → `de` → `en-US` → `en`, partial translation fallback, two-letter culture file resolution                       |           |      |
-| TASK-179 | Create `tests/Xample.AppHost.Tests.Integration/Culture/CultureNegotiationTests.cs` testing: Accept-Language header handling, explicit culture in URL overrides header, default culture with/without prefix                           |           |      |
-| TASK-180 | Create `tests/Xample.AppHost.Tests.Integration/EdgeCases/UnicodeContentTests.cs` testing: emoji rendering, CJK character support, RTL text handling, special symbols in content                                                      |           |      |
-| TASK-181 | Create `tests/Xample.AppHost.Tests.Integration/EdgeCases/MarkdownRenderingTests.cs` testing: code blocks syntax highlighted, tables rendered correctly, task lists functional, nested lists proper indentation                       |           |      |
-| TASK-182 | Create `tests/Xample.AppHost.Tests.Integration/EdgeCases/YamlParsingTests.cs` testing: special characters in frontmatter, multiline values, complex nested structures, array fields                                                  |           |      |
-| TASK-183 | Create `tests/Xample.AppHost.Tests.Integration/EdgeCases/WhitespaceHandlingTests.cs` testing: content with various whitespace preserved correctly, frontmatter whitespace trimmed appropriately                                      |           |      |
-| TASK-184 | Create `tests/Xample.AppHost.Tests.Integration/EdgeCases/TimezoneTests.cs` testing: DateTimeOffset parsing across timezones, expiration calculation with different timezones, UTC normalization                                      |           |      |
-| TASK-185 | Create `tests/Xample.AppHost.Tests.Integration/Security/PathTraversalTests.cs` testing: `../` in URL rejected, encoded path traversal (`%2e%2e%2f`) rejected, absolute paths rejected                                                |           |      |
-| TASK-186 | Create `tests/Xample.AppHost.Tests.Integration/Performance/CachingTests.cs` testing: second request served from cache, cache invalidation on file change (if watcher enabled), cache key includes culture                            |           |      |
-| TASK-187 | Create `tests/Xample.AppHost.Tests.Integration/Startup/ValidationTests.cs` testing: startup fails for missing `_index.md` in segment, startup fails for missing default culture content, startup fails for invalid configuration     |           |      |
-| TASK-188 | Create test fixture `tests/Xample.AppHost.Tests.Integration/Fixtures/XampleAppFixture.cs` using Aspire testing to spin up Xample application with test configuration                                                                 |           |      |
-| TASK-189 | Create test data helper `tests/Xample.AppHost.Tests.Integration/Helpers/ContentTestHelpers.cs` with methods to create/modify/delete test content files during integration tests                                                      |           |      |
-| TASK-190 | Create test assertions helper `tests/Xample.AppHost.Tests.Integration/Helpers/HtmlAssertions.cs` with custom TUnit assertions for: canonical link presence, meta tags, content structure                                             |           |      |
+| TASK-180 | Create `tests/Xample.AppHost.Tests.Integration/Routing/HomePageRoutingTests.cs` testing: `/` returns home page, `/en-US` returns home with canonical to `/`, `/de-DE` returns German home page                                       |           |      |
+| TASK-181 | Create `tests/Xample.AppHost.Tests.Integration/Routing/CultureRoutingTests.cs` testing: all supported cultures return content, unsupported culture `/es-ES` returns 404, culture fallback from `de-DE` → `de` → `en-US`              |           |      |
+| TASK-182 | Create `tests/Xample.AppHost.Tests.Integration/Routing/SegmentRoutingTests.cs` testing: `/posts` returns paginated index, `/posts/getting-started` returns post detail, nested `/posts/tutorials/beginner-guide` works               |           |      |
+| TASK-183 | Create `tests/Xample.AppHost.Tests.Integration/Routing/PageRoutingTests.cs` testing: `/about` returns standalone page, `/contact` resolves folder-style page, `/legal/privacy` resolves nested page                                  |           |      |
+| TASK-184 | Create `tests/Xample.AppHost.Tests.Integration/Routing/CanonicalUrlTests.cs` testing: canonical link present in HTML head, non-canonical URLs (e.g., `/en-US`) include canonical link to `/`, no HTTP redirects occur                |           |      |
+| TASK-185 | Create `tests/Xample.AppHost.Tests.Integration/Pagination/PaginationRoutingTests.cs` testing: `/posts` shows page 1, `/posts/page-2` shows page 2, `/posts/page-1` canonical to `/posts`, out-of-range `/posts/page-999` returns 404 |           |      |
+| TASK-186 | Create `tests/Xample.AppHost.Tests.Integration/Pagination/NumericPaginationTests.cs` testing: `/posts/tutorials` with Numeric format, `/posts/tutorials/2` works, `/posts/tutorials/1` canonical to `/posts/tutorials`               |           |      |
+| TASK-187 | Create `tests/Xample.AppHost.Tests.Integration/Pagination/PaginationBoundaryTests.cs` testing: exactly PageSize items shows single page, PageSize+1 items creates page 2, empty segment shows no results message                     |           |      |
+| TASK-188 | Create `tests/Xample.AppHost.Tests.Integration/Content/ContentResolutionTests.cs` testing: frontmatter correctly parsed, custom descriptor fields populated, Markdown body rendered to HTML                                          |           |      |
+| TASK-189 | Create `tests/Xample.AppHost.Tests.Integration/Content/DraftContentTests.cs` testing: `draft: true` content returns 404 in production mode, draft content accessible in development mode if configured                               |           |      |
+| TASK-190 | Create `tests/Xample.AppHost.Tests.Integration/Content/ExpiredContentTests.cs` testing: content with past `expiredAt` returns 404, content with future `expiredAt` renders normally, null `expiredAt` never expires                  |           |      |
+| TASK-191 | Create `tests/Xample.AppHost.Tests.Integration/Content/FutureDateContentTests.cs` testing: content with future `publishedDate` behavior (may be hidden or shown based on configuration)                                              |           |      |
+| TASK-192 | Create `tests/Xample.AppHost.Tests.Integration/Slug/SlugValidationTests.cs` testing: valid slugs resolve correctly, requests for invalid slug patterns return 404, slug case sensitivity handling                                    |           |      |
+| TASK-193 | Create `tests/Xample.AppHost.Tests.Integration/Slug/SlugBoundaryTests.cs` testing: minimum slug length (3 chars) works, maximum slug length (70 chars) works, 2-char slug returns 404, 71-char slug returns 404                      |           |      |
+| TASK-194 | Create `tests/Xample.AppHost.Tests.Integration/Culture/CultureFallbackTests.cs` testing: full fallback chain `de-DE` → `de` → `en-US` → `en`, partial translation fallback, two-letter culture file resolution                       |           |      |
+| TASK-195 | Create `tests/Xample.AppHost.Tests.Integration/Culture/CultureNegotiationTests.cs` testing: Accept-Language header handling, explicit culture in URL overrides header, default culture with/without prefix                           |           |      |
+| TASK-196 | Create `tests/Xample.AppHost.Tests.Integration/EdgeCases/UnicodeContentTests.cs` testing: emoji rendering, CJK character support, RTL text handling, special symbols in content                                                      |           |      |
+| TASK-197 | Create `tests/Xample.AppHost.Tests.Integration/EdgeCases/MarkdownRenderingTests.cs` testing: code blocks syntax highlighted, tables rendered correctly, task lists functional, nested lists proper indentation                       |           |      |
+| TASK-198 | Create `tests/Xample.AppHost.Tests.Integration/EdgeCases/YamlParsingTests.cs` testing: special characters in frontmatter, multiline values, complex nested structures, array fields                                                  |           |      |
+| TASK-199 | Create `tests/Xample.AppHost.Tests.Integration/EdgeCases/WhitespaceHandlingTests.cs` testing: content with various whitespace preserved correctly, frontmatter whitespace trimmed appropriately                                      |           |      |
+| TASK-200 | Create `tests/Xample.AppHost.Tests.Integration/EdgeCases/TimezoneTests.cs` testing: DateTimeOffset parsing across timezones, expiration calculation with different timezones, UTC normalization                                      |           |      |
+| TASK-201 | Create `tests/Xample.AppHost.Tests.Integration/Security/PathTraversalTests.cs` testing: `../` in URL rejected, encoded path traversal (`%2e%2e%2f`) rejected, absolute paths rejected                                                |           |      |
+| TASK-202 | Create `tests/Xample.AppHost.Tests.Integration/Performance/CachingTests.cs` testing: second request served from cache, cache invalidation on file change (if watcher enabled), cache key includes culture                            |           |      |
+| TASK-203 | Create `tests/Xample.AppHost.Tests.Integration/Startup/ValidationTests.cs` testing: startup fails for missing `_index.md` in segment, startup fails for missing default culture content, startup fails for invalid configuration     |           |      |
+| TASK-204 | Create test fixture `tests/Xample.AppHost.Tests.Integration/Fixtures/XampleAppFixture.cs` using Aspire testing to spin up Xample application with test configuration                                                                 |           |      |
+| TASK-205 | Create test data helper `tests/Xample.AppHost.Tests.Integration/Helpers/ContentTestHelpers.cs` with methods to create/modify/delete test content files during integration tests                                                      |           |      |
+| TASK-206 | Create test assertions helper `tests/Xample.AppHost.Tests.Integration/Helpers/HtmlAssertions.cs` with custom TUnit assertions for: canonical link presence, meta tags, content structure                                             |           |      |
 
 ## 3. Alternatives
 
@@ -755,6 +774,10 @@ After completing each phase, provide a summary:
 - **FILE-064**: `src/ForgingBlazor/Pagination/PaginationUrlParser.cs` - Pagination URL parser
 - **FILE-065**: `src/ForgingBlazor/Validation/StartupValidationHostedService.cs` - Startup validation hosted service
 - **FILE-066**: `src/ForgingBlazor/Components/CanonicalLinkComponent.razor` - Canonical link Blazor component
+- **FILE-067**: `src/ForgingBlazor/Components/ForgingRouter.razor` - Drop-in router component shell
+- **FILE-068**: `src/ForgingBlazor/Components/ForgingRouter.razor.cs` - Drop-in router logic integrating Dynamic Content Routing
+- **FILE-069**: `src/ForgingBlazor/Components/ForgingRouteView.razor` - Drop-in route view component shell
+- **FILE-070**: `src/ForgingBlazor/Components/ForgingRouteView.razor.cs` - Route view rendering with layout and NotFound semantics
 
 ### 5.3 New Files in ForgingBlazor.Storage.AzureBlob (New Project)
 
@@ -804,6 +827,8 @@ After completing each phase, provide a summary:
 - **FILE-104**: `tests/ForgingBlazor.Tests.Integration/Routing/ContentRoutingIntegrationTests.cs`
 - **FILE-105**: `tests/ForgingBlazor.Tests.Integration/Storage/PublishingWorkflowIntegrationTests.cs`
 - **FILE-106**: `tests/ForgingBlazor.Tests.Integration/Fixtures/TestContentFixture.cs`
+- **FILE-107**: `tests/ForgingBlazor.Tests.Unit/Components/ForgingRouteViewTests.cs` - Unit tests for ForgingRouteView
+- **FILE-108**: `tests/ForgingBlazor.Tests.Unit/Components/ForgingRouterTests.cs` - Unit tests for ForgingRouter
 
 ### 5.6 New Files in Xample Demonstration Project
 
@@ -884,6 +909,7 @@ After completing each phase, provide a summary:
 - **FILE-172**: `tests/Xample.AppHost.Tests.Integration/Security/PathTraversalTests.cs`
 - **FILE-173**: `tests/Xample.AppHost.Tests.Integration/Performance/CachingTests.cs`
 - **FILE-174**: `tests/Xample.AppHost.Tests.Integration/Startup/ValidationTests.cs`
+- **FILE-175**: `tests/Xample.AppHost.Tests.Integration/Routing/ForgingRouterSmokeTests.cs` - Integration smoke tests for ForgingRouter
 
 ### 5.10 Modified Files in Xample
 
