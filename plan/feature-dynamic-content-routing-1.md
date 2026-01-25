@@ -45,8 +45,9 @@ For each task, follow this exact workflow:
    - Ensure code compiles without errors
 
 3. **Post-Execution**
-   - Run `dotnet build ForgingBlazor.slnx` to verify compilation
-   - For test tasks: Run `dotnet test --solution ForgingBlazor.slnx` to verify all tests pass
+   - Run `dotnet restore` to ensure all dependencies are resolved
+   - Run `dotnet build ForgingBlazor.slnx --no-restore` to verify compilation
+   - For test tasks: Run `dotnet test --solution ForgingBlazor.slnx --no-build --no-restore --ignore-exit-code 8` to verify all tests pass
    - Update the task status in this plan (mark as ✅ with date)
    - Commit changes with conventional commit message format
 
