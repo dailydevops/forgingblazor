@@ -1,4 +1,4 @@
-﻿namespace NetEvolve.ForgingBlazor.Extensibility;
+﻿namespace NetEvolve.ForgingBlazor;
 
 /// <summary>
 /// Defines the contract for building a ForgingBlazor application.

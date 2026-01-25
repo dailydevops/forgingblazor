@@ -1,4 +1,4 @@
-﻿namespace NetEvolve.ForgingBlazor.Extensibility;
+﻿namespace NetEvolve.ForgingBlazor;
 
 using System.Diagnostics.CodeAnalysis;
 
