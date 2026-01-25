@@ -38,14 +38,11 @@ internal sealed class CultureFallbackChain
 
         var chain = new List<CultureInfo?>();
 
-        // 1. Add the specific culture (e.g., de-DE)
-        if (!culture.IsNeutralCulture)
-        {
-            chain.Add(culture);
-        }
+        // 1. Add the specific culture (e.g., de-DE) or neutral culture (e.g., de)
+        chain.Add(culture);
 
-        // 2. Add the neutral culture (e.g., de)
-        if (!string.IsNullOrEmpty(culture.Parent?.Name))
+        // 2. Add the parent neutral culture if the current culture is specific (e.g., de from de-DE)
+        if (!culture.IsNeutralCulture && !string.IsNullOrEmpty(culture.Parent?.Name))
         {
             chain.Add(culture.Parent);
         }

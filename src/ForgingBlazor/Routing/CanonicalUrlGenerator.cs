@@ -36,7 +36,13 @@ internal sealed class CanonicalUrlGenerator
 
         if (includeCulturePrefix)
         {
-            return $"/{culture.TwoLetterISOLanguageName}{normalizedPath}";
+            var result = $"/{culture.Name}{normalizedPath}";
+            // Remove trailing slash for non-root paths
+            if (result.Length > 1 && result.EndsWith('/'))
+            {
+                result = result.TrimEnd('/');
+            }
+            return result;
         }
 
         return normalizedPath;

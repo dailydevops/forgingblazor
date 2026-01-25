@@ -22,7 +22,7 @@ public sealed class CultureResolverTests
     [Test]
     public async Task FromTwoLetterCode_WithInvalidCode_ReturnsNull()
     {
-        var result = CultureResolver.FromTwoLetterCode("zz");
+        var result = CultureResolver.FromTwoLetterCode("l1");
 
         _ = await Assert.That(result).IsNull();
     }
