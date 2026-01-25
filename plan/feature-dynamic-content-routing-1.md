@@ -18,157 +18,47 @@ This implementation plan defines the complete development roadmap for the Dynami
 
 ## AI Agent Instructions
 
-This section provides mandatory guidelines for AI agents executing this implementation plan. All agents MUST follow these instructions precisely.
+Mandatory guidance for executing this plan. Keep it simple, precise, and consistent with project decisions.
 
-### Execution Principles
+### Principles
 
-1. **Sequential Phase Execution**: Execute phases in numerical order (Phase 1 → Phase 2 → ... → Phase 24). Do NOT skip phases unless explicitly instructed.
-2. **Task Atomicity**: Complete ONE task fully before starting the next task. Each task MUST be independently verifiable.
-3. **Dependency Awareness**: Tasks within a phase MAY be executed in parallel ONLY if they have no interdependencies. When in doubt, execute sequentially.
-4. **Fail-Fast**: If a task cannot be completed, STOP execution and report the blocker. Do NOT proceed with dependent tasks.
+- **MUST** work in English and follow all accepted ADRs in `decisions/`.
+- **MUST** run phases sequentially and complete one task at a time.
+- **MAY** run tasks in parallel only when there are no dependencies.
+- **MUST** fail-fast: stop and report blockers before proceeding.
 
-### Task Execution Workflow
+### Task Workflow
 
-For each task, follow this exact workflow:
-
-1. **Pre-Execution**
-   - Read and understand the task description completely
-   - Identify all files to be created or modified
-   - Verify all dependencies from previous tasks are satisfied
-   - Check that required interfaces/classes from earlier phases exist
-
-2. **Execution**
-   - Implement the task according to the description
-   - Follow all coding standards from `.github/instructions/*.instructions.md`
-   - Apply all constraints from the Requirements & Constraints section
-   - Write XML documentation for all public APIs
-   - Ensure code compiles without errors
-
-3. **Post-Execution**
-   - Run `dotnet restore` to ensure all dependencies are resolved
-   - Run `dotnet build ForgingBlazor.slnx --no-restore` to verify compilation
-   - For test tasks: Run `dotnet test --solution ForgingBlazor.slnx --no-build --no-restore --ignore-exit-code 8` to verify all tests pass
-   - Update the task status in this plan (mark as ✅ with date)
-   - Commit changes with conventional commit message format
-
-### Plan Maintenance
-
-#### Updating Task Status
-
-When completing a task, update the implementation table:
-
-```markdown
-| TASK-XXX | Description | ✅ | 2026-01-25 |
-```
-
-#### Status Tracking Rules
-
-- Mark task as `✅` ONLY after successful build AND test (if applicable)
-- If a task is partially complete, add a note in the Description column: `[PARTIAL: reason]`
-- If a task is blocked, mark as `⏸️` and add blocker description
-- If a task is skipped (with justification), mark as `⏭️`
-
-#### Phase Completion
-
-When ALL tasks in a phase are completed:
-
-1. Add a completion note after the phase table:
-
-   ```markdown
-   > ✅ **Phase X completed**: 2026-01-25 by [Agent/Developer]
-   ```
-
-2. Verify all tests for that phase pass
-3. Update the plan's `last_updated` frontmatter field
-
-#### Plan Versioning
-
-- Increment `version` in frontmatter for significant changes (new phases, major restructuring)
-- Update `last_updated` for any modification
-- When `status` changes: update both frontmatter AND badge in Introduction
-
-### Commit Message Format
-
-Use conventional commits for all changes:
+- Read the task, confirm prerequisites, and list affected files.
+- Implement per `.github/instructions/*.instructions.md` and plan requirements.
+- Add XML docs to all public APIs.
+- Build: `dotnet restore` then `dotnet build ForgingBlazor.slnx --no-restore`.
+- For tests: `dotnet test --solution ForgingBlazor.slnx --no-build --no-restore --ignore-exit-code 8`.
+- Update the task table; mark ✅ only after successful build/tests.
+- Commit using Conventional Commits (see [decisions/2025-07-10-conventional-commits.md](../decisions/2025-07-10-conventional-commits.md)). Example:
 
 ```txt
-feat(routing): implement IRoutingBuilder interface
+feat(routing): add IRoutingBuilder and root config
 
-- Add IRoutingBuilder with ConfigureRoot, MapSegment, MapPage methods
-- Create IRootConfiguration for culture and component settings
-- Implements TASK-005, TASK-006
-
+Implements TASK-005, TASK-006
 Refs: TASK-005, TASK-006
 ```
 
-Commit message types:
-
-- `feat`: New feature implementation
-- `test`: Test file creation or modification
-- `docs`: Documentation updates
-- `refactor`: Code restructuring without behavior change
-- `fix`: Bug fixes during implementation
-- `chore`: Maintenance tasks (e.g., updating dependencies)
-- `style`: Code style or formatting changes
-- `perf`: Performance improvements
-
-More details in [`decisions/2025-07-10-conventional-commits.md`](../decisions/2025-07-10-conventional-commits.md).
-
-### Documentation Requirements
-
-#### Code Documentation
-
-- All public classes, interfaces, methods, and properties MUST have XML documentation
-- Include `<summary>`, `<param>`, `<returns>`, `<exception>` where applicable
-- Reference requirement IDs in remarks: `/// <remarks>Implements REQ-API-001</remarks>`
-
-#### In-Code References
-
-When implementing a requirement, add a comment referencing the requirement ID:
-
-```csharp
-// REQ-RTE-002: Slug constraint pattern
-private static readonly Regex SlugPattern = new(@"^[A-Za-z][A-Za-z0-9-]{1,68}[A-Za-z]$");
-```
-
-### Error Handling
-
-If an error occurs during task execution:
-
-1. **Compilation Error**: Fix the error before proceeding. If unfixable, mark task as blocked.
-2. **Test Failure**: Investigate and fix. Do NOT mark task complete with failing tests.
-3. **Missing Dependency**: Check if a previous task was missed. Execute missing task first.
-4. **Ambiguous Requirement**: Refer to the specification document. If still unclear, document the assumption made.
-
 ### Quality Gates
 
-Before marking a phase complete, verify:
+- No new warnings; tests pass; XML docs present; constraints respected.
 
-- [ ] All tasks in the phase are marked ✅
-- [ ] `dotnet build ForgingBlazor.slnx` succeeds without warnings (except allowed in `<NoWarn>`)
-- [ ] `dotnet test --solution ForgingBlazor.slnx` passes all tests
-- [ ] No new compiler warnings introduced
-- [ ] All public APIs have XML documentation
-- [ ] Code follows patterns established in existing codebase
+### Phase Completion
+
+- Add a completion note, verify tests, and update `last_updated` in frontmatter.
 
 ### Progress Reporting
 
-After completing each phase, provide a summary:
+- After each phase, add a brief report (completed tasks, created/modified files, tests added, notes).
 
-```markdown
-## Progress Report - Phase X
+### Per-Phase Testing
 
-**Completed**: 2026-01-25
-**Tasks**: X/X completed
-**Files Created**: [list]
-**Files Modified**: [list]
-**Tests Added**: X tests
-**Notes**: [any observations or issues encountered]
-```
-
-### Per-Phase Testing Rule
-
-Each implementation phase MUST end with tasks that add unit and, where applicable, integration tests for any new elements introduced in that phase. This ensures the test suite grows continuously alongside the implementation.
+- End every phase with unit/integration tests for new elements.
 
 ---
 
