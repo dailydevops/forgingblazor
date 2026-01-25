@@ -2,7 +2,7 @@
 goal: Implement Dynamic Content Routing and Storage System for ForgingBlazor
 version: 1.0
 date_created: 2026-01-25
-last_updated: 2026-01-25T00:00:00Z
+last_updated: 2026-01-26T00:00:00Z
 owner: ForgingBlazor Team
 status: In progress
 tags: [feature, routing, storage, content-management, blazor, fluent-api]
@@ -273,9 +273,16 @@ Refs: TASK-005, TASK-006
 | TASK-041 | Create `FileSystemStorageOptions` class in `src/ForgingBlazor/Storage/FileSystem/FileSystemStorageOptions.cs` implementing `IFileSystemStorageOptions` with `BasePath` and `EnableWatch` properties                                    | ✅        | 2026-01-25 |
 | TASK-042 | Create `FileSystemContentStorageProvider` internal class in `src/ForgingBlazor/Storage/FileSystem/FileSystemContentStorageProvider.cs` implementing `IContentStorageProvider` with async file operations using `System.IO`             | ✅        | 2026-01-25 |
 | TASK-043 | Create `FileSystemAssetStorageProvider` internal class in `src/ForgingBlazor/Storage/FileSystem/FileSystemAssetStorageProvider.cs` implementing `IAssetStorageProvider` with async file operations                                     | ✅        | 2026-01-25 |
-| TASK-044 | Create `FileSystemWatcherService` internal class in `src/ForgingBlazor/Storage/FileSystem/FileSystemWatcherService.cs` implementing `IHostedService` wrapping `FileSystemWatcher` for .md file changes with debouncing                 |           |            |
-| TASK-045 | Create `ContentCacheService` internal class in `src/ForgingBlazor/Content/ContentCacheService.cs` implementing `IMemoryCache` wrapper with culture-aware cache keys and invalidation support                                           |           |            |
-| TASK-046 | Create `ContentCacheInvalidationHandler` internal class in `src/ForgingBlazor/Content/ContentCacheInvalidationHandler.cs` subscribing to FileSystemWatcher events and invalidating affected cache entries                              |           |            |
+| TASK-044 | Create `FileSystemWatcherService` internal class in `src/ForgingBlazor/Storage/FileSystem/FileSystemWatcherService.cs` implementing `IHostedService` wrapping `FileSystemWatcher` for .md file changes with debouncing                 | ✅        | 2026-01-26 |
+| TASK-045 | Create `ContentCacheService` internal class in `src/ForgingBlazor/Content/ContentCacheService.cs` implementing `IMemoryCache` wrapper with culture-aware cache keys and invalidation support                                           | ✅        | 2026-01-26 |
+| TASK-046 | Create `ContentCacheInvalidationHandler` internal class in `src/ForgingBlazor/Content/ContentCacheInvalidationHandler.cs` subscribing to FileSystemWatcher events and invalidating affected cache entries                              | ✅        | 2026-01-26 |
+
+#### Phase 4 Report (2026-01-26)
+
+- Completed: TASK-044 through TASK-046 delivering file system watching with debounced change detection, content caching infrastructure, and cache invalidation handling.
+- Files: Implementations added under `src/ForgingBlazor/Storage/FileSystem/FileSystemWatcherService.cs`, `src/ForgingBlazor/Content/ContentCacheService.cs`, and `src/ForgingBlazor/Content/ContentCacheInvalidationHandler.cs`. Unit tests added in `tests/ForgingBlazor.Tests.Unit/Storage/FileSystemWatcherServiceTests.cs`, `tests/ForgingBlazor.Tests.Unit/Content/ContentCacheServiceTests.cs`, and `tests/ForgingBlazor.Tests.Unit/Content/ContentCacheInvalidationHandlerTests.cs`.
+- Tests: `dotnet build ForgingBlazor.slnx --no-restore` (successful with 13 warnings - same as before), `dotnet test --solution ForgingBlazor.slnx --no-build --no-restore` (315 tests passing, +9 new tests).
+- Notes: FileSystemWatcherService implements IHostedService with 300ms debouncing for file change events. ContentCacheService wraps IMemoryCache with culture-aware cache keys and configurable expiration (30min sliding, 4h absolute). ContentCacheInvalidationHandler connects file system events to cache invalidation logic. All CA1848 logging warnings suppressed with pragmas (LoggerMessage source generators deferred to future refactoring).
 
 ### Phase 5: Culture Resolution and Fallback
 
