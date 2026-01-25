@@ -25,7 +25,7 @@ public interface IContentStorageProvider
         CultureInfo culture,
         CancellationToken cancellationToken = default
     )
-        where TDescriptor : ContentDescriptor;
+        where TDescriptor : ContentDescriptor, new();
 
     /// <summary>
     /// Retrieves all content items under a segment for a given culture.
@@ -40,7 +40,7 @@ public interface IContentStorageProvider
         CultureInfo culture,
         CancellationToken cancellationToken = default
     )
-        where TDescriptor : ContentDescriptor;
+        where TDescriptor : ContentDescriptor, new();
 
     /// <summary>
     /// Checks whether a path exists in content storage.

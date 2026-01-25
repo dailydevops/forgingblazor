@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Routing.Configurations;
+﻿namespace NetEvolve.ForgingBlazor.Routing.Configurations;
 
 using System;
 using System.Globalization;

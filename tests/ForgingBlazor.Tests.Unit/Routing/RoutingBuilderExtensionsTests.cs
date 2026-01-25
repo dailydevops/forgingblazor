@@ -61,24 +61,33 @@ public class RoutingBuilderExtensionsTests
         var configuration = serviceProvider.GetRequiredService<RoutingConfiguration>();
 
         // Assert
-        _ = await Assert.That(configuration.Root.DefaultContentType).IsSameReferenceAs(typeof(TestContentDescriptor));
-        _ = await Assert.That(configuration.Root.DefaultComponentType).IsSameReferenceAs(typeof(TestIndexComponent));
-        _ = await Assert.That(configuration.Root.DefaultLayoutType).IsSameReferenceAs(typeof(TestLayout));
-        _ = await Assert.That(configuration.Root.HomePageContentType).IsSameReferenceAs(typeof(TestContentDescriptor));
+        using (Assert.Multiple())
+        {
+            _ = await Assert
+                .That(configuration.Root.DefaultContentType)
+                .IsSameReferenceAs(typeof(TestContentDescriptor));
+            _ = await Assert
+                .That(configuration.Root.DefaultComponentType)
+                .IsSameReferenceAs(typeof(TestIndexComponent));
+            _ = await Assert.That(configuration.Root.DefaultLayoutType).IsSameReferenceAs(typeof(TestLayout));
+            _ = await Assert
+                .That(configuration.Root.HomePageContentType)
+                .IsSameReferenceAs(typeof(TestContentDescriptor));
 
-        _ = await Assert.That(configuration.Segments.ContainsKey("posts")).IsTrue();
-        var segment = configuration.Segments["posts"];
-        _ = await Assert.That(segment.Pagination).IsNotNull();
-        _ = await Assert.That(segment.Pagination!.PageSize).EqualTo(5);
-        _ = await Assert.That(segment.Pagination!.Format).EqualTo(PaginationUrlFormat.Prefixed);
-        _ = await Assert.That(segment.Pagination!.Prefix).EqualTo("page-");
-        _ = await Assert.That(segment.Metadata.Fields.ContainsKey("author")).IsTrue();
+            _ = await Assert.That(configuration.Segments.ContainsKey("posts")).IsTrue();
+            var segment = configuration.Segments["posts"];
+            _ = await Assert.That(segment.Pagination).IsNotNull();
+            _ = await Assert.That(segment.Pagination!.PageSize).EqualTo(5);
+            _ = await Assert.That(segment.Pagination!.Format).EqualTo(PaginationUrlFormat.Prefixed);
+            _ = await Assert.That(segment.Pagination!.Prefix).EqualTo("page-");
+            _ = await Assert.That(segment.Metadata.Fields.ContainsKey("author")).IsTrue();
 
-        _ = await Assert.That(configuration.Pages.ContainsKey("about")).IsTrue();
-        var page = configuration.Pages["about"];
-        _ = await Assert.That(page.ComponentType).IsSameReferenceAs(typeof(TestPageComponent));
-        _ = await Assert.That(page.LayoutType).IsSameReferenceAs(typeof(TestLayout));
-        _ = await Assert.That(page.Metadata.Fields.ContainsKey("featured")).IsTrue();
+            _ = await Assert.That(configuration.Pages.ContainsKey("about")).IsTrue();
+            var page = configuration.Pages["about"];
+            _ = await Assert.That(page.ComponentType).IsSameReferenceAs(typeof(TestPageComponent));
+            _ = await Assert.That(page.LayoutType).IsSameReferenceAs(typeof(TestLayout));
+            _ = await Assert.That(page.Metadata.Fields.ContainsKey("featured")).IsTrue();
+        }
     }
 
     [Test]
@@ -113,8 +122,11 @@ public class RoutingBuilderExtensionsTests
         var configuration = serviceProvider.GetRequiredService<RoutingConfiguration>();
 
         // Assert
-        _ = await Assert.That(configuration.Segments.ContainsKey("blog")).IsTrue();
-        _ = await Assert.That(configuration.Segments.ContainsKey("blog/tutorials")).IsTrue();
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(configuration.Segments.ContainsKey("blog")).IsTrue();
+            _ = await Assert.That(configuration.Segments.ContainsKey("blog/tutorials")).IsTrue();
+        }
     }
 
     [Test]

@@ -15,5 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\ForgingBlazor\ForgingBlazor.csproj" />
+    <ProjectReference Include="..\..\src\ForgingBlazor.Extensibility\ForgingBlazor.Extensibility.csproj" />
   </ItemGroup>
 </Project>

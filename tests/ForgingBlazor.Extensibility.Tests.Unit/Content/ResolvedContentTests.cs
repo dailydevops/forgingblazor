@@ -20,11 +20,14 @@ public class ResolvedContentTests
             RouteValues = routeValues,
         };
 
-        _ = await Assert.That(resolved).IsNotNull();
-        _ = await Assert.That(resolved.Descriptor).IsEqualTo(descriptor);
-        _ = await Assert.That(resolved.Culture).IsEqualTo(culture);
-        _ = await Assert.That(resolved.CanonicalUrl).IsEqualTo(canonicalUrl);
-        _ = await Assert.That(resolved.RouteValues).IsEqualTo(routeValues);
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(resolved).IsNotNull();
+            _ = await Assert.That(resolved.Descriptor).IsEqualTo(descriptor);
+            _ = await Assert.That(resolved.Culture).IsEqualTo(culture);
+            _ = await Assert.That(resolved.CanonicalUrl).IsEqualTo(canonicalUrl);
+            _ = await Assert.That(resolved.RouteValues).IsEqualTo(routeValues);
+        }
     }
 
     [Test]
@@ -149,7 +152,10 @@ public class ResolvedContentTests
             RouteValues = routeValues,
         };
 
-        _ = await Assert.That(resolved.RouteValues.Keys).Contains("page");
-        _ = await Assert.That(resolved.RouteValues["page"]).IsEqualTo(1);
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(resolved.RouteValues.Keys).Contains("page");
+            _ = await Assert.That(resolved.RouteValues["page"]).IsEqualTo(1);
+        }
     }
 }

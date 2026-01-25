@@ -40,8 +40,11 @@ public class AdministrationConfigValidationTests
         validation.Configure(options);
 
         // Assert
-        _ = await Assert.That(options.IsEnabled).EqualTo(false);
-        _ = await Assert.That(options.PathSegment).EqualTo("custom-admin");
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(options.IsEnabled).EqualTo(false);
+            _ = await Assert.That(options.PathSegment).EqualTo("custom-admin");
+        }
     }
 
     [Test]
@@ -67,8 +70,11 @@ public class AdministrationConfigValidationTests
         var result = validation.Validate(null, options);
 
         // Assert
-        _ = await Assert.That(result.Failed).EqualTo(true);
-        _ = await Assert.That(result.FailureMessage).Contains("path segment must be provided");
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result.Failed).EqualTo(true);
+            _ = await Assert.That(result.FailureMessage).Contains("path segment must be provided");
+        }
     }
 
     [Test]
@@ -83,8 +89,11 @@ public class AdministrationConfigValidationTests
         var result = validation.Validate(null, options);
 
         // Assert
-        _ = await Assert.That(result.Failed).EqualTo(true);
-        _ = await Assert.That(result.FailureMessage).Contains("path segment must be provided");
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result.Failed).EqualTo(true);
+            _ = await Assert.That(result.FailureMessage).Contains("path segment must be provided");
+        }
     }
 
     [Test]
@@ -99,8 +108,11 @@ public class AdministrationConfigValidationTests
         var result = validation.Validate(null, options);
 
         // Assert
-        _ = await Assert.That(result.Failed).EqualTo(true);
-        _ = await Assert.That(result.FailureMessage).Contains("path segment must be provided");
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result.Failed).EqualTo(true);
+            _ = await Assert.That(result.FailureMessage).Contains("path segment must be provided");
+        }
     }
 
     [Test]
