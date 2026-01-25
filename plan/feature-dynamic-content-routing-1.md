@@ -281,13 +281,13 @@ Refs: TASK-005, TASK-006
 
 - GOAL-005: Implement culture resolution with fallback hierarchy
 
-| Task     | Description                                                                                                                                                                                            | Completed | Date |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ---- |
-| TASK-047 | Create `CultureResolver` internal class in `src/ForgingBlazor/Routing/Culture/CultureResolver.cs` with methods to parse culture from Two-Letter code, LCID, or full format (e.g., "en", 1033, "en-US") |           |      |
-| TASK-048 | Create `CultureFallbackChain` internal class in `src/ForgingBlazor/Routing/Culture/CultureFallbackChain.cs` implementing fallback: `de-DE` → `de` → `en-US` (default) → `en` → no suffix               |           |      |
-| TASK-049 | Create `CultureContentLocator` internal class in `src/ForgingBlazor/Content/CultureContentLocator.cs` using `CultureFallbackChain` to locate content files following lookup order defined in spec      |           |      |
-| TASK-050 | Create `ContentLookupPath` record in `src/ForgingBlazor/Content/ContentLookupPath.cs` representing a content file path with culture suffix variations                                                  |           |      |
-| TASK-051 | Create `CultureValidation` internal class in `src/ForgingBlazor/Routing/Culture/CultureValidation.cs` validating supported cultures at startup and throwing exception for unsupported cultures         |           |      |
+| Task     | Description                                                                                                                                                                                            | Completed | Date       |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ---------- |
+| TASK-047 | Create `CultureResolver` internal class in `src/ForgingBlazor/Routing/Culture/CultureResolver.cs` with methods to parse culture from Two-Letter code, LCID, or full format (e.g., "en", 1033, "en-US") | ✅        | 2026-01-26 |
+| TASK-048 | Create `CultureFallbackChain` internal class in `src/ForgingBlazor/Routing/Culture/CultureFallbackChain.cs` implementing fallback: `de-DE` → `de` → `en-US` (default) → `en` → no suffix               | ✅        | 2026-01-26 |
+| TASK-049 | Create `CultureContentLocator` internal class in `src/ForgingBlazor/Content/CultureContentLocator.cs` using `CultureFallbackChain` to locate content files following lookup order defined in spec      | ✅        | 2026-01-26 |
+| TASK-050 | Create `ContentLookupPath` record in `src/ForgingBlazor/Content/ContentLookupPath.cs` representing a content file path with culture suffix variations                                                  | ✅        | 2026-01-26 |
+| TASK-051 | Create `CultureValidation` internal class in `src/ForgingBlazor/Routing/Culture/CultureValidation.cs` validating supported cultures at startup and throwing exception for unsupported cultures         | ✅        | 2026-01-26 |
 
 ### Phase 6: Route Resolution and Matching
 

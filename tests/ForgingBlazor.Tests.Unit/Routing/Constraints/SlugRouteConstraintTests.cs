@@ -97,26 +97,26 @@ public sealed class SlugRouteConstraintTests
     }
 
     [Test]
-    public async Task Match_WhenRouteKeyEmpty_ThrowsArgumentException()
+    public void Match_WhenRouteKeyEmpty_ThrowsArgumentException()
     {
         var constraint = new SlugRouteConstraint();
         var values = new RouteValueDictionary { ["slug"] = "valid-slug" };
 
-        _ = await Assert
-            .That(() => constraint.Match(null, null, "", values, RouteDirection.IncomingRequest))
-            .ThrowsExactly<ArgumentException>()
-            .WithParameterName("routeKey");
+        _ = Assert.Throws<ArgumentException>(
+            "routeKey",
+            () => constraint.Match(null, null, "", values, RouteDirection.IncomingRequest)
+        );
     }
 
     [Test]
-    public async Task Match_WhenValuesNull_ThrowsArgumentNullException()
+    public void Match_WhenValuesNull_ThrowsArgumentNullException()
     {
         var constraint = new SlugRouteConstraint();
 
-        _ = await Assert
-            .That(() => constraint.Match(null, null, "slug", null!, RouteDirection.IncomingRequest))
-            .ThrowsExactly<ArgumentNullException>()
-            .WithParameterName("values");
+        _ = Assert.Throws<ArgumentNullException>(
+            "values",
+            () => constraint.Match(null, null, "slug", null!, RouteDirection.IncomingRequest)
+        );
     }
 
     [Test]

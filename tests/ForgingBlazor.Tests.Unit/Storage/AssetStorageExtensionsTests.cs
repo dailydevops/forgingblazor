@@ -34,20 +34,17 @@ public sealed class AssetStorageExtensionsTests
     }
 
     [Test]
-    public async Task AddAssetStorage_WhenBuilderNull_ThrowsArgumentNullException() =>
-        _ = await Assert
-            .That(() => AssetStorageExtensions.AddAssetStorage(null!, _ => { }))
-            .ThrowsExactly<ArgumentNullException>()
-            .WithParameterName("builder");
+    public void AddAssetStorage_WhenBuilderNull_ThrowsArgumentNullException() =>
+        _ = Assert.Throws<ArgumentNullException>(
+            "builder",
+            () => AssetStorageExtensions.AddAssetStorage(null!, _ => { })
+        );
 
     [Test]
-    public async Task AddAssetStorage_WhenConfigureNull_ThrowsArgumentNullException()
+    public void AddAssetStorage_WhenConfigureNull_ThrowsArgumentNullException()
     {
         var builder = new ForgingBlazorApplicationBuilder(Array.Empty<string>());
 
-        _ = await Assert
-            .That(() => builder.AddAssetStorage(null!))
-            .ThrowsExactly<ArgumentNullException>()
-            .WithParameterName("configure");
+        _ = Assert.Throws<ArgumentNullException>("configure", () => builder.AddAssetStorage(null!));
     }
 }

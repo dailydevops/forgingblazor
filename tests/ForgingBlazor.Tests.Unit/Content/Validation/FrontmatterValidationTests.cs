@@ -31,10 +31,11 @@ public sealed class FrontmatterValidationTests
             ["publisheddate"] = DateTimeOffset.UtcNow,
         };
 
-        _ = await Assert
-            .That(() => FrontmatterValidation.ValidateRequiredFields(frontmatter))
-            .ThrowsExactly<ContentValidationException>()
-            .WithMessage("Required frontmatter field 'title' is missing or empty.");
+        var exception = Assert.Throws<ContentValidationException>(() =>
+            FrontmatterValidation.ValidateRequiredFields(frontmatter)
+        );
+
+        _ = await Assert.That(exception.Message).IsEqualTo("Required frontmatter field 'title' is missing or empty.");
     }
 
     [Test]
@@ -46,10 +47,11 @@ public sealed class FrontmatterValidationTests
             ["publisheddate"] = DateTimeOffset.UtcNow,
         };
 
-        _ = await Assert
-            .That(() => FrontmatterValidation.ValidateRequiredFields(frontmatter))
-            .ThrowsExactly<ContentValidationException>()
-            .WithMessage("Required frontmatter field 'slug' is missing or empty.");
+        var exception = Assert.Throws<ContentValidationException>(() =>
+            FrontmatterValidation.ValidateRequiredFields(frontmatter)
+        );
+
+        _ = await Assert.That(exception.Message).IsEqualTo("Required frontmatter field 'slug' is missing or empty.");
     }
 
     [Test]
@@ -57,10 +59,13 @@ public sealed class FrontmatterValidationTests
     {
         var frontmatter = new Dictionary<string, object> { ["title"] = "Test Title", ["slug"] = "test-slug" };
 
+        var exception = Assert.Throws<ContentValidationException>(() =>
+            FrontmatterValidation.ValidateRequiredFields(frontmatter)
+        );
+
         _ = await Assert
-            .That(() => FrontmatterValidation.ValidateRequiredFields(frontmatter))
-            .ThrowsExactly<ContentValidationException>()
-            .WithMessage("Required frontmatter field 'publisheddate' is missing or empty.");
+            .That(exception.Message)
+            .IsEqualTo("Required frontmatter field 'publisheddate' is missing or empty.");
     }
 
     [Test]
@@ -73,10 +78,11 @@ public sealed class FrontmatterValidationTests
             ["publisheddate"] = DateTimeOffset.UtcNow,
         };
 
-        _ = await Assert
-            .That(() => FrontmatterValidation.ValidateRequiredFields(frontmatter))
-            .ThrowsExactly<ContentValidationException>()
-            .WithMessage("Required frontmatter field 'title' is missing or empty.");
+        var exception = Assert.Throws<ContentValidationException>(() =>
+            FrontmatterValidation.ValidateRequiredFields(frontmatter)
+        );
+
+        _ = await Assert.That(exception.Message).IsEqualTo("Required frontmatter field 'title' is missing or empty.");
     }
 
     [Test]
@@ -89,9 +95,7 @@ public sealed class FrontmatterValidationTests
             ["publisheddate"] = DateTimeOffset.UtcNow,
         };
 
-        _ = await Assert
-            .That(() => FrontmatterValidation.ValidateRequiredFields(frontmatter))
-            .ThrowsExactly<ContentValidationException>();
+        _ = Assert.Throws<ContentValidationException>(() => FrontmatterValidation.ValidateRequiredFields(frontmatter));
     }
 
     [Test]
@@ -104,9 +108,7 @@ public sealed class FrontmatterValidationTests
             ["publisheddate"] = "not-a-date",
         };
 
-        _ = await Assert
-            .That(() => FrontmatterValidation.ValidateRequiredFields(frontmatter))
-            .ThrowsExactly<ContentValidationException>();
+        _ = Assert.Throws<ContentValidationException>(() => FrontmatterValidation.ValidateRequiredFields(frontmatter));
     }
 
     [Test]
@@ -132,10 +134,13 @@ public sealed class FrontmatterValidationTests
             ["publisheddate"] = new DateTime(2026, 1, 25, 10, 0, 0, DateTimeKind.Unspecified),
         };
 
+        var exception = Assert.Throws<ContentValidationException>(() =>
+            FrontmatterValidation.ValidateRequiredFields(frontmatter)
+        );
+
         _ = await Assert
-            .That(() => FrontmatterValidation.ValidateRequiredFields(frontmatter))
-            .ThrowsExactly<ContentValidationException>()
-            .WithMessage(
+            .That(exception.Message)
+            .IsEqualTo(
                 "The 'publisheddate' field must have a specified timezone. Use DateTimeOffset or specify DateTimeKind."
             );
     }
@@ -164,9 +169,7 @@ public sealed class FrontmatterValidationTests
             ["expiredat"] = "not-a-date",
         };
 
-        _ = await Assert
-            .That(() => FrontmatterValidation.ValidateRequiredFields(frontmatter))
-            .ThrowsExactly<ContentValidationException>();
+        _ = Assert.Throws<ContentValidationException>(() => FrontmatterValidation.ValidateRequiredFields(frontmatter));
     }
 
     [Test]
@@ -184,9 +187,10 @@ public sealed class FrontmatterValidationTests
     }
 
     [Test]
-    public async Task ValidateRequiredFields_WhenFrontmatterNull_ThrowsArgumentNullException() =>
-        _ = await Assert
-            .That(() => FrontmatterValidation.ValidateRequiredFields(null!))
-            .ThrowsExactly<ArgumentNullException>()
-            .WithParameterName("frontmatter");
+    public async Task ValidateRequiredFields_WhenFrontmatterNull_ThrowsArgumentNullException()
+    {
+        var exception = Assert.Throws<ArgumentNullException>(() => FrontmatterValidation.ValidateRequiredFields(null!));
+
+        _ = await Assert.That(exception.ParamName).IsEqualTo("frontmatter");
+    }
 }

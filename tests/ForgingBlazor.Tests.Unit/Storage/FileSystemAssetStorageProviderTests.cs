@@ -85,7 +85,7 @@ public sealed class FileSystemAssetStorageProviderTests : IDisposable
         // Act & Assert
         _ = await Assert
             .That(async () => await provider.GetAssetAsync("nonexistent.jpg"))
-            .ThrowsExactly<FileNotFoundException>();
+            .Throws<FileNotFoundException>();
     }
 
     [Test]

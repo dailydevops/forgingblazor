@@ -70,27 +70,21 @@ public sealed class PaginationConfigurationTests
     }
 
     [Test]
-    public async Task PageSize_WhenSizeTooSmall_ThrowsArgumentOutOfRangeException()
+    public void PageSize_WhenSizeTooSmall_ThrowsArgumentOutOfRangeException()
     {
         var state = new PaginationConfigurationBuilderState();
         var config = new PaginationConfiguration(state);
 
-        _ = await Assert
-            .That(() => config.PageSize(Defaults.PageSizeMinimum - 1))
-            .ThrowsExactly<ArgumentOutOfRangeException>()
-            .WithParameterName("size");
+        _ = Assert.Throws<ArgumentOutOfRangeException>("size", () => config.PageSize(Defaults.PageSizeMinimum - 1));
     }
 
     [Test]
-    public async Task PageSize_WhenSizeTooLarge_ThrowsArgumentOutOfRangeException()
+    public void PageSize_WhenSizeTooLarge_ThrowsArgumentOutOfRangeException()
     {
         var state = new PaginationConfigurationBuilderState();
         var config = new PaginationConfiguration(state);
 
-        _ = await Assert
-            .That(() => config.PageSize(Defaults.PageSizeMaximum + 1))
-            .ThrowsExactly<ArgumentOutOfRangeException>()
-            .WithParameterName("size");
+        _ = Assert.Throws<ArgumentOutOfRangeException>("size", () => config.PageSize(Defaults.PageSizeMaximum + 1));
     }
 
     [Test]
@@ -126,33 +120,24 @@ public sealed class PaginationConfigurationTests
     }
 
     [Test]
-    public async Task UrlFormat_WithPrefixedFormatNoPrefix_ThrowsArgumentException()
+    public void UrlFormat_WithPrefixedFormatNoPrefix_ThrowsArgumentException()
     {
         var state = new PaginationConfigurationBuilderState();
         var config = new PaginationConfiguration(state);
 
-        _ = await Assert
-            .That(() => config.UrlFormat(PaginationUrlFormat.Prefixed))
-            .ThrowsExactly<ArgumentException>()
-            .WithParameterName("prefix");
+        _ = Assert.Throws<ArgumentException>("prefix", () => config.UrlFormat(PaginationUrlFormat.Prefixed));
     }
 
     [Test]
-    public async Task UrlFormat_WithPrefixedFormatEmptyPrefix_ThrowsArgumentException()
+    public void UrlFormat_WithPrefixedFormatEmptyPrefix_ThrowsArgumentException()
     {
         var state = new PaginationConfigurationBuilderState();
         var config = new PaginationConfiguration(state);
 
-        _ = await Assert
-            .That(() => config.UrlFormat(PaginationUrlFormat.Prefixed, ""))
-            .ThrowsExactly<ArgumentException>()
-            .WithParameterName("prefix");
+        _ = Assert.Throws<ArgumentException>("prefix", () => config.UrlFormat(PaginationUrlFormat.Prefixed, ""));
     }
 
     [Test]
-    public async Task Constructor_WhenStateNull_ThrowsArgumentNullException() =>
-        _ = await Assert
-            .That(() => new PaginationConfiguration(null!))
-            .ThrowsExactly<ArgumentNullException>()
-            .WithParameterName("pagination");
+    public void Constructor_WhenStateNull_ThrowsArgumentNullException() =>
+        _ = Assert.Throws<ArgumentNullException>("pagination", () => new PaginationConfiguration(null!));
 }

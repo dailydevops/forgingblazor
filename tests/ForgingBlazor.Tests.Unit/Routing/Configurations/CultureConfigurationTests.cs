@@ -56,27 +56,21 @@ public sealed class CultureConfigurationTests
     }
 
     [Test]
-    public async Task Default_WhenCultureNull_ThrowsArgumentNullException()
+    public void Default_WhenCultureNull_ThrowsArgumentNullException()
     {
         var state = new CultureConfigurationBuilderState();
         var config = new CultureConfiguration(state);
 
-        _ = await Assert
-            .That(() => config.Default((CultureInfo)null!))
-            .ThrowsExactly<ArgumentNullException>()
-            .WithParameterName("culture");
+        _ = Assert.Throws<ArgumentNullException>("culture", () => config.Default((CultureInfo)null!));
     }
 
     [Test]
-    public async Task Default_WhenStringEmpty_ThrowsArgumentException()
+    public void Default_WhenStringEmpty_ThrowsArgumentException()
     {
         var state = new CultureConfigurationBuilderState();
         var config = new CultureConfiguration(state);
 
-        _ = await Assert
-            .That(() => config.Default(string.Empty))
-            .ThrowsExactly<ArgumentException>()
-            .WithParameterName("culture");
+        _ = Assert.Throws<ArgumentException>("culture", () => config.Default(string.Empty));
     }
 
     [Test]
@@ -114,45 +108,33 @@ public sealed class CultureConfigurationTests
     }
 
     [Test]
-    public async Task Supported_WhenCultureArrayNull_ThrowsArgumentNullException()
+    public void Supported_WhenCultureArrayNull_ThrowsArgumentNullException()
     {
         var state = new CultureConfigurationBuilderState();
         var config = new CultureConfiguration(state);
 
-        _ = await Assert
-            .That(() => config.Supported((CultureInfo[])null!))
-            .ThrowsExactly<ArgumentNullException>()
-            .WithParameterName("cultures");
+        _ = Assert.Throws<ArgumentNullException>("cultures", () => config.Supported((CultureInfo[])null!));
     }
 
     [Test]
-    public async Task Supported_WhenStringArrayNull_ThrowsArgumentNullException()
+    public void Supported_WhenStringArrayNull_ThrowsArgumentNullException()
     {
         var state = new CultureConfigurationBuilderState();
         var config = new CultureConfiguration(state);
 
-        _ = await Assert
-            .That(() => config.Supported((string[])null!))
-            .ThrowsExactly<ArgumentNullException>()
-            .WithParameterName("cultures");
+        _ = Assert.Throws<ArgumentNullException>("cultures", () => config.Supported((string[])null!));
     }
 
     [Test]
-    public async Task Supported_WhenLcidArrayNull_ThrowsArgumentNullException()
+    public void Supported_WhenLcidArrayNull_ThrowsArgumentNullException()
     {
         var state = new CultureConfigurationBuilderState();
         var config = new CultureConfiguration(state);
 
-        _ = await Assert
-            .That(() => config.Supported((int[])null!))
-            .ThrowsExactly<ArgumentNullException>()
-            .WithParameterName("lcids");
+        _ = Assert.Throws<ArgumentNullException>("lcids", () => config.Supported((int[])null!));
     }
 
     [Test]
-    public async Task Constructor_WhenStateNull_ThrowsArgumentNullException() =>
-        _ = await Assert
-            .That(() => new CultureConfiguration(null!))
-            .ThrowsExactly<ArgumentNullException>()
-            .WithParameterName("state");
+    public void Constructor_WhenStateNull_ThrowsArgumentNullException() =>
+        _ = Assert.Throws<ArgumentNullException>("state", () => new CultureConfiguration(null!));
 }

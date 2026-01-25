@@ -34,20 +34,17 @@ public sealed class ContentStorageExtensionsTests
     }
 
     [Test]
-    public async Task AddContentStorage_WhenBuilderNull_ThrowsArgumentNullException() =>
-        _ = await Assert
-            .That(() => ContentStorageExtensions.AddContentStorage(null!, _ => { }))
-            .ThrowsExactly<ArgumentNullException>()
-            .WithParameterName("builder");
+    public void AddContentStorage_WhenBuilderNull_ThrowsArgumentNullException() =>
+        _ = Assert.Throws<ArgumentNullException>(
+            "builder",
+            () => ContentStorageExtensions.AddContentStorage(null!, _ => { })
+        );
 
     [Test]
-    public async Task AddContentStorage_WhenConfigureNull_ThrowsArgumentNullException()
+    public void AddContentStorage_WhenConfigureNull_ThrowsArgumentNullException()
     {
         var builder = new ForgingBlazorApplicationBuilder(Array.Empty<string>());
 
-        _ = await Assert
-            .That(() => builder.AddContentStorage(null!))
-            .ThrowsExactly<ArgumentNullException>()
-            .WithParameterName("configure");
+        _ = Assert.Throws<ArgumentNullException>("configure", () => builder.AddContentStorage(null!));
     }
 }

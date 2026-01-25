@@ -36,23 +36,17 @@ public sealed class ContentStorageBuilderTests
     }
 
     [Test]
-    public async Task UseFileSystem_WhenConfigureNull_ThrowsArgumentNullException()
+    public void UseFileSystem_WhenConfigureNull_ThrowsArgumentNullException()
     {
         var services = new ServiceCollection();
         var builder = new ContentStorageBuilder(services);
 
-        _ = await Assert
-            .That(() => builder.UseFileSystem(null!))
-            .ThrowsExactly<ArgumentNullException>()
-            .WithParameterName("configure");
+        _ = Assert.Throws<ArgumentNullException>("configure", () => builder.UseFileSystem(null!));
     }
 
     [Test]
-    public async Task Constructor_WhenServicesNull_ThrowsArgumentNullException() =>
-        _ = await Assert
-            .That(() => new ContentStorageBuilder(null!))
-            .ThrowsExactly<ArgumentNullException>()
-            .WithParameterName("services");
+    public void Constructor_WhenServicesNull_ThrowsArgumentNullException() =>
+        _ = Assert.Throws<ArgumentNullException>("services", () => new ContentStorageBuilder(null!));
 
     [Test]
     public async Task UseFileSystem_RegistersFileSystemContentStorageProvider()

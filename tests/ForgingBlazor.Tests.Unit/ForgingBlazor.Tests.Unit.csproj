@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="NetEvolve.Extensions.TUnit" />
+    <PackageReference Include="NSubstitute" />
     <PackageReference Include="TUnit" />
   </ItemGroup>
 
