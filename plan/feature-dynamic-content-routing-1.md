@@ -241,17 +241,24 @@ Refs: TASK-005, TASK-006
 
 - GOAL-003: Implement Markdown and YAML frontmatter parsing with content descriptor mapping
 
-| Task     | Description                                                                                                                                                                                                                          | Completed | Date |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ---- |
-| TASK-028 | Add `YamlDotNet` package reference to `Directory.Packages.props` with latest stable version                                                                                                                                          |           |      |
-| TASK-029 | Add `Markdig` package reference to `Directory.Packages.props` with latest stable version                                                                                                                                             |           |      |
-| TASK-030 | Add package references to `ForgingBlazor.csproj` for `YamlDotNet` and `Markdig` without version attributes                                                                                                                           |           |      |
-| TASK-031 | Create `FrontmatterParser` internal class in `src/ForgingBlazor/Content/Parsing/FrontmatterParser.cs` using YamlDotNet to extract YAML between `---` delimiters and return Dictionary<string, object>                                |           |      |
-| TASK-032 | Create `MarkdownRenderer` internal class in `src/ForgingBlazor/Content/Parsing/MarkdownRenderer.cs` using Markdig with pipeline configured for: advanced extensions, syntax highlighting, tables, task lists                         |           |      |
-| TASK-033 | Create `ContentParser` internal class in `src/ForgingBlazor/Content/Parsing/ContentParser.cs` orchestrating frontmatter extraction, YAML parsing, Markdown rendering, and content descriptor instantiation                           |           |      |
-| TASK-034 | Create `ContentDescriptorFactory` internal class in `src/ForgingBlazor/Content/ContentDescriptorFactory.cs` using reflection to instantiate content descriptor types and map frontmatter properties including custom metadata fields |           |      |
-| TASK-035 | Create `ContentValidationException` class in `src/ForgingBlazor.Extensibility/Content/ContentValidationException.cs` deriving from `Exception` with properties for field name, expected type, and actual value                       |           |      |
-| TASK-036 | Create `FrontmatterValidation` internal class in `src/ForgingBlazor/Content/Validation/FrontmatterValidation.cs` validating required fields (title, slug, publishedDate), slug format, and DateTimeOffset parsing                    |           |      |
+| Task     | Description                                                                                                                                                                                                                          | Completed | Date       |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ---------- |
+| TASK-028 | Add `YamlDotNet` package reference to `Directory.Packages.props` with latest stable version                                                                                                                                          | ✅        | 2026-01-25 |
+| TASK-029 | Add `Markdig` package reference to `Directory.Packages.props` with latest stable version                                                                                                                                             | ✅        | 2026-01-25 |
+| TASK-030 | Add package references to `ForgingBlazor.csproj` for `YamlDotNet` and `Markdig` without version attributes                                                                                                                           | ✅        | 2026-01-25 |
+| TASK-031 | Create `FrontmatterParser` internal class in `src/ForgingBlazor/Content/Parsing/FrontmatterParser.cs` using YamlDotNet to extract YAML between `---` delimiters and return Dictionary<string, object>                                | ✅        | 2026-01-25 |
+| TASK-032 | Create `MarkdownRenderer` internal class in `src/ForgingBlazor/Content/Parsing/MarkdownRenderer.cs` using Markdig with pipeline configured for: advanced extensions, syntax highlighting, tables, task lists                         | ✅        | 2026-01-25 |
+| TASK-033 | Create `ContentParser` internal class in `src/ForgingBlazor/Content/Parsing/ContentParser.cs` orchestrating frontmatter extraction, YAML parsing, Markdown rendering, and content descriptor instantiation                           | ✅        | 2026-01-25 |
+| TASK-034 | Create `ContentDescriptorFactory` internal class in `src/ForgingBlazor/Content/ContentDescriptorFactory.cs` using reflection to instantiate content descriptor types and map frontmatter properties including custom metadata fields | ✅        | 2026-01-25 |
+| TASK-035 | Create `ContentValidationException` class in `src/ForgingBlazor.Extensibility/Content/ContentValidationException.cs` deriving from `Exception` with properties for field name, expected type, and actual value                       | ✅        | 2026-01-25 |
+| TASK-036 | Create `FrontmatterValidation` internal class in `src/ForgingBlazor/Content/Validation/FrontmatterValidation.cs` validating required fields (title, slug, publishedDate), slug format, and DateTimeOffset parsing                    | ✅        | 2026-01-25 |
+
+#### Phase 3 Report (2026-01-25)
+
+- Completed: TASK-028 through TASK-036 delivering comprehensive Markdown and YAML frontmatter parsing infrastructure.
+- Files: Added YamlDotNet 16.3.0 and Markdig 0.41.0 package references. Implementations added under `src/ForgingBlazor/Content/**` including `FrontmatterParser`, `MarkdownRenderer`, `ContentParser`, `ContentDescriptorFactory`, and `FrontmatterValidation`. Public exception `ContentValidationException` added to `src/ForgingBlazor.Extensibility/Content/`.
+- Tests: `dotnet build ForgingBlazor.slnx --no-restore` (successful without warnings), `dotnet test --solution ForgingBlazor.slnx --no-build --no-restore --ignore-exit-code 8` (147 tests passing).
+- Notes: All parsing components implemented as static classes for utility pattern compliance (CA1822, S1118, S2325). CultureInfo.InvariantCulture applied to all date/bool conversions (CA1305). Reflection-based property mapping supports case-insensitive frontmatter fields with automatic type conversion for DateTimeOffset, bool, enum, and nullable types.
 
 ### Phase 4: Storage Provider Implementations
 
