@@ -217,8 +217,8 @@ Refs: TASK-005, TASK-006
 
 - GOAL-002: Implement FluentAPI builders for routing configuration in `ForgingBlazor` project
 
-| Task     | Description                                                                                                                                                                                                                        | Completed | Date |
-| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
+| Task     | Description                                                                                                                                                                                                                        | Completed | Date       |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---------- |
 | TASK-018 | Create `RoutingBuilderExtensions` static class in `src/ForgingBlazor/Routing/RoutingBuilderExtensions.cs` with `AddRouting()` extension method on `IForgingBlazorApplicationBuilder` accepting `Action<IRoutingBuilder>` parameter | ✅        | 2026-01-25 |
 | TASK-019 | Create `RoutingBuilder` internal class in `src/ForgingBlazor/Routing/RoutingBuilder.cs` implementing `IRoutingBuilder` with internal state for root configuration, segments, and pages                                             | ✅        | 2026-01-25 |
 | TASK-020 | Create `RootConfiguration` internal class in `src/ForgingBlazor/Routing/Configurations/RootConfiguration.cs` implementing `IRootConfiguration` storing culture settings, default component/layout types, and home page component   | ✅        | 2026-01-25 |
