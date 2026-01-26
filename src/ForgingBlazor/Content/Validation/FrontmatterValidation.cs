@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using global::NetEvolve.ForgingBlazor;
+using NetEvolve.ForgingBlazor;
 
 /// <summary>
 /// Validates YAML frontmatter data for content files.

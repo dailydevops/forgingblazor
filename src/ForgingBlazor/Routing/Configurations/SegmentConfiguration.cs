@@ -1,9 +1,9 @@
 ﻿namespace NetEvolve.ForgingBlazor.Routing.Configurations;
 
 using System;
-using global::NetEvolve.ForgingBlazor;
-using global::NetEvolve.ForgingBlazor.Routing;
 using Microsoft.AspNetCore.Components;
+using NetEvolve.ForgingBlazor;
+using NetEvolve.ForgingBlazor.Routing;
 
 /// <summary>
 /// Implements the segment configuration fluent API.

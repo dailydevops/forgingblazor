@@ -1,8 +1,8 @@
 ﻿namespace NetEvolve.ForgingBlazor.Routing;
 
 using System;
-using global::NetEvolve.ForgingBlazor;
-using global::NetEvolve.ForgingBlazor.Routing.Configurations;
+using NetEvolve.ForgingBlazor;
+using NetEvolve.ForgingBlazor.Routing.Configurations;
 
 /// <summary>
 /// Implements the <see cref="IRoutingBuilder"/> fluent API.

@@ -1,8 +1,8 @@
 ﻿namespace NetEvolve.ForgingBlazor.Tests.Unit.Routing.Constraints;
 
 using System;
-using global::NetEvolve.ForgingBlazor.Routing.Constraints;
 using Microsoft.AspNetCore.Routing;
+using NetEvolve.ForgingBlazor.Routing.Constraints;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
 

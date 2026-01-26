@@ -1,8 +1,8 @@
 ﻿namespace NetEvolve.ForgingBlazor.Routing.Configurations;
 
 using System;
-using global::NetEvolve.ForgingBlazor;
-using global::NetEvolve.ForgingBlazor.Routing;
+using NetEvolve.ForgingBlazor;
+using NetEvolve.ForgingBlazor.Routing;
 
 /// <summary>
 /// Implements the pagination configuration fluent API.

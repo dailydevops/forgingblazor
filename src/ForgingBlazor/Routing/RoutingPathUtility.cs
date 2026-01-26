@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using global::NetEvolve.ForgingBlazor;
+using NetEvolve.ForgingBlazor;
 
 /// <summary>
 /// Provides helper methods to normalize and validate routing paths.

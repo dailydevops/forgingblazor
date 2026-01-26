@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using global::NetEvolve.ForgingBlazor;
+using NetEvolve.ForgingBlazor;
 
 /// <summary>
 /// Provides mutable builder state used while configuring routing via the FluentAPI.

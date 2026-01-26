@@ -1,8 +1,8 @@
 ﻿namespace NetEvolve.ForgingBlazor.Content.Parsing;
 
 using System;
-using global::NetEvolve.ForgingBlazor;
-using global::NetEvolve.ForgingBlazor.Content.Validation;
+using NetEvolve.ForgingBlazor;
+using NetEvolve.ForgingBlazor.Content.Validation;
 
 /// <summary>
 /// Orchestrates the parsing of Markdown content with YAML frontmatter into content descriptors.

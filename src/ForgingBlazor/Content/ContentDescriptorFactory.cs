@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using global::NetEvolve.ForgingBlazor;
+using NetEvolve.ForgingBlazor;
 
 /// <summary>
 /// Factory for creating and populating <see cref="ContentDescriptor"/> instances from frontmatter data.

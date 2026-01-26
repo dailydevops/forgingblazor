@@ -2,8 +2,8 @@
 
 using System;
 using System.Runtime.Versioning;
-using global::NetEvolve.ForgingBlazor;
-using global::NetEvolve.ForgingBlazor.Storage;
+using NetEvolve.ForgingBlazor;
+using NetEvolve.ForgingBlazor.Storage;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
 

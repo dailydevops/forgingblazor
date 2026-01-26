@@ -1,8 +1,8 @@
 ﻿namespace NetEvolve.ForgingBlazor.Tests.Unit.Routing;
 
 using System;
-using global::NetEvolve.ForgingBlazor.Routing;
 using Microsoft.AspNetCore.Components;
+using NetEvolve.ForgingBlazor.Routing;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
 
@@ -118,6 +118,93 @@ public sealed class RouteResolverTests
         {
             _ = await Assert.That(result).IsTrue();
             _ = await Assert.That(resolved).IsEqualTo(definition);
+        }
+    }
+
+    [Test]
+    public async Task TryResolve_WithCaseInsensitiveMatch_ReturnsTrue()
+    {
+        var registry = new RouteRegistry();
+        var definition = new RouteDefinition("/BLOG", typeof(RouteView), null, null, null, null);
+        registry.Register("/BLOG", definition);
+        var resolver = new RouteResolver(registry);
+
+        var result = resolver.TryResolve("/blog", out var resolved);
+
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result).IsTrue();
+            _ = await Assert.That(resolved).IsEqualTo(definition);
+        }
+    }
+
+    [Test]
+    public async Task TryResolve_WithMultipleSegments_ReturnsCorrectRoute()
+    {
+        var registry = new RouteRegistry();
+        var definition = new RouteDefinition("/blog/posts/article", typeof(RouteView), null, null, null, null);
+        registry.Register("/blog/posts/article", definition);
+        var resolver = new RouteResolver(registry);
+
+        var result = resolver.TryResolve("/blog/posts/article", out var resolved);
+
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result).IsTrue();
+            _ = await Assert.That(resolved).IsEqualTo(definition);
+        }
+    }
+
+    [Test]
+    public async Task TryResolve_WithEmptyPath_NormalizesToRoot()
+    {
+        var registry = new RouteRegistry();
+        var definition = new RouteDefinition("/", typeof(RouteView), null, null, null, null);
+        registry.Register("/", definition);
+        var resolver = new RouteResolver(registry);
+
+        var result = resolver.TryResolve("", out var resolved);
+
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result).IsTrue();
+            _ = await Assert.That(resolved).IsEqualTo(definition);
+        }
+    }
+
+    [Test]
+    public async Task TryResolve_WithPartialPathMatch_ReturnsMatchingRoute()
+    {
+        var registry = new RouteRegistry();
+        var definition = new RouteDefinition("/blog", typeof(RouteView), null, null, null, null);
+        registry.Register("/blog", definition);
+        var resolver = new RouteResolver(registry);
+
+        var result = resolver.TryResolve("/blog/posts/my-article", out var resolved);
+
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result).IsTrue();
+            _ = await Assert.That(resolved).IsEqualTo(definition);
+        }
+    }
+
+    [Test]
+    public async Task TryResolve_WithMultipleRegisteredRoutes_ReturnsCorrectRoute()
+    {
+        var registry = new RouteRegistry();
+        var definition1 = new RouteDefinition("/blog", typeof(RouteView), null, null, null, null);
+        var definition2 = new RouteDefinition("/posts", typeof(LayoutView), null, null, null, null);
+        registry.Register("/blog", definition1);
+        registry.Register("/posts", definition2);
+        var resolver = new RouteResolver(registry);
+
+        var result = resolver.TryResolve("/posts", out var resolved);
+
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result).IsTrue();
+            _ = await Assert.That(resolved).IsEqualTo(definition2);
         }
     }
 }

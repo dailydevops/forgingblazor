@@ -2,8 +2,8 @@
 
 using System;
 using System.Globalization;
-using global::NetEvolve.ForgingBlazor;
-using global::NetEvolve.ForgingBlazor.Routing;
+using NetEvolve.ForgingBlazor;
+using NetEvolve.ForgingBlazor.Routing;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
 
@@ -103,5 +103,107 @@ public sealed class CanonicalUrlGeneratorTests
         var url = CanonicalUrlGenerator.Generate("blog/posts/article/", _german, CultureCanonical.WithPrefix, _english);
 
         _ = await Assert.That(url).IsEqualTo("/de-DE/blog/posts/article");
+    }
+
+    [Test]
+    public async Task Generate_WithMultipleSlashes_NormalizesPath()
+    {
+        var url = CanonicalUrlGenerator.Generate("//blog//posts//", _english, CultureCanonical.WithoutPrefix, _english);
+
+        _ = await Assert.That(url).IsNotNull();
+    }
+
+    [Test]
+    public async Task Generate_WithFrenchCulture_IncludesCulturePrefix()
+    {
+        var french = CultureInfo.GetCultureInfo("fr-FR");
+        var url = CanonicalUrlGenerator.Generate("/articles", french, CultureCanonical.WithPrefix, _english);
+
+        _ = await Assert.That(url).IsEqualTo("/fr-FR/articles");
+    }
+
+    [Test]
+    public async Task Generate_WithSpanishCulture_IncludesCulturePrefix()
+    {
+        var spanish = CultureInfo.GetCultureInfo("es-ES");
+        var url = CanonicalUrlGenerator.Generate("/blog", spanish, CultureCanonical.WithPrefix, _english);
+
+        _ = await Assert.That(url).IsEqualTo("/es-ES/blog");
+    }
+
+    [Test]
+    public async Task Generate_WithoutPrefixAndSameCulture_NoCulturePrefix()
+    {
+        var url = CanonicalUrlGenerator.Generate("/blog", _german, CultureCanonical.WithoutPrefix, _german);
+
+        _ = await Assert.That(url).IsEqualTo("/blog");
+    }
+
+    [Test]
+    public async Task Generate_WithoutPrefixAndDifferentCulture_IncludesCulturePrefix()
+    {
+        var french = CultureInfo.GetCultureInfo("fr-FR");
+        var url = CanonicalUrlGenerator.Generate("/blog", french, CultureCanonical.WithoutPrefix, _english);
+
+        _ = await Assert.That(url).IsEqualTo("/fr-FR/blog");
+    }
+
+    [Test]
+    public async Task Generate_WithLongPath_PreservesFullPath()
+    {
+        var longPath = "/blog/category/subcategory/article/section/subsection";
+        var url = CanonicalUrlGenerator.Generate(longPath, _english, CultureCanonical.WithoutPrefix, _english);
+
+        _ = await Assert.That(url).IsEqualTo(longPath);
+    }
+
+    [Test]
+    public async Task Generate_WithDashesInPath_PreservesDashes()
+    {
+        var url = CanonicalUrlGenerator.Generate("/my-blog-post", _english, CultureCanonical.WithoutPrefix, _english);
+
+        _ = await Assert.That(url).IsEqualTo("/my-blog-post");
+    }
+
+    [Test]
+    public async Task Generate_WithUnderscoresInPath_PreservesUnderscores()
+    {
+        var url = CanonicalUrlGenerator.Generate("/my_blog_post", _english, CultureCanonical.WithoutPrefix, _english);
+
+        _ = await Assert.That(url).IsEqualTo("/my_blog_post");
+    }
+
+    [Test]
+    public async Task Generate_WithNumbersInPath_PreservesNumbers()
+    {
+        var url = CanonicalUrlGenerator.Generate(
+            "/blog2024/article123",
+            _english,
+            CultureCanonical.WithoutPrefix,
+            _english
+        );
+
+        _ = await Assert.That(url).IsEqualTo("/blog2024/article123");
+    }
+
+    [Test]
+    public async Task Generate_WithPrefixAndComplexPath_CombinesCorrectly()
+    {
+        var url = CanonicalUrlGenerator.Generate(
+            "/blog/my-posts/article-2024",
+            _german,
+            CultureCanonical.WithPrefix,
+            _english
+        );
+
+        _ = await Assert.That(url).IsEqualTo("/de-DE/blog/my-posts/article-2024");
+    }
+
+    [Test]
+    public async Task Generate_WithWhitespaceOnlyPath_ReturnsSlash()
+    {
+        var url = CanonicalUrlGenerator.Generate("   ", _english, CultureCanonical.WithoutPrefix, _english);
+
+        _ = await Assert.That(url).IsEqualTo("/");
     }
 }

@@ -24,7 +24,7 @@ public sealed class ContentCacheServiceTests
         var factoryCalled = false;
 
         // Act
-        var result = service.GetOrCreate(
+        _ = service.GetOrCreate(
             "blog",
             "test",
             culture,

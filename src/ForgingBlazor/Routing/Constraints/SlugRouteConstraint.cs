@@ -2,9 +2,9 @@
 
 using System;
 using System.Globalization;
-using global::NetEvolve.ForgingBlazor;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using NetEvolve.ForgingBlazor;
 
 /// <summary>
 /// Enforces the slug route constraint defined by the dynamic content routing system.

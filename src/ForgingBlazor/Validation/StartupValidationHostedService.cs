@@ -49,7 +49,7 @@ internal sealed class StartupValidationHostedService : IHostedService
         _logger.LogInformation("Starting startup validation...");
 #pragma warning restore CA1848
 
-        var errors = new System.Collections.Generic.List<string>();
+        var errors = new List<string>();
 
         // Validate routing configuration
         if (_routingValidation is not null)

@@ -7,7 +7,7 @@ using System.IO;
 using System.Runtime.Versioning;
 using System.Threading;
 using System.Threading.Tasks;
-using global::NetEvolve.ForgingBlazor.Content.Parsing;
+using NetEvolve.ForgingBlazor.Content.Parsing;
 
 /// <summary>
 /// File system implementation of content storage provider.

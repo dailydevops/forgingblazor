@@ -2,8 +2,8 @@
 
 using System;
 using System.Collections.Generic;
-using global::NetEvolve.ForgingBlazor;
-using global::NetEvolve.ForgingBlazor.Content.Validation;
+using NetEvolve.ForgingBlazor;
+using NetEvolve.ForgingBlazor.Content.Validation;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
 

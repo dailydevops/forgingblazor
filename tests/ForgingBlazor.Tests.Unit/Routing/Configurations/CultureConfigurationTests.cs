@@ -2,8 +2,8 @@
 
 using System;
 using System.Globalization;
-using global::NetEvolve.ForgingBlazor.Routing;
-using global::NetEvolve.ForgingBlazor.Routing.Configurations;
+using NetEvolve.ForgingBlazor.Routing;
+using NetEvolve.ForgingBlazor.Routing.Configurations;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
 

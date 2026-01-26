@@ -44,7 +44,7 @@ internal sealed class ContentStructureValidation
     public async Task ValidateAsync(CancellationToken cancellationToken = default)
     {
         var allRoutes = _routeRegistry.GetAll();
-        var missingFiles = new System.Collections.Generic.List<string>();
+        var missingFiles = new List<string>();
 
         foreach (var route in allRoutes)
         {

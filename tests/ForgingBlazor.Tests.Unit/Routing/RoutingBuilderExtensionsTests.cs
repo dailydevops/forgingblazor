@@ -50,7 +50,7 @@ public class RoutingBuilderExtensionsTests
                     page.WithContentType<TestContentDescriptor>()
                         .WithComponent<TestPageComponent>()
                         .WithLayout<TestLayout>()
-                        .WithMetadata(metadata => metadata.ExtendWith<bool>("featured", true))
+                        .WithMetadata(metadata => metadata.ExtendWith("featured", true))
             );
         });
 

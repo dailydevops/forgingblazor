@@ -1,7 +1,7 @@
 ﻿namespace NetEvolve.ForgingBlazor.Extensibility.Tests.Unit.Content;
 
 using System;
-using global::NetEvolve.ForgingBlazor;
+using NetEvolve.ForgingBlazor;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
 

@@ -1,9 +1,9 @@
 ﻿namespace NetEvolve.ForgingBlazor.Tests.Unit.Routing.Configurations;
 
 using System;
-using global::NetEvolve.ForgingBlazor;
-using global::NetEvolve.ForgingBlazor.Routing;
-using global::NetEvolve.ForgingBlazor.Routing.Configurations;
+using NetEvolve.ForgingBlazor;
+using NetEvolve.ForgingBlazor.Routing;
+using NetEvolve.ForgingBlazor.Routing.Configurations;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
 

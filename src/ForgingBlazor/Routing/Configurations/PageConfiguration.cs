@@ -1,8 +1,8 @@
 ﻿namespace NetEvolve.ForgingBlazor.Routing.Configurations;
 
 using System;
-using global::NetEvolve.ForgingBlazor;
 using Microsoft.AspNetCore.Components;
+using NetEvolve.ForgingBlazor;
 
 /// <summary>
 /// Implements the page configuration fluent API.

@@ -2,7 +2,7 @@
 
 using System;
 using System.Globalization;
-using global::NetEvolve.ForgingBlazor.Routing;
+using NetEvolve.ForgingBlazor.Routing;
 
 /// <summary>
 /// Implements the culture configuration fluent API.

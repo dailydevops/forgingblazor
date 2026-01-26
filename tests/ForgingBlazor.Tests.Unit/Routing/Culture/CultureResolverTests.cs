@@ -1,6 +1,6 @@
 ﻿namespace NetEvolve.ForgingBlazor.Tests.Unit.Routing.Culture;
 
-using global::NetEvolve.ForgingBlazor.Routing.Culture;
+using NetEvolve.ForgingBlazor.Routing.Culture;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
 

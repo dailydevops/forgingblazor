@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Globalization;
-using global::NetEvolve.ForgingBlazor;
+using NetEvolve.ForgingBlazor;
 
 /// <summary>
 /// Represents the immutable result of the routing FluentAPI configuration.
