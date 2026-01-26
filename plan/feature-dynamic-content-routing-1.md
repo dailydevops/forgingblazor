@@ -2,7 +2,7 @@
 goal: Implement Dynamic Content Routing and Storage System for ForgingBlazor
 version: 1.0
 date_created: 2026-01-25
-last_updated: 2026-01-26T23:30:00Z
+last_updated: 2026-01-26T23:45:00Z
 owner: ForgingBlazor Team
 status: In progress
 tags: [feature, routing, storage, content-management, blazor, fluent-api]
@@ -451,12 +451,19 @@ Refs: TASK-005, TASK-006
 
 - GOAL-014: Implement unit tests for routing configuration and resolution
 
-| Task     | Description                                                                                                                                                                                                          | Completed | Date |
-| -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
-| TASK-096 | Create test file `tests/ForgingBlazor.Tests.Unit/Routing/RoutingBuilderTests.cs` testing: FluentAPI chain methods, configuration accumulation, nested segment support                                                |           |      |
-| TASK-097 | Create test file `tests/ForgingBlazor.Tests.Unit/Routing/SlugRouteConstraintTests.cs` testing: valid slug patterns, invalid patterns, edge cases (length limits, consecutive hyphens, leading/trailing restrictions) |           |      |
-| TASK-098 | Create test file `tests/ForgingBlazor.Tests.Unit/Routing/RouteResolverTests.cs` testing: path matching, culture prefix handling, pagination pattern matching                                                         |           |      |
-| TASK-099 | Create test file `tests/ForgingBlazor.Tests.Unit/Routing/CanonicalUrlGeneratorTests.cs` testing: WithPrefix vs WithoutPrefix generation, culture variations                                                          |           |      |
+| Task     | Description                                                                                                                                                                                                          | Completed | Date       |
+| -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---------- |
+| TASK-096 | Create/verify test file `tests/ForgingBlazor.Tests.Unit/Routing/RoutingBuilderTests.cs` testing: FluentAPI chain methods, configuration accumulation, nested segment support                                        | ✅        | 2026-01-26 |
+| TASK-097 | Create test file `tests/ForgingBlazor.Tests.Unit/Routing/SlugRouteConstraintTests.cs` testing: valid slug patterns, invalid patterns, edge cases (length limits, consecutive hyphens, leading/trailing restrictions) | ✅        | 2026-01-26 |
+| TASK-098 | Create test file `tests/ForgingBlazor.Tests.Unit/Routing/RouteResolverTests.cs` testing: path matching, culture prefix handling, pagination pattern matching                                                         | ✅        | 2026-01-26 |
+| TASK-099 | Create test file `tests/ForgingBlazor.Tests.Unit/Routing/CanonicalUrlGeneratorTests.cs` testing: WithPrefix vs WithoutPrefix generation, culture variations                                                          | ✅        | 2026-01-26 |
+
+#### Phase 14 Report (2026-01-26)
+
+- Completed: TASK-096 through TASK-099 delivering comprehensive routing unit tests with complete edge case coverage.
+- Files: Created `tests/ForgingBlazor.Tests.Unit/Routing/SlugRouteConstraintTests.cs` (40 tests). Verified existing `RoutingBuilderTests.cs` (14 tests), `RouteResolverTests.cs` (13 tests), and `CanonicalUrlGeneratorTests.cs` (21 tests) from earlier phases.
+- Tests: `dotnet build ForgingBlazor.slnx --no-restore` (successful with 13 warnings - same as before), `dotnet test --solution ForgingBlazor.slnx --no-build --no-restore` (573 tests passing, +40 new SlugRouteConstraint tests).
+- Notes: SlugRouteConstraintTests comprehensively validates slug pattern matching including minimum/maximum length boundaries (3-70 chars), valid characters (ASCII letters, digits, single hyphens), invalid starts/ends (hyphens or digits), consecutive hyphens rejection, special character rejection (underscores, dots, spaces, Unicode), edge cases (empty, null, whitespace, missing route keys), and IRouteConstraint interface contract. Tests verify slug must start and end with ASCII letter (A-Z, a-z), may contain letters/digits/single hyphens, and match pattern for all value types (string, ReadOnlyMemory<char>, IFormCollection, object conversion). RouteResolverTests verify path matching with exact/partial matches, normalization (leading slash, trailing slash, case-insensitive), culture-aware routing. CanonicalUrlGeneratorTests validate WithPrefix/WithoutPrefix generation across cultures, path normalization, special character preservation. RoutingBuilderTests confirm FluentAPI configuration, nested segments, accumulation, validation.
 
 ### Phase 15: Unit Tests - Content Parsing
 
