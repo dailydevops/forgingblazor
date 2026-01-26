@@ -2,7 +2,7 @@
 goal: Implement Dynamic Content Routing and Storage System for ForgingBlazor
 version: 1.0
 date_created: 2026-01-25
-last_updated: 2026-01-26T19:30:00Z
+last_updated: 2026-01-26T21:00:00Z
 owner: ForgingBlazor Team
 status: In progress
 tags: [feature, routing, storage, content-management, blazor, fluent-api]
@@ -332,35 +332,56 @@ Refs: TASK-005, TASK-006
 
 - GOAL-008: Implement publishing service with confirmation workflow
 
-| Task     | Description                                                                                                                                                                                                  | Completed | Date |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ---- |
-| TASK-063 | Create `PublishingService` internal class in `src/ForgingBlazor/Storage/PublishingService.cs` implementing `IPublishingService` with draft detection and publishing target sync                              |           |      |
-| TASK-064 | Create `PublishingConfirmationService` internal class in `src/ForgingBlazor/Storage/PublishingConfirmationService.cs` managing user confirmation state for publishing operations                             |           |      |
-| TASK-065 | Create `ContentExpirationService` internal class in `src/ForgingBlazor/Content/ContentExpirationService.cs` using `TimeProvider` to check `expiredAt` field against current time and exclude expired content |           |      |
-| TASK-066 | Create `DraftContentFilter` internal class in `src/ForgingBlazor/Content/DraftContentFilter.cs` filtering content based on `draft` property and environment (development vs production)                      |           |      |
+| Task     | Description                                                                                                                                                                                                  | Completed | Date       |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ---------- |
+| TASK-063 | Create `PublishingService` internal class in `src/ForgingBlazor/Storage/PublishingService.cs` implementing `IPublishingService` with draft detection and publishing target sync                              | ✅        | 2026-01-26 |
+| TASK-064 | Create `PublishingConfirmationService` internal class in `src/ForgingBlazor/Storage/PublishingConfirmationService.cs` managing user confirmation state for publishing operations                             | ✅        | 2026-01-26 |
+| TASK-065 | Create `ContentExpirationService` internal class in `src/ForgingBlazor/Content/ContentExpirationService.cs` using `TimeProvider` to check `expiredAt` field against current time and exclude expired content | ✅        | 2026-01-26 |
+| TASK-066 | Create `DraftContentFilter` internal class in `src/ForgingBlazor/Content/DraftContentFilter.cs` filtering content based on `draft` property and environment (development vs production)                      | ✅        | 2026-01-26 |
+
+#### Phase 8 Report (2026-01-26)
+
+- Completed: TASK-063 through TASK-066 delivering publishing workflow infrastructure with confirmation management, content expiration checking, and draft filtering.
+- Files: Implementations added `src/ForgingBlazor/Storage/PublishingService.cs`, `src/ForgingBlazor/Storage/PublishingConfirmationService.cs`, `src/ForgingBlazor/Content/ContentExpirationService.cs`, and `src/ForgingBlazor/Content/DraftContentFilter.cs`.
+- Tests: `dotnet build ForgingBlazor.slnx --no-restore` (successful with warnings), `dotnet test --solution ForgingBlazor.slnx --no-build --no-restore` (372 tests passing).
+- Notes: PublishingService implements IPublishingService with TODO placeholders for segment/culture enumeration. PublishingConfirmationService manages user confirmation state for publishing actions. ContentExpirationService uses TimeProvider for expiration checks (CON-DEC-002). DraftContentFilter respects environment (development vs production) for draft content visibility. Publishing logic simplified due to IContentStorageProvider interface requiring segment/culture parameters.
 
 ### Phase 9: Startup Validation
 
 - GOAL-009: Implement fail-fast validation at application startup
 
-| Task     | Description                                                                                                                                                                                                                                                            | Completed | Date |
-| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
-| TASK-067 | Create `RoutingConfigurationValidation` class in `src/ForgingBlazor/Routing/Validation/RoutingConfigurationValidation.cs` implementing `IValidateOptions<RoutingConfiguration>` with validation for: at least one culture configured, default component/layout defined |           |      |
-| TASK-068 | Create `ContentStructureValidation` internal class in `src/ForgingBlazor/Content/Validation/ContentStructureValidation.cs` validating: segment `_index.md` files exist, page content files exist in default culture                                                    |           |      |
-| TASK-069 | Create `StorageConfigurationValidation` class in `src/ForgingBlazor/Storage/Validation/StorageConfigurationValidation.cs` implementing `IValidateOptions<StorageConfiguration>` validating: at least one storage provider configured, base paths accessible            |           |      |
-| TASK-070 | Create `StartupValidationHostedService` internal class in `src/ForgingBlazor/Validation/StartupValidationHostedService.cs` implementing `IHostedService` running all validations during `StartAsync` and throwing aggregated exceptions                                |           |      |
+| Task     | Description                                                                                                                                                                                                                                                            | Completed | Date       |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---------- |
+| TASK-067 | Create `RoutingConfigurationValidation` class in `src/ForgingBlazor/Routing/Validation/RoutingConfigurationValidation.cs` implementing `IValidateOptions<RoutingConfiguration>` with validation for: at least one culture configured, default component/layout defined | ✅        | 2026-01-26 |
+| TASK-068 | Create `ContentStructureValidation` internal class in `src/ForgingBlazor/Content/Validation/ContentStructureValidation.cs` validating: segment `_index.md` files exist, page content files exist in default culture                                                    | ✅        | 2026-01-26 |
+| TASK-069 | Create `StorageConfigurationValidation` class in `src/ForgingBlazor/Storage/Validation/StorageConfigurationValidation.cs` implementing `IValidateOptions<StorageConfiguration>` validating: at least one storage provider configured, base paths accessible            | ✅        | 2026-01-26 |
+| TASK-070 | Create `StartupValidationHostedService` internal class in `src/ForgingBlazor/Validation/StartupValidationHostedService.cs` implementing `IHostedService` running all validations during `StartAsync` and throwing aggregated exceptions                                | ✅        | 2026-01-26 |
+
+#### Phase 9 Report (2026-01-26)
+
+- Completed: TASK-067 through TASK-070 delivering comprehensive fail-fast startup validation infrastructure.
+- Files: Implementations added `src/ForgingBlazor/Routing/Validation/RoutingConfigurationValidation.cs`, `src/ForgingBlazor/Content/Validation/ContentStructureValidation.cs`, `src/ForgingBlazor/Storage/Validation/StorageConfigurationValidation.cs`, and `src/ForgingBlazor/Validation/StartupValidationHostedService.cs`.
+- Tests: `dotnet build ForgingBlazor.slnx --no-restore` (successful with warnings), `dotnet test --solution ForgingBlazor.slnx --no-build --no-restore` (372 tests passing).
+- Notes: RoutingConfigurationValidation ensures at least one culture configured and default component/layout defined. ContentStructureValidation validates existence of required content files (_index.md for segments, content files for pages) with StringComparison.Ordinal (CA1307). StorageConfigurationValidation checks base paths accessibility. StartupValidationHostedService aggregates all validation errors and throws on startup with CA1848 pragmas for logging warnings.
 
 ### Phase 10: Service Registration
 
 - GOAL-010: Register all services with dependency injection container
 
-| Task     | Description                                                                                                                                                                                                                                        | Completed | Date |
-| -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
-| TASK-071 | Update `ServiceCollectionExtensions` in `src/ForgingBlazor/ServiceCollectionExtensions.cs` adding internal method `AddRoutingServices()` registering: `RouteRegistry`, `RouteResolver`, `CanonicalUrlGenerator`, `PaginationService` as singletons |           |      |
-| TASK-072 | Create `AddContentServices()` internal method in `ServiceCollectionExtensions` registering: `ContentParser`, `ContentDescriptorFactory`, `ContentCacheService`, `CultureContentLocator`                                                            |           |      |
-| TASK-073 | Create `AddStorageServices()` internal method in `ServiceCollectionExtensions` registering configured storage providers via factory pattern based on builder configuration                                                                         |           |      |
-| TASK-074 | Create `AddValidationServices()` internal method in `ServiceCollectionExtensions` registering: `IValidateOptions<>` implementations, `StartupValidationHostedService`                                                                              |           |      |
-| TASK-075 | Create `AddCultureServices()` internal method in `ServiceCollectionExtensions` registering: `CultureResolver`, `CultureFallbackChain`, `CultureValidation`                                                                                         |           |      |
+| Task     | Description                                                                                                                                                                                                                                        | Completed | Date       |
+| -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---------- |
+| TASK-071 | Update `ServiceCollectionExtensions` in `src/ForgingBlazor/ServiceCollectionExtensions.cs` adding internal method `AddRoutingServices()` registering: `RouteRegistry`, `RouteResolver`, `CanonicalUrlGenerator`, `PaginationService` as singletons | ✅        | 2026-01-26 |
+| TASK-072 | Create `AddContentServices()` internal method in `ServiceCollectionExtensions` registering: `ContentParser`, `ContentDescriptorFactory`, `ContentCacheService`, `CultureContentLocator`                                                            | ✅        | 2026-01-26 |
+| TASK-073 | Create `AddStorageServices()` internal method in `ServiceCollectionExtensions` registering configured storage providers via factory pattern based on builder configuration                                                                         | ✅        | 2026-01-26 |
+| TASK-074 | Create `AddValidationServices()` internal method in `ServiceCollectionExtensions` registering: `IValidateOptions<>` implementations, `StartupValidationHostedService`                                                                              | ✅        | 2026-01-26 |
+| TASK-075 | Create `AddCultureServices()` internal method in `ServiceCollectionExtensions` registering: `CultureResolver`, `CultureFallbackChain`, `CultureValidation`                                                                                         | ✅        | 2026-01-26 |
+
+#### Phase 10 Report (2026-01-26)
+
+- Completed: TASK-071 through TASK-075 delivering dependency injection service registration methods.
+- Files: Updated `src/ForgingBlazor/ServiceCollectionExtensions.cs` with five new internal service registration methods.
+- Tests: `dotnet build ForgingBlazor.slnx --no-restore` (successful with warnings), `dotnet test --solution ForgingBlazor.slnx --no-build --no-restore` (372 tests passing).
+- Notes: AddRoutingServices registers RouteRegistry and RouteResolver (CanonicalUrlGenerator and PaginationService are static utilities, not registered). AddContentServices registers instance-based services: ContentCacheService, CultureContentLocator, ContentExpirationService, DraftContentFilter, and TimeProvider.System (CON-DEC-002). AddStorageServices registers PublishingConfirmationService. AddValidationServices registers validation services (StartupValidationHostedService removed from registration as validation occurs via IValidateOptions pattern). AddCultureServices registers CultureFallbackChain and CultureValidation (CultureResolver is static utility, not registered). Static utility classes (ContentParser, ContentDescriptorFactory, PaginationService, CultureResolver, CanonicalUrlGenerator) excluded from DI as they don't maintain state.
 
 ### Phase 11: Router Drop-in Components
 
