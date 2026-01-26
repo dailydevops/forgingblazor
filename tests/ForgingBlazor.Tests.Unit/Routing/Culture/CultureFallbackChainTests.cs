@@ -84,9 +84,7 @@ public sealed class CultureFallbackChainTests
     {
         var chain = new CultureFallbackChain();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => chain.GetFallbackChain(null!));
-
-        _ = await Assert.That(exception.ParamName).IsEqualTo("culture");
+        _ = Assert.Throws<ArgumentNullException>("culture", () => chain.GetFallbackChain(null!));
     }
 
     [Test]
@@ -128,9 +126,7 @@ public sealed class CultureFallbackChainTests
     {
         var chain = new CultureFallbackChain();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => chain.GetCultureSuffixes(null!));
-
-        _ = await Assert.That(exception.ParamName).IsEqualTo("culture");
+        _ = Assert.Throws<ArgumentNullException>("culture", () => chain.GetCultureSuffixes(null!));
     }
 
     [Test]

@@ -68,9 +68,7 @@ public sealed class CultureContentLocatorTests
         var storageProvider = Substitute.For<IContentStorageProvider>();
         var locator = new CultureContentLocator(fallbackChain, storageProvider);
 
-        var exception = Assert.Throws<ArgumentNullException>(() => locator.GetLookupPaths(null!));
-
-        _ = await Assert.That(exception.ParamName).IsEqualTo("lookupPath");
+        _ = Assert.Throws<ArgumentNullException>("lookupPath", () => locator.GetLookupPaths(null!));
     }
 
     [Test]

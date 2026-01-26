@@ -187,10 +187,9 @@ public sealed class FrontmatterValidationTests
     }
 
     [Test]
-    public async Task ValidateRequiredFields_WhenFrontmatterNull_ThrowsArgumentNullException()
-    {
-        var exception = Assert.Throws<ArgumentNullException>(() => FrontmatterValidation.ValidateRequiredFields(null!));
-
-        _ = await Assert.That(exception.ParamName).IsEqualTo("frontmatter");
-    }
+    public async Task ValidateRequiredFields_WhenFrontmatterNull_ThrowsArgumentNullException() =>
+        _ = Assert.Throws<ArgumentNullException>(
+            "frontmatter",
+            () => FrontmatterValidation.ValidateRequiredFields(null!)
+        );
 }

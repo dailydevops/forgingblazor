@@ -49,9 +49,7 @@ public sealed class ContentLookupPathTests
     {
         var lookupPath = new ContentLookupPath("posts/my-article", ".md", CultureInfo.GetCultureInfo("en-US"));
 
-        var exception = Assert.Throws<ArgumentNullException>(() => lookupPath.GeneratePath(null!));
-
-        _ = await Assert.That(exception.ParamName).IsEqualTo("cultureSuffix");
+        _ = Assert.Throws<ArgumentNullException>("cultureSuffix", () => lookupPath.GeneratePath(null!));
     }
 
     [Test]

@@ -27,12 +27,8 @@ public sealed class CultureResolverTests
     }
 
     [Test]
-    public async Task FromTwoLetterCode_WithNullCode_ThrowsArgumentNullException()
-    {
-        var exception = Assert.Throws<ArgumentNullException>(() => CultureResolver.FromTwoLetterCode(null!));
-
-        _ = await Assert.That(exception.ParamName).IsEqualTo("twoLetterCode");
-    }
+    public async Task FromTwoLetterCode_WithNullCode_ThrowsArgumentNullException() =>
+        _ = Assert.Throws<ArgumentNullException>("twoLetterCode", () => CultureResolver.FromTwoLetterCode(null!));
 
     [Test]
     [Arguments("")]
