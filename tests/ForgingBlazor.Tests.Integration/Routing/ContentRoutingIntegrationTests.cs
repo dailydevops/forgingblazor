@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Tests.Integration.Routing;
+﻿namespace NetEvolve.ForgingBlazor.Tests.Integration.Routing;
 
 using System;
 using System.Threading.Tasks;

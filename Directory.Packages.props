@@ -32,6 +32,7 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.15.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.15.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.15.0" />
+    <PackageVersion Include="Testcontainers.Azurite" Version="4.2.0" />
     <PackageVersion Include="Aspire.Hosting.Testing" Version="13.1.0" />
     <PackageVersion Include="TUnit" Version="1.12.65" />
     <PackageVersion Include="YamlDotNet" Version="16.3.0" />
