@@ -1,0 +1,17 @@
+﻿@using Microsoft.AspNetCore.Components.Routing
+
+@if (RouteData is not null)
+{
+    if (_resolvedContent is not null)
+    {
+        <DynamicComponent Type="@_componentType" Parameters="@_parameters" />
+    }
+    else
+    {
+        <RouteView RouteData="@RouteData" DefaultLayout="@DefaultLayout" />
+    }
+}
+else if (NotFoundContent is not null)
+{
+    @NotFoundContent
+}
