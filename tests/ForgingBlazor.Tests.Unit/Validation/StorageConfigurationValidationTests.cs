@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Tests.Unit.Validation;
+﻿namespace NetEvolve.ForgingBlazor.Tests.Unit.Validation;
 
 using System;
 using System.IO;

@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="NetEvolve.Extensions.TUnit" />
+    <PackageReference Include="NSubstitute" />
     <PackageReference Include="TUnit" />
   </ItemGroup>
 
@@ -15,5 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\ForgingBlazor\ForgingBlazor.csproj" />
+    <ProjectReference Include="..\..\src\ForgingBlazor.Extensibility\ForgingBlazor.Extensibility.csproj" />
   </ItemGroup>
 </Project>
