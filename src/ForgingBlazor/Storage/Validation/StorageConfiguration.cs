@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Storage.Validation;
+﻿namespace NetEvolve.ForgingBlazor.Storage.Validation;
 
 /// <summary>
 /// Represents storage configuration options.

@@ -5,9 +5,7 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
-using DotNet.Testcontainers.Containers;
 using NetEvolve.ForgingBlazor.Content;
-using Testcontainers.Azurite;
 using TUnit.Assertions;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
@@ -19,9 +17,11 @@ using TUnit.Core;
 /// These tests automatically start and manage an Azurite container for testing.
 /// No manual setup is required.
 /// </remarks>
-public sealed class AzureBlobContentStorageProviderTests
+[ClassDataSource<AzuriteFixture>]
+public sealed class AzureBlobContentStorageProviderTests(AzuriteFixture fixture)
 {
     private const string TestContainerName = "content-test";
+    private readonly AzuriteFixture _fixture = fixture;
 
     [Before(Test)]
     public async Task SetupAsync()
@@ -39,7 +39,7 @@ public sealed class AzureBlobContentStorageProviderTests
     public async Task Constructor_WithValidConnectionString_CreatesProvider()
     {
         // Arrange & Act
-        var provider = new AzureBlobContentStorageProvider(AzuriteFixture.ConnectionString, TestContainerName);
+        var provider = new AzureBlobContentStorageProvider(_fixture.ConnectionString, TestContainerName);
 
         // Assert
         _ = await Assert.That(provider).IsNotNull();
@@ -71,7 +71,7 @@ public sealed class AzureBlobContentStorageProviderTests
         // Act & Assert
 #pragma warning disable CA1806 // Do not ignore method results
         _ = Assert.Throws<ArgumentException>(() =>
-            _ = new AzureBlobContentStorageProvider(AzuriteFixture.ConnectionString, null!)
+            _ = new AzureBlobContentStorageProvider(_fixture.ConnectionString, null!)
         );
 #pragma warning restore CA1806 // Do not ignore method results
     }
@@ -80,7 +80,7 @@ public sealed class AzureBlobContentStorageProviderTests
     public async Task GetContentAsync_WhenBlobExists_ReturnsContent()
     {
         // Arrange
-        var provider = new AzureBlobContentStorageProvider(AzuriteFixture.ConnectionString, TestContainerName);
+        var provider = new AzureBlobContentStorageProvider(_fixture.ConnectionString, TestContainerName);
         var culture = CultureInfo.GetCultureInfo("en-US");
         var segmentPath = "blog";
         var slug = "test-post";
@@ -118,7 +118,7 @@ public sealed class AzureBlobContentStorageProviderTests
     public async Task GetContentAsync_WhenBlobDoesNotExist_ReturnsNull()
     {
         // Arrange
-        var provider = new AzureBlobContentStorageProvider(AzuriteFixture.ConnectionString, TestContainerName);
+        var provider = new AzureBlobContentStorageProvider(_fixture.ConnectionString, TestContainerName);
         var culture = CultureInfo.GetCultureInfo("en-US");
 
         // Act
@@ -137,14 +137,14 @@ public sealed class AzureBlobContentStorageProviderTests
     public async Task GetContentsAsync_WhenMultipleBlobsExist_ReturnsAll()
     {
         // Arrange
-        var provider = new AzureBlobContentStorageProvider(AzuriteFixture.ConnectionString, TestContainerName);
+        var provider = new AzureBlobContentStorageProvider(_fixture.ConnectionString, TestContainerName);
         var culture = CultureInfo.GetCultureInfo("en-US");
         var segmentPath = "blog";
 
         var markdown1 = """
             ---
             title: Post 1
-            slug: post-1
+            slug: post-one
             publisheddate: 2026-01-25T10:00:00Z
             ---
             # Post 1
@@ -152,14 +152,14 @@ public sealed class AzureBlobContentStorageProviderTests
         var markdown2 = """
             ---
             title: Post 2
-            slug: post-2
+            slug: post-two
             publisheddate: 2026-01-25T11:00:00Z
             ---
             # Post 2
             """;
 
-        await UploadBlobAsync($"{segmentPath}/EN-US/post-1.md", markdown1);
-        await UploadBlobAsync($"{segmentPath}/EN-US/post-2.md", markdown2);
+        await UploadBlobAsync($"{segmentPath}/EN-US/post-one.md", markdown1);
+        await UploadBlobAsync($"{segmentPath}/EN-US/post-two.md", markdown2);
 
         // Act
         var results = await provider.GetContentsAsync<TestContentDescriptor>(
@@ -172,8 +172,8 @@ public sealed class AzureBlobContentStorageProviderTests
         using (Assert.Multiple())
         {
             _ = await Assert.That(results.Count).IsEqualTo(2);
-            _ = await Assert.That(results.Any(x => x.Slug == "post-1")).IsTrue();
-            _ = await Assert.That(results.Any(x => x.Slug == "post-2")).IsTrue();
+            _ = await Assert.That(results.Any(x => x.Slug == "post-one")).IsTrue();
+            _ = await Assert.That(results.Any(x => x.Slug == "post-two")).IsTrue();
         }
     }
 
@@ -181,7 +181,7 @@ public sealed class AzureBlobContentStorageProviderTests
     public async Task GetContentsAsync_WhenNoBlobsExist_ReturnsEmpty()
     {
         // Arrange
-        var provider = new AzureBlobContentStorageProvider(AzuriteFixture.ConnectionString, TestContainerName);
+        var provider = new AzureBlobContentStorageProvider(_fixture.ConnectionString, TestContainerName);
         var culture = CultureInfo.GetCultureInfo("en-US");
 
         // Act
@@ -195,7 +195,7 @@ public sealed class AzureBlobContentStorageProviderTests
     public async Task ExistsAsync_WhenBlobExists_ReturnsTrue()
     {
         // Arrange
-        var provider = new AzureBlobContentStorageProvider(AzuriteFixture.ConnectionString, TestContainerName);
+        var provider = new AzureBlobContentStorageProvider(_fixture.ConnectionString, TestContainerName);
         var path = "test/file.md";
         await UploadBlobAsync(path, "test content");
 
@@ -210,7 +210,7 @@ public sealed class AzureBlobContentStorageProviderTests
     public async Task ExistsAsync_WhenBlobDoesNotExist_ReturnsFalse()
     {
         // Arrange
-        var provider = new AzureBlobContentStorageProvider(AzuriteFixture.ConnectionString, TestContainerName);
+        var provider = new AzureBlobContentStorageProvider(_fixture.ConnectionString, TestContainerName);
 
         // Act
         var result = await provider.ExistsAsync("nonexistent.md", CancellationToken.None);
@@ -219,23 +219,23 @@ public sealed class AzureBlobContentStorageProviderTests
         _ = await Assert.That(result).IsFalse();
     }
 
-    private static async Task CreateContainerIfNotExistsAsync()
+    private async Task CreateContainerIfNotExistsAsync()
     {
-        var client = new BlobServiceClient(AzuriteFixture.ConnectionString);
+        var client = new BlobServiceClient(_fixture.ConnectionString);
         var containerClient = client.GetBlobContainerClient(TestContainerName);
         _ = await containerClient.CreateIfNotExistsAsync();
     }
 
-    private static async Task DeleteContainerAsync()
+    private async Task DeleteContainerAsync()
     {
-        var client = new BlobServiceClient(AzuriteFixture.ConnectionString);
+        var client = new BlobServiceClient(_fixture.ConnectionString);
         var containerClient = client.GetBlobContainerClient(TestContainerName);
         _ = await containerClient.DeleteIfExistsAsync();
     }
 
-    private static async Task UploadBlobAsync(string blobPath, string content)
+    private async Task UploadBlobAsync(string blobPath, string content)
     {
-        var client = new BlobServiceClient(AzuriteFixture.ConnectionString);
+        var client = new BlobServiceClient(_fixture.ConnectionString);
         var containerClient = client.GetBlobContainerClient(TestContainerName);
         var blobClient = containerClient.GetBlobClient(blobPath);
         await blobClient.UploadAsync(BinaryData.FromString(content), overwrite: true);

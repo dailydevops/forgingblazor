@@ -1,41 +1,26 @@
-namespace NetEvolve.ForgingBlazor.Storage.AzureBlob;
+﻿namespace NetEvolve.ForgingBlazor.Storage.AzureBlob;
 
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging.Abstractions;
 using Testcontainers.Azurite;
-using TUnit.Core;
+using TUnit.Core.Interfaces;
 
 /// <summary>
 /// Shared Azurite container fixture for all blob storage tests.
 /// </summary>
-internal static class AzuriteFixture
+public sealed class AzuriteFixture : IAsyncInitializer, IAsyncDisposable
 {
-    private static AzuriteContainer? _container;
-    private static string _connectionString = string.Empty;
+    private readonly AzuriteContainer _container = new AzuriteBuilder(
+        /*dockerimage*/"mcr.microsoft.com/azure-storage/azurite:3.35.0"
+    )
+        .WithLogger(NullLogger.Instance)
+        .WithCommand("--skipApiVersionCheck")
+        .Build();
 
-    public static string ConnectionString => _connectionString;
+    internal string ConnectionString => _container.GetConnectionString();
 
-    [Before(Assembly)]
-    public static async Task StartAzuriteAsync()
-    {
-        _container = new AzuriteBuilder()
-            .WithImage("mcr.microsoft.com/azure-storage/azurite:3.33.0")
-            .WithCommand("azurite-blob", "--blobHost", "0.0.0.0", "--skipApiVersionCheck")
-            .Build();
+    public async ValueTask DisposeAsync() => await _container.DisposeAsync().ConfigureAwait(false);
 
-        await _container.StartAsync();
-        _connectionString = _container.GetConnectionString();
-
-        // Give Azurite time to fully initialize
-        await Task.Delay(TimeSpan.FromSeconds(2));
-    }
-
-    [After(Assembly)]
-    public static async Task StopAzuriteAsync()
-    {
-        if (_container != null)
-        {
-            await _container.DisposeAsync();
-        }
-    }
+    public async Task InitializeAsync() => await _container.StartAsync().ConfigureAwait(false);
 }
