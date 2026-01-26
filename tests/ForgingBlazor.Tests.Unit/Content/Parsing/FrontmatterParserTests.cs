@@ -103,8 +103,7 @@ tags:
 ---
 Body content
 """;
-
-        var (frontmatter, body) = FrontmatterParser.Parse(content);
+        var (frontmatter, _) = FrontmatterParser.Parse(content);
 
         using (Assert.Multiple())
         {
@@ -144,8 +143,7 @@ publishedDate: 2026-01-25T10:00:00+00:00
 ---
 Body
 """;
-
-        var (frontmatter, body) = FrontmatterParser.Parse(content);
+        var (frontmatter, _) = FrontmatterParser.Parse(content);
 
         using (Assert.Multiple())
         {
@@ -158,9 +156,9 @@ Body
     public async Task Parse_WithWhitespaceAroundDelimiters_HandlesCorrectly()
     {
         var content = """
-  ---  
+  ---
 title: Test
-  ---  
+  ---
 Body
 """;
 

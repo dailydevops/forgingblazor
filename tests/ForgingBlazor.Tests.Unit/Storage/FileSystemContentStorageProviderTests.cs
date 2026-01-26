@@ -66,17 +66,14 @@ public sealed class FileSystemContentStorageProviderTests : IDisposable
 
         var culturePath = Path.Combine(_testDirectory, segmentPath, "EN-US");
         _ = Directory.CreateDirectory(culturePath);
-        await File.WriteAllTextAsync(Path.Combine(culturePath, $"{slug}.md"), markdown);
+        await File.WriteAllTextAsync(Path.Combine(culturePath, $"{slug}.md"), markdown).ConfigureAwait(false);
 
         using var provider = new FileSystemContentStorageProvider(_options);
 
         // Act
-        var result = await provider.GetContentAsync<TestContentDescriptor>(
-            segmentPath,
-            slug,
-            culture,
-            CancellationToken.None
-        );
+        var result = await provider
+            .GetContentAsync<TestContentDescriptor>(segmentPath, slug, culture, CancellationToken.None)
+            .ConfigureAwait(false);
 
         // Assert
         using (Assert.Multiple())
@@ -95,12 +92,9 @@ public sealed class FileSystemContentStorageProviderTests : IDisposable
         using var provider = new FileSystemContentStorageProvider(_options);
 
         // Act
-        var result = await provider.GetContentAsync<TestContentDescriptor>(
-            "blog",
-            "nonexistent",
-            culture,
-            CancellationToken.None
-        );
+        var result = await provider
+            .GetContentAsync<TestContentDescriptor>("blog", "nonexistent", culture, CancellationToken.None)
+            .ConfigureAwait(false);
 
         // Assert
         _ = await Assert.That(result).IsNull();
@@ -132,17 +126,15 @@ public sealed class FileSystemContentStorageProviderTests : IDisposable
             Content 2
             """;
 
-        await File.WriteAllTextAsync(Path.Combine(culturePath, "post-one.md"), markdown1);
-        await File.WriteAllTextAsync(Path.Combine(culturePath, "post-two.md"), markdown2);
+        await File.WriteAllTextAsync(Path.Combine(culturePath, "post-one.md"), markdown1).ConfigureAwait(false);
+        await File.WriteAllTextAsync(Path.Combine(culturePath, "post-two.md"), markdown2).ConfigureAwait(false);
 
         using var provider = new FileSystemContentStorageProvider(_options);
 
         // Act
-        var results = await provider.GetContentsAsync<TestContentDescriptor>(
-            segmentPath,
-            culture,
-            CancellationToken.None
-        );
+        var results = await provider
+            .GetContentsAsync<TestContentDescriptor>(segmentPath, culture, CancellationToken.None)
+            .ConfigureAwait(false);
 
         // Assert
         using (Assert.Multiple())
@@ -161,7 +153,9 @@ public sealed class FileSystemContentStorageProviderTests : IDisposable
         using var provider = new FileSystemContentStorageProvider(_options);
 
         // Act
-        var results = await provider.GetContentsAsync<TestContentDescriptor>("blog", culture, CancellationToken.None);
+        var results = await provider
+            .GetContentsAsync<TestContentDescriptor>("blog", culture, CancellationToken.None)
+            .ConfigureAwait(false);
 
         // Assert
         _ = await Assert.That(results.Count).IsEqualTo(0);
@@ -175,12 +169,12 @@ public sealed class FileSystemContentStorageProviderTests : IDisposable
         var fullPath = Path.Combine(_testDirectory, path);
         var directory = Path.GetDirectoryName(fullPath)!;
         _ = Directory.CreateDirectory(directory);
-        await File.WriteAllTextAsync(fullPath, "content");
+        await File.WriteAllTextAsync(fullPath, "content").ConfigureAwait(false);
 
         using var provider = new FileSystemContentStorageProvider(_options);
 
         // Act
-        var exists = await provider.ExistsAsync(path);
+        var exists = await provider.ExistsAsync(path).ConfigureAwait(false);
 
         // Assert
         _ = await Assert.That(exists).IsTrue();
@@ -193,7 +187,7 @@ public sealed class FileSystemContentStorageProviderTests : IDisposable
         using var provider = new FileSystemContentStorageProvider(_options);
 
         // Act
-        var exists = await provider.ExistsAsync("nonexistent.md");
+        var exists = await provider.ExistsAsync("nonexistent.md").ConfigureAwait(false);
 
         // Assert
         _ = await Assert.That(exists).IsFalse();
@@ -209,13 +203,13 @@ public sealed class FileSystemContentStorageProviderTests : IDisposable
         using var provider = new FileSystemContentStorageProvider(_options);
 
         // Act
-        await provider.SaveContentAsync(path, markdown);
+        await provider.SaveContentAsync(path, markdown).ConfigureAwait(false);
 
         // Assert
         var fullPath = Path.Combine(_testDirectory, path);
         _ = await Assert.That(File.Exists(fullPath)).IsTrue();
 
-        var content = await File.ReadAllTextAsync(fullPath);
+        var content = await File.ReadAllTextAsync(fullPath).ConfigureAwait(false);
         _ = await Assert.That(content).IsEqualTo(markdown);
     }
 
@@ -227,12 +221,12 @@ public sealed class FileSystemContentStorageProviderTests : IDisposable
         var fullPath = Path.Combine(_testDirectory, path);
         var directory = Path.GetDirectoryName(fullPath)!;
         _ = Directory.CreateDirectory(directory);
-        await File.WriteAllTextAsync(fullPath, "content");
+        await File.WriteAllTextAsync(fullPath, "content").ConfigureAwait(false);
 
         using var provider = new FileSystemContentStorageProvider(_options);
 
         // Act
-        await provider.DeleteContentAsync(path);
+        await provider.DeleteContentAsync(path).ConfigureAwait(false);
 
         // Assert
         _ = await Assert.That(File.Exists(fullPath)).IsFalse();

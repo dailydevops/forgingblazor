@@ -22,7 +22,7 @@ public sealed class ContentRoutingIntegrationTests : IAsyncDisposable
     public async Task SetupAsync()
     {
         _fixture = new TestContentFixture();
-        await _fixture.InitializeAsync();
+        await _fixture.InitializeAsync().ConfigureAwait(false);
 
         _storageOptions = new FileSystemStorageOptions();
         _ = _storageOptions.WithBasePath(_fixture.BaseDirectory);
@@ -33,7 +33,7 @@ public sealed class ContentRoutingIntegrationTests : IAsyncDisposable
     {
         if (_fixture != null)
         {
-            await _fixture.DisposeAsync();
+            await _fixture.DisposeAsync().ConfigureAwait(false);
         }
     }
 
@@ -41,7 +41,7 @@ public sealed class ContentRoutingIntegrationTests : IAsyncDisposable
     {
         if (_fixture != null)
         {
-            await _fixture.DisposeAsync();
+            await _fixture.DisposeAsync().ConfigureAwait(false);
         }
     }
 

@@ -57,19 +57,19 @@ public sealed class FileSystemAssetStorageProviderTests : IDisposable
         _ = Directory.CreateDirectory(directory);
 
         var testContent = "fake image content"u8.ToArray();
-        await File.WriteAllBytesAsync(fullPath, testContent);
+        await File.WriteAllBytesAsync(fullPath, testContent).ConfigureAwait(false);
 
         using var provider = new FileSystemAssetStorageProvider(_options);
 
         // Act
-        var stream = await provider.GetAssetAsync(path);
+        var stream = await provider.GetAssetAsync(path).ConfigureAwait(false);
 
         // Assert
         _ = await Assert.That(stream).IsNotNull();
         using (stream)
         {
             using var ms = new MemoryStream();
-            await stream.CopyToAsync(ms);
+            await stream.CopyToAsync(ms).ConfigureAwait(false);
             var content = ms.ToArray();
             _ = await Assert.That(content).IsEquivalentTo(testContent);
         }
@@ -83,7 +83,7 @@ public sealed class FileSystemAssetStorageProviderTests : IDisposable
 
         // Act & Assert
         _ = await Assert
-            .That(async () => await provider.GetAssetAsync("nonexistent.jpg"))
+            .That(async () => await provider.GetAssetAsync("nonexistent.jpg").ConfigureAwait(false))
             .Throws<FileNotFoundException>();
     }
 
@@ -95,13 +95,13 @@ public sealed class FileSystemAssetStorageProviderTests : IDisposable
         var imagesPath = Path.Combine(_testDirectory, folder);
         _ = Directory.CreateDirectory(imagesPath);
 
-        await File.WriteAllTextAsync(Path.Combine(imagesPath, "image1.jpg"), "content1");
-        await File.WriteAllTextAsync(Path.Combine(imagesPath, "image2.png"), "content2");
+        await File.WriteAllTextAsync(Path.Combine(imagesPath, "image1.jpg"), "content1").ConfigureAwait(false);
+        await File.WriteAllTextAsync(Path.Combine(imagesPath, "image2.png"), "content2").ConfigureAwait(false);
 
         using var provider = new FileSystemAssetStorageProvider(_options);
 
         // Act
-        var assets = await provider.GetAssetsAsync(folder);
+        var assets = await provider.GetAssetsAsync(folder).ConfigureAwait(false);
 
         // Assert
         using (Assert.Multiple())
@@ -122,7 +122,7 @@ public sealed class FileSystemAssetStorageProviderTests : IDisposable
         using var provider = new FileSystemAssetStorageProvider(_options);
 
         // Act
-        var assets = await provider.GetAssetsAsync(folder);
+        var assets = await provider.GetAssetsAsync(folder).ConfigureAwait(false);
 
         // Assert
         _ = await Assert.That(assets.Count).IsEqualTo(0);
@@ -139,13 +139,13 @@ public sealed class FileSystemAssetStorageProviderTests : IDisposable
         using var stream = new MemoryStream(testContent);
 
         // Act
-        await provider.SaveAssetAsync(path, stream);
+        await provider.SaveAssetAsync(path, stream).ConfigureAwait(false);
 
         // Assert
         var fullPath = Path.Combine(_testDirectory, path);
         _ = await Assert.That(File.Exists(fullPath)).IsTrue();
 
-        var savedContent = await File.ReadAllBytesAsync(fullPath);
+        var savedContent = await File.ReadAllBytesAsync(fullPath).ConfigureAwait(false);
         _ = await Assert.That(savedContent).IsEquivalentTo(testContent);
     }
 
@@ -160,7 +160,7 @@ public sealed class FileSystemAssetStorageProviderTests : IDisposable
         using var stream = new MemoryStream(testContent);
 
         // Act
-        await provider.SaveAssetAsync(path, stream);
+        await provider.SaveAssetAsync(path, stream).ConfigureAwait(false);
 
         // Assert
         var fullPath = Path.Combine(_testDirectory, path);
@@ -173,12 +173,12 @@ public sealed class FileSystemAssetStorageProviderTests : IDisposable
         // Arrange
         var path = "to-delete.txt";
         var fullPath = Path.Combine(_testDirectory, path);
-        await File.WriteAllTextAsync(fullPath, "content");
+        await File.WriteAllTextAsync(fullPath, "content").ConfigureAwait(false);
 
         using var provider = new FileSystemAssetStorageProvider(_options);
 
         // Act
-        await provider.DeleteAssetAsync(path);
+        await provider.DeleteAssetAsync(path).ConfigureAwait(false);
 
         // Assert
         _ = await Assert.That(File.Exists(fullPath)).IsFalse();
@@ -191,7 +191,7 @@ public sealed class FileSystemAssetStorageProviderTests : IDisposable
         using var provider = new FileSystemAssetStorageProvider(_options);
 
         // Act & Assert - should not throw
-        await provider.DeleteAssetAsync("nonexistent.txt");
+        await provider.DeleteAssetAsync("nonexistent.txt").ConfigureAwait(false);
     }
 
     [Test]
@@ -200,12 +200,12 @@ public sealed class FileSystemAssetStorageProviderTests : IDisposable
         // Arrange
         var path = "existing.txt";
         var fullPath = Path.Combine(_testDirectory, path);
-        await File.WriteAllTextAsync(fullPath, "content");
+        await File.WriteAllTextAsync(fullPath, "content").ConfigureAwait(false);
 
         using var provider = new FileSystemAssetStorageProvider(_options);
 
         // Act
-        var exists = await provider.ExistsAsync(path);
+        var exists = await provider.ExistsAsync(path).ConfigureAwait(false);
 
         // Assert
         _ = await Assert.That(exists).IsTrue();
@@ -218,7 +218,7 @@ public sealed class FileSystemAssetStorageProviderTests : IDisposable
         using var provider = new FileSystemAssetStorageProvider(_options);
 
         // Act
-        var exists = await provider.ExistsAsync("nonexistent.txt");
+        var exists = await provider.ExistsAsync("nonexistent.txt").ConfigureAwait(false);
 
         // Assert
         _ = await Assert.That(exists).IsFalse();

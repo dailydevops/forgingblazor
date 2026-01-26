@@ -19,7 +19,7 @@ public sealed class StorageConfigurationValidationTests
         // Arrange
         var validator = new StorageConfigurationValidation();
         var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(tempDir);
+        _ = Directory.CreateDirectory(tempDir);
 
         try
         {
@@ -139,8 +139,8 @@ public sealed class StorageConfigurationValidationTests
         var validator = new StorageConfigurationValidation();
         var contentDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         var assetDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(contentDir);
-        Directory.CreateDirectory(assetDir);
+        _ = Directory.CreateDirectory(contentDir);
+        _ = Directory.CreateDirectory(assetDir);
 
         try
         {
@@ -180,7 +180,7 @@ public sealed class StorageConfigurationValidationTests
         var validator = new StorageConfigurationValidation();
         var contentDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         var nonExistentAssetPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(contentDir);
+        _ = Directory.CreateDirectory(contentDir);
 
         try
         {
@@ -218,7 +218,7 @@ public sealed class StorageConfigurationValidationTests
         // Arrange
         var validator = new StorageConfigurationValidation();
         var contentDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(contentDir);
+        _ = Directory.CreateDirectory(contentDir);
 
         try
         {
@@ -253,7 +253,7 @@ public sealed class StorageConfigurationValidationTests
         // Arrange
         var validator = new StorageConfigurationValidation();
         var contentDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(contentDir);
+        _ = Directory.CreateDirectory(contentDir);
 
         try
         {
@@ -284,7 +284,7 @@ public sealed class StorageConfigurationValidationTests
         // Arrange
         var validator = new StorageConfigurationValidation();
         var contentDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(contentDir);
+        _ = Directory.CreateDirectory(contentDir);
 
         try
         {
@@ -319,7 +319,7 @@ public sealed class StorageConfigurationValidationTests
         // Arrange
         var validator = new StorageConfigurationValidation();
         var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(tempDir);
+        _ = Directory.CreateDirectory(tempDir);
 
         try
         {

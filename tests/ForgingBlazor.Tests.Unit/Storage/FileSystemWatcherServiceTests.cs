@@ -55,7 +55,7 @@ public sealed class FileSystemWatcherServiceTests : IDisposable
         using var service = new FileSystemWatcherService(_options, NullLogger<FileSystemWatcherService>.Instance);
 
         // Act & Assert - Should not throw
-        await service.StartAsync(CancellationToken.None);
+        await service.StartAsync(CancellationToken.None).ConfigureAwait(false);
     }
 
     [Test]
@@ -66,7 +66,7 @@ public sealed class FileSystemWatcherServiceTests : IDisposable
         using var service = new FileSystemWatcherService(_options, NullLogger<FileSystemWatcherService>.Instance);
 
         // Act & Assert - Should not throw
-        await service.StartAsync(CancellationToken.None);
+        await service.StartAsync(CancellationToken.None).ConfigureAwait(false);
     }
 
     [Test]
@@ -76,10 +76,10 @@ public sealed class FileSystemWatcherServiceTests : IDisposable
         _ = _options.WatchForChanges();
         using var service = new FileSystemWatcherService(_options, NullLogger<FileSystemWatcherService>.Instance);
 
-        await service.StartAsync(CancellationToken.None);
+        await service.StartAsync(CancellationToken.None).ConfigureAwait(false);
 
         // Act & Assert - Should not throw
-        await service.StopAsync(CancellationToken.None);
+        await service.StopAsync(CancellationToken.None).ConfigureAwait(false);
     }
 
     [Test]
@@ -92,14 +92,14 @@ public sealed class FileSystemWatcherServiceTests : IDisposable
         var changedFiles = new List<string>();
         service.OnFileChanged(filePath => changedFiles.Add(filePath));
 
-        await service.StartAsync(CancellationToken.None);
+        await service.StartAsync(CancellationToken.None).ConfigureAwait(false);
 
         // Act
         var testFile = Path.Combine(_testDirectory, "test.md");
-        await File.WriteAllTextAsync(testFile, "test content");
+        await File.WriteAllTextAsync(testFile, "test content").ConfigureAwait(false);
 
         // Give the watcher and debounce timer time to process
-        await Task.Delay(500);
+        await Task.Delay(500).ConfigureAwait(false);
 
         // Assert
         _ = await Assert.That(changedFiles.Count).IsGreaterThan(0);

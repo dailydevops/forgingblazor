@@ -89,14 +89,14 @@ public sealed class ContentStructureValidationTests
         // Arrange
         var routeRegistry = new RouteRegistry();
         var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(tempDir);
+        _ = Directory.CreateDirectory(tempDir);
 
         try
         {
             var validation = new ContentStructureValidation(routeRegistry, tempDir);
 
             // Act & Assert
-            await validation.ValidateAsync();
+            await validation.ValidateAsync().ConfigureAwait(false);
         }
         finally
         {
@@ -113,7 +113,7 @@ public sealed class ContentStructureValidationTests
         // Arrange
         var routeRegistry = new RouteRegistry();
         var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(tempDir);
+        _ = Directory.CreateDirectory(tempDir);
 
         try
         {
@@ -121,12 +121,12 @@ public sealed class ContentStructureValidationTests
             routeRegistry.Register("about", route);
 
             var contentFile = Path.Combine(tempDir, "about.md");
-            await File.WriteAllTextAsync(contentFile, "# About");
+            await File.WriteAllTextAsync(contentFile, "# About").ConfigureAwait(false);
 
             var validation = new ContentStructureValidation(routeRegistry, tempDir);
 
             // Act & Assert
-            await validation.ValidateAsync();
+            await validation.ValidateAsync().ConfigureAwait(false);
         }
         finally
         {
@@ -143,7 +143,7 @@ public sealed class ContentStructureValidationTests
         // Arrange
         var routeRegistry = new RouteRegistry();
         var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(tempDir);
+        _ = Directory.CreateDirectory(tempDir);
 
         try
         {
@@ -154,10 +154,15 @@ public sealed class ContentStructureValidationTests
 
             // Act & Assert
             var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await validation.ValidateAsync()
+                await validation.ValidateAsync().ConfigureAwait(false)
             );
-            _ = await Assert.That(exception.Message).Contains("Missing required content files");
-            _ = await Assert.That(exception.Message).Contains("about.md");
+
+            using (Assert.Multiple())
+            {
+                _ = await Assert.That(exception).IsNotNull();
+                _ = await Assert.That(exception.Message).Contains("Missing required content files");
+                _ = await Assert.That(exception.Message).Contains("about.md");
+            }
         }
         finally
         {
@@ -174,7 +179,7 @@ public sealed class ContentStructureValidationTests
         // Arrange
         var routeRegistry = new RouteRegistry();
         var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(tempDir);
+        _ = Directory.CreateDirectory(tempDir);
 
         try
         {
@@ -182,14 +187,14 @@ public sealed class ContentStructureValidationTests
             routeRegistry.Register("blog/posts", route);
 
             var segmentDir = Path.Combine(tempDir, "blog", "posts");
-            Directory.CreateDirectory(segmentDir);
+            _ = Directory.CreateDirectory(segmentDir);
             var indexFile = Path.Combine(segmentDir, "_index.md");
-            await File.WriteAllTextAsync(indexFile, "# Posts");
+            await File.WriteAllTextAsync(indexFile, "# Posts").ConfigureAwait(false);
 
             var validation = new ContentStructureValidation(routeRegistry, tempDir);
 
             // Act & Assert
-            await validation.ValidateAsync();
+            await validation.ValidateAsync().ConfigureAwait(false);
         }
         finally
         {
@@ -206,7 +211,7 @@ public sealed class ContentStructureValidationTests
         // Arrange
         var routeRegistry = new RouteRegistry();
         var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(tempDir);
+        _ = Directory.CreateDirectory(tempDir);
 
         try
         {
@@ -217,10 +222,15 @@ public sealed class ContentStructureValidationTests
 
             // Act & Assert
             var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await validation.ValidateAsync()
+                await validation.ValidateAsync().ConfigureAwait(false)
             );
-            _ = await Assert.That(exception.Message).Contains("Missing required content files");
-            _ = await Assert.That(exception.Message).Contains("_index.md");
+
+            using (Assert.Multiple())
+            {
+                _ = await Assert.That(exception).IsNotNull();
+                _ = await Assert.That(exception.Message).Contains("Missing required content files");
+                _ = await Assert.That(exception.Message).Contains("_index.md");
+            }
         }
         finally
         {
@@ -237,7 +247,7 @@ public sealed class ContentStructureValidationTests
         // Arrange
         var routeRegistry = new RouteRegistry();
         var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(tempDir);
+        _ = Directory.CreateDirectory(tempDir);
 
         try
         {
@@ -246,14 +256,14 @@ public sealed class ContentStructureValidationTests
             routeRegistry.Register("articles", route);
 
             var segmentDir = Path.Combine(tempDir, "articles");
-            Directory.CreateDirectory(segmentDir);
+            _ = Directory.CreateDirectory(segmentDir);
             var indexFile = Path.Combine(segmentDir, "_index.md");
-            await File.WriteAllTextAsync(indexFile, "# Articles");
+            await File.WriteAllTextAsync(indexFile, "# Articles").ConfigureAwait(false);
 
             var validation = new ContentStructureValidation(routeRegistry, tempDir);
 
             // Act & Assert
-            await validation.ValidateAsync();
+            await validation.ValidateAsync().ConfigureAwait(false);
         }
         finally
         {
@@ -270,7 +280,7 @@ public sealed class ContentStructureValidationTests
         // Arrange
         var routeRegistry = new RouteRegistry();
         var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(tempDir);
+        _ = Directory.CreateDirectory(tempDir);
 
         try
         {
@@ -279,13 +289,13 @@ public sealed class ContentStructureValidationTests
             routeRegistry.Register("about", route1);
             routeRegistry.Register("contact", route2);
 
-            await File.WriteAllTextAsync(Path.Combine(tempDir, "about.md"), "# About");
-            await File.WriteAllTextAsync(Path.Combine(tempDir, "contact.md"), "# Contact");
+            await File.WriteAllTextAsync(Path.Combine(tempDir, "about.md"), "# About").ConfigureAwait(false);
+            await File.WriteAllTextAsync(Path.Combine(tempDir, "contact.md"), "# Contact").ConfigureAwait(false);
 
             var validation = new ContentStructureValidation(routeRegistry, tempDir);
 
             // Act & Assert
-            await validation.ValidateAsync();
+            await validation.ValidateAsync().ConfigureAwait(false);
         }
         finally
         {
@@ -302,7 +312,7 @@ public sealed class ContentStructureValidationTests
         // Arrange
         var routeRegistry = new RouteRegistry();
         var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(tempDir);
+        _ = Directory.CreateDirectory(tempDir);
 
         try
         {
@@ -315,10 +325,15 @@ public sealed class ContentStructureValidationTests
 
             // Act & Assert
             var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await validation.ValidateAsync()
+                await validation.ValidateAsync().ConfigureAwait(false)
             );
-            _ = await Assert.That(exception.Message).Contains("about.md");
-            _ = await Assert.That(exception.Message).Contains("contact.md");
+
+            using (Assert.Multiple())
+            {
+                _ = await Assert.That(exception).IsNotNull();
+                _ = await Assert.That(exception.Message).Contains("about.md");
+                _ = await Assert.That(exception.Message).Contains("contact.md");
+            }
         }
         finally
         {
@@ -335,7 +350,7 @@ public sealed class ContentStructureValidationTests
         // Arrange
         var routeRegistry = new RouteRegistry();
         var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(tempDir);
+        _ = Directory.CreateDirectory(tempDir);
 
         try
         {
@@ -347,11 +362,11 @@ public sealed class ContentStructureValidationTests
 
             var validation = new ContentStructureValidation(routeRegistry, tempDir);
             using var cts = new CancellationTokenSource();
-            await cts.CancelAsync();
+            await cts.CancelAsync().ConfigureAwait(false);
 
             // Act & Assert
             _ = await Assert.ThrowsAsync<OperationCanceledException>(async () =>
-                await validation.ValidateAsync(cts.Token)
+                await validation.ValidateAsync(cts.Token).ConfigureAwait(false)
             );
         }
         finally

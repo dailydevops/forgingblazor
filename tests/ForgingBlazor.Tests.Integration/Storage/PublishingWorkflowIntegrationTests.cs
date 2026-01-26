@@ -32,7 +32,7 @@ public sealed class PublishingWorkflowIntegrationTests : IAsyncDisposable
     public async Task SetupAsync()
     {
         _fixture = new TestContentFixture();
-        await _fixture.InitializeAsync();
+        await _fixture.InitializeAsync().ConfigureAwait(false);
 
         _storageOptions = new FileSystemStorageOptions();
         _ = _storageOptions.WithBasePath(_fixture.BaseDirectory);
@@ -43,7 +43,7 @@ public sealed class PublishingWorkflowIntegrationTests : IAsyncDisposable
     {
         if (_fixture != null)
         {
-            await _fixture.DisposeAsync();
+            await _fixture.DisposeAsync().ConfigureAwait(false);
         }
     }
 
@@ -51,7 +51,7 @@ public sealed class PublishingWorkflowIntegrationTests : IAsyncDisposable
     {
         if (_fixture != null)
         {
-            await _fixture.DisposeAsync();
+            await _fixture.DisposeAsync().ConfigureAwait(false);
         }
     }
 
@@ -134,7 +134,7 @@ public sealed class PublishingWorkflowIntegrationTests : IAsyncDisposable
         // Arrange
         var fixedTime = DateTimeOffset.Parse("2026-01-25T12:00:00Z", CultureInfo.InvariantCulture);
         var timeProvider = Substitute.For<TimeProvider>();
-        timeProvider.GetUtcNow().Returns(fixedTime);
+        _ = timeProvider.GetUtcNow().Returns(fixedTime);
 
         var expirationService = new ContentExpirationService(timeProvider);
 
@@ -175,7 +175,7 @@ public sealed class PublishingWorkflowIntegrationTests : IAsyncDisposable
         // Arrange
         var fixedTime = DateTimeOffset.Parse("2026-01-25T12:00:00Z", CultureInfo.InvariantCulture);
         var timeProvider = Substitute.For<TimeProvider>();
-        timeProvider.GetUtcNow().Returns(fixedTime);
+        _ = timeProvider.GetUtcNow().Returns(fixedTime);
 
         var expirationService = new ContentExpirationService(timeProvider);
 
@@ -203,7 +203,9 @@ public sealed class PublishingWorkflowIntegrationTests : IAsyncDisposable
         var culture = CultureInfo.GetCultureInfo("en-US");
 
         // Act
-        var result = await provider.GetContentAsync<TestContentDescriptor>("blog", "getting-started", culture);
+        var result = await provider
+            .GetContentAsync<TestContentDescriptor>("blog", "getting-started", culture)
+            .ConfigureAwait(false);
 
         // Assert
         using (Assert.Multiple())
@@ -223,7 +225,9 @@ public sealed class PublishingWorkflowIntegrationTests : IAsyncDisposable
         var culture = CultureInfo.GetCultureInfo("en-US");
 
         // Act
-        var result = await provider.GetContentAsync<TestContentDescriptor>("blog", "work-in-progress", culture);
+        var result = await provider
+            .GetContentAsync<TestContentDescriptor>("blog", "work-in-progress", culture)
+            .ConfigureAwait(false);
 
         // Assert
         using (Assert.Multiple())
@@ -243,16 +247,12 @@ public sealed class PublishingWorkflowIntegrationTests : IAsyncDisposable
         var germanCulture = CultureInfo.GetCultureInfo("de-DE");
 
         // Act
-        var englishContent = await provider.GetContentAsync<TestContentDescriptor>(
-            "blog",
-            "getting-started",
-            englishCulture
-        );
-        var germanContent = await provider.GetContentAsync<TestContentDescriptor>(
-            "blog",
-            "getting-started",
-            germanCulture
-        );
+        var englishContent = await provider
+            .GetContentAsync<TestContentDescriptor>("blog", "getting-started", englishCulture)
+            .ConfigureAwait(false);
+        var germanContent = await provider
+            .GetContentAsync<TestContentDescriptor>("blog", "getting-started", germanCulture)
+            .ConfigureAwait(false);
 
         // Assert
         using (Assert.Multiple())
@@ -273,7 +273,9 @@ public sealed class PublishingWorkflowIntegrationTests : IAsyncDisposable
         var spanishCulture = CultureInfo.GetCultureInfo("es-ES");
 
         // Act
-        var result = await provider.GetContentAsync<TestContentDescriptor>("blog", "getting-started", spanishCulture);
+        var result = await provider
+            .GetContentAsync<TestContentDescriptor>("blog", "getting-started", spanishCulture)
+            .ConfigureAwait(false);
 
         // Assert - Should return null as there's no Spanish translation
         _ = await Assert.That(result).IsNull();
@@ -287,7 +289,7 @@ public sealed class PublishingWorkflowIntegrationTests : IAsyncDisposable
         var culture = CultureInfo.GetCultureInfo("en-US");
 
         // Act
-        var results = await provider.GetContentsAsync<TestContentDescriptor>("blog", culture);
+        var results = await provider.GetContentsAsync<TestContentDescriptor>("blog", culture).ConfigureAwait(false);
 
         // Assert
         using (Assert.Multiple())
@@ -337,7 +339,7 @@ public sealed class PublishingWorkflowIntegrationTests : IAsyncDisposable
         // Arrange - Time before expiration
         var beforeExpirationTime = DateTimeOffset.Parse("2026-01-17T10:00:00Z", CultureInfo.InvariantCulture);
         var timeProviderBefore = Substitute.For<TimeProvider>();
-        timeProviderBefore.GetUtcNow().Returns(beforeExpirationTime);
+        _ = timeProviderBefore.GetUtcNow().Returns(beforeExpirationTime);
 
         var expirationServiceBefore = new ContentExpirationService(timeProviderBefore);
 
@@ -356,7 +358,7 @@ public sealed class PublishingWorkflowIntegrationTests : IAsyncDisposable
         // Arrange - Time after expiration
         var afterExpirationTime = DateTimeOffset.Parse("2026-01-20T10:00:00Z", CultureInfo.InvariantCulture);
         var timeProviderAfter = Substitute.For<TimeProvider>();
-        timeProviderAfter.GetUtcNow().Returns(afterExpirationTime);
+        _ = timeProviderAfter.GetUtcNow().Returns(afterExpirationTime);
 
         var expirationServiceAfter = new ContentExpirationService(timeProviderAfter);
 

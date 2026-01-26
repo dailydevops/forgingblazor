@@ -33,11 +33,11 @@ public sealed class TestContentFixture : IAsyncDisposable
     /// </summary>
     public async Task InitializeAsync()
     {
-        await CreateBlogContentAsync();
-        await CreatePageContentAsync();
-        await CreateMultiCultureContentAsync();
-        await CreateDraftContentAsync();
-        await CreateExpiredContentAsync();
+        await CreateBlogContentAsync().ConfigureAwait(false);
+        await CreatePageContentAsync().ConfigureAwait(false);
+        await CreateMultiCultureContentAsync().ConfigureAwait(false);
+        await CreateDraftContentAsync().ConfigureAwait(false);
+        await CreateExpiredContentAsync().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ public sealed class TestContentFixture : IAsyncDisposable
             _ = Directory.CreateDirectory(directory);
         }
 
-        await File.WriteAllTextAsync(fullPath, markdownContent);
+        await File.WriteAllTextAsync(fullPath, markdownContent).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -84,12 +84,13 @@ public sealed class TestContentFixture : IAsyncDisposable
         }
 
         await Task.Run(() =>
-        {
-            if (Directory.Exists(_baseDirectory))
             {
-                Directory.Delete(_baseDirectory, recursive: true);
-            }
-        });
+                if (Directory.Exists(_baseDirectory))
+                {
+                    Directory.Delete(_baseDirectory, recursive: true);
+                }
+            })
+            .ConfigureAwait(false);
 
         _disposed = true;
     }
@@ -113,7 +114,7 @@ public sealed class TestContentFixture : IAsyncDisposable
             Blazor is a web framework for building interactive web UIs.
             """;
 
-        await AddContentAsync("blog/EN-US/getting-started.md", publishedPost);
+        await AddContentAsync("blog/EN-US/getting-started.md", publishedPost).ConfigureAwait(false);
 
         // Another published post
         var secondPost = """
@@ -128,7 +129,7 @@ public sealed class TestContentFixture : IAsyncDisposable
             Learn about advanced routing patterns in web applications.
             """;
 
-        await AddContentAsync("blog/EN-US/advanced-routing.md", secondPost);
+        await AddContentAsync("blog/EN-US/advanced-routing.md", secondPost).ConfigureAwait(false);
 
         // Index page for blog segment
         var indexPage = """
@@ -143,7 +144,7 @@ public sealed class TestContentFixture : IAsyncDisposable
             Welcome to our blog. Here you'll find articles about web development.
             """;
 
-        await AddContentAsync("blog/EN-US/blog-index.md", indexPage);
+        await AddContentAsync("blog/EN-US/blog-index.md", indexPage).ConfigureAwait(false);
     }
 
     private async Task CreatePageContentAsync()
@@ -161,7 +162,7 @@ public sealed class TestContentFixture : IAsyncDisposable
             We are a team dedicated to building great web applications.
             """;
 
-        await AddContentAsync("pages/EN-US/about.md", aboutPage);
+        await AddContentAsync("pages/EN-US/about.md", aboutPage).ConfigureAwait(false);
 
         // Contact page
         var contactPage = """
@@ -176,7 +177,7 @@ public sealed class TestContentFixture : IAsyncDisposable
             Get in touch with our team.
             """;
 
-        await AddContentAsync("pages/EN-US/contact.md", contactPage);
+        await AddContentAsync("pages/EN-US/contact.md", contactPage).ConfigureAwait(false);
     }
 
     private async Task CreateMultiCultureContentAsync()
@@ -198,7 +199,7 @@ public sealed class TestContentFixture : IAsyncDisposable
             Blazor ist ein Web-Framework zum Erstellen interaktiver Web-UIs.
             """;
 
-        await AddContentAsync("blog/DE-DE/getting-started.md", germanPost);
+        await AddContentAsync("blog/DE-DE/getting-started.md", germanPost).ConfigureAwait(false);
 
         // German about page
         var germanAbout = """
@@ -213,7 +214,7 @@ public sealed class TestContentFixture : IAsyncDisposable
             Wir sind ein Team, das sich der Entwicklung großartiger Webanwendungen widmet.
             """;
 
-        await AddContentAsync("pages/DE-DE/about.md", germanAbout);
+        await AddContentAsync("pages/DE-DE/about.md", germanAbout).ConfigureAwait(false);
     }
 
     private async Task CreateDraftContentAsync()
@@ -231,7 +232,7 @@ public sealed class TestContentFixture : IAsyncDisposable
             This post is still being written and should not be visible in production.
             """;
 
-        await AddContentAsync("blog/EN-US/work-in-progress.md", draftPost);
+        await AddContentAsync("blog/EN-US/work-in-progress.md", draftPost).ConfigureAwait(false);
     }
 
     private async Task CreateExpiredContentAsync()
@@ -250,7 +251,7 @@ public sealed class TestContentFixture : IAsyncDisposable
             This offer has expired and should no longer be visible.
             """;
 
-        await AddContentAsync("blog/EN-US/limited-offer.md", expiredPost);
+        await AddContentAsync("blog/EN-US/limited-offer.md", expiredPost).ConfigureAwait(false);
 
         // Future-dated post (not yet published)
         var futurePost = """
@@ -265,6 +266,6 @@ public sealed class TestContentFixture : IAsyncDisposable
             This post is scheduled for future publication.
             """;
 
-        await AddContentAsync("blog/EN-US/coming-soon.md", futurePost);
+        await AddContentAsync("blog/EN-US/coming-soon.md", futurePost).ConfigureAwait(false);
     }
 }

@@ -24,16 +24,10 @@ public sealed class AzureBlobContentStorageProviderTests(AzuriteFixture fixture)
     private readonly AzuriteFixture _fixture = fixture;
 
     [Before(Test)]
-    public async Task SetupAsync()
-    {
-        await CreateContainerIfNotExistsAsync();
-    }
+    public async Task SetupAsync() => await CreateContainerIfNotExistsAsync().ConfigureAwait(false);
 
     [After(Test)]
-    public async Task CleanupAsync()
-    {
-        await DeleteContainerAsync();
-    }
+    public async Task CleanupAsync() => await DeleteContainerAsync().ConfigureAwait(false);
 
     [Test]
     public async Task Constructor_WithValidConnectionString_CreatesProvider()
@@ -46,35 +40,29 @@ public sealed class AzureBlobContentStorageProviderTests(AzuriteFixture fixture)
     }
 
     [Test]
-    public void Constructor_WithNullConnectionString_ThrowsArgumentException()
-    {
+    public void Constructor_WithNullConnectionString_ThrowsArgumentException() =>
         // Act & Assert
 #pragma warning disable CA1806 // Do not ignore method results
         _ = Assert.Throws<ArgumentException>(() => _ = new AzureBlobContentStorageProvider(null!, TestContainerName));
 #pragma warning restore CA1806 // Do not ignore method results
-    }
 
     [Test]
-    public void Constructor_WithEmptyConnectionString_ThrowsArgumentException()
-    {
+    public void Constructor_WithEmptyConnectionString_ThrowsArgumentException() =>
         // Act & Assert
 #pragma warning disable CA1806 // Do not ignore method results
         _ = Assert.Throws<ArgumentException>(() =>
             _ = new AzureBlobContentStorageProvider(string.Empty, TestContainerName)
         );
 #pragma warning restore CA1806 // Do not ignore method results
-    }
 
     [Test]
-    public void Constructor_WithNullContainerName_ThrowsArgumentException()
-    {
+    public void Constructor_WithNullContainerName_ThrowsArgumentException() =>
         // Act & Assert
 #pragma warning disable CA1806 // Do not ignore method results
         _ = Assert.Throws<ArgumentException>(() =>
             _ = new AzureBlobContentStorageProvider(_fixture.ConnectionString, null!)
         );
 #pragma warning restore CA1806 // Do not ignore method results
-    }
 
     [Test]
     public async Task GetContentAsync_WhenBlobExists_ReturnsContent()
@@ -94,15 +82,12 @@ public sealed class AzureBlobContentStorageProviderTests(AzuriteFixture fixture)
             This is a test post.
             """;
 
-        await UploadBlobAsync($"{segmentPath}/EN-US/{slug}.md", markdown);
+        await UploadBlobAsync($"{segmentPath}/EN-US/{slug}.md", markdown).ConfigureAwait(false);
 
         // Act
-        var result = await provider.GetContentAsync<TestContentDescriptor>(
-            segmentPath,
-            slug,
-            culture,
-            CancellationToken.None
-        );
+        var result = await provider
+            .GetContentAsync<TestContentDescriptor>(segmentPath, slug, culture, CancellationToken.None)
+            .ConfigureAwait(false);
 
         // Assert
         using (Assert.Multiple())
@@ -122,12 +107,9 @@ public sealed class AzureBlobContentStorageProviderTests(AzuriteFixture fixture)
         var culture = CultureInfo.GetCultureInfo("en-US");
 
         // Act
-        var result = await provider.GetContentAsync<TestContentDescriptor>(
-            "blog",
-            "nonexistent",
-            culture,
-            CancellationToken.None
-        );
+        var result = await provider
+            .GetContentAsync<TestContentDescriptor>("blog", "nonexistent", culture, CancellationToken.None)
+            .ConfigureAwait(false);
 
         // Assert
         _ = await Assert.That(result).IsNull();
@@ -158,15 +140,13 @@ public sealed class AzureBlobContentStorageProviderTests(AzuriteFixture fixture)
             # Post 2
             """;
 
-        await UploadBlobAsync($"{segmentPath}/EN-US/post-one.md", markdown1);
-        await UploadBlobAsync($"{segmentPath}/EN-US/post-two.md", markdown2);
+        await UploadBlobAsync($"{segmentPath}/EN-US/post-one.md", markdown1).ConfigureAwait(false);
+        await UploadBlobAsync($"{segmentPath}/EN-US/post-two.md", markdown2).ConfigureAwait(false);
 
         // Act
-        var results = await provider.GetContentsAsync<TestContentDescriptor>(
-            segmentPath,
-            culture,
-            CancellationToken.None
-        );
+        var results = await provider
+            .GetContentsAsync<TestContentDescriptor>(segmentPath, culture, CancellationToken.None)
+            .ConfigureAwait(false);
 
         // Assert
         using (Assert.Multiple())
@@ -185,7 +165,9 @@ public sealed class AzureBlobContentStorageProviderTests(AzuriteFixture fixture)
         var culture = CultureInfo.GetCultureInfo("en-US");
 
         // Act
-        var results = await provider.GetContentsAsync<TestContentDescriptor>("empty", culture, CancellationToken.None);
+        var results = await provider
+            .GetContentsAsync<TestContentDescriptor>("empty", culture, CancellationToken.None)
+            .ConfigureAwait(false);
 
         // Assert
         _ = await Assert.That(results.Count).IsEqualTo(0);
@@ -197,10 +179,10 @@ public sealed class AzureBlobContentStorageProviderTests(AzuriteFixture fixture)
         // Arrange
         var provider = new AzureBlobContentStorageProvider(_fixture.ConnectionString, TestContainerName);
         var path = "test/file.md";
-        await UploadBlobAsync(path, "test content");
+        await UploadBlobAsync(path, "test content").ConfigureAwait(false);
 
         // Act
-        var result = await provider.ExistsAsync(path, CancellationToken.None);
+        var result = await provider.ExistsAsync(path, CancellationToken.None).ConfigureAwait(false);
 
         // Assert
         _ = await Assert.That(result).IsTrue();
@@ -213,7 +195,7 @@ public sealed class AzureBlobContentStorageProviderTests(AzuriteFixture fixture)
         var provider = new AzureBlobContentStorageProvider(_fixture.ConnectionString, TestContainerName);
 
         // Act
-        var result = await provider.ExistsAsync("nonexistent.md", CancellationToken.None);
+        var result = await provider.ExistsAsync("nonexistent.md", CancellationToken.None).ConfigureAwait(false);
 
         // Assert
         _ = await Assert.That(result).IsFalse();
@@ -223,14 +205,14 @@ public sealed class AzureBlobContentStorageProviderTests(AzuriteFixture fixture)
     {
         var client = new BlobServiceClient(_fixture.ConnectionString);
         var containerClient = client.GetBlobContainerClient(TestContainerName);
-        _ = await containerClient.CreateIfNotExistsAsync();
+        _ = await containerClient.CreateIfNotExistsAsync().ConfigureAwait(false);
     }
 
     private async Task DeleteContainerAsync()
     {
         var client = new BlobServiceClient(_fixture.ConnectionString);
         var containerClient = client.GetBlobContainerClient(TestContainerName);
-        _ = await containerClient.DeleteIfExistsAsync();
+        _ = await containerClient.DeleteIfExistsAsync().ConfigureAwait(false);
     }
 
     private async Task UploadBlobAsync(string blobPath, string content)
@@ -238,7 +220,7 @@ public sealed class AzureBlobContentStorageProviderTests(AzuriteFixture fixture)
         var client = new BlobServiceClient(_fixture.ConnectionString);
         var containerClient = client.GetBlobContainerClient(TestContainerName);
         var blobClient = containerClient.GetBlobClient(blobPath);
-        await blobClient.UploadAsync(BinaryData.FromString(content), overwrite: true);
+        _ = await blobClient.UploadAsync(BinaryData.FromString(content), overwrite: true).ConfigureAwait(false);
     }
 
     private sealed class TestContentDescriptor : ContentDescriptor

@@ -14,9 +14,9 @@ public class IntegrationTest1
     {
         // Arrange
         var cancellationToken = TestContext.Current!.Execution.CancellationToken;
-        var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.Xample_AppHost>(
-            cancellationToken
-        );
+        var appHost = await DistributedApplicationTestingBuilder
+            .CreateAsync<Projects.Xample_AppHost>(cancellationToken)
+            .ConfigureAwait(false);
         _ = appHost.Services.AddLogging(logging =>
         {
             _ = logging
@@ -30,8 +30,11 @@ public class IntegrationTest1
             _ = clientBuilder.AddStandardResilienceHandler()
         );
 
-        await using var app = await appHost.BuildAsync(cancellationToken).WaitAsync(DefaultTimeout, cancellationToken);
-        await app.StartAsync(cancellationToken).WaitAsync(DefaultTimeout, cancellationToken);
+        await using var app = await appHost
+            .BuildAsync(cancellationToken)
+            .WaitAsync(DefaultTimeout, cancellationToken)
+            .ConfigureAwait(false);
+        await app.StartAsync(cancellationToken).WaitAsync(DefaultTimeout, cancellationToken).ConfigureAwait(false);
 
         // Act
         using var httpClient = app.CreateHttpClient(ProjectNames.Xample);
@@ -40,7 +43,7 @@ public class IntegrationTest1
             .WaitAsync(DefaultTimeout, cancellationToken)
             .ConfigureAwait(false);
 #pragma warning disable CA2234 // Pass system uri objects instead of strings
-        using var response = await httpClient.GetAsync("/", cancellationToken);
+        using var response = await httpClient.GetAsync("/", cancellationToken).ConfigureAwait(false);
 #pragma warning restore CA2234 // Pass system uri objects instead of strings
 
         // Assert

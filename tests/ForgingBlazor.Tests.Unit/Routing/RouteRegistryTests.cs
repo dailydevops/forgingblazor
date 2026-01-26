@@ -237,7 +237,7 @@ public sealed class RouteRegistryTests
             tasks.Add(task);
         }
 
-        await Task.WhenAll(tasks);
+        await Task.WhenAll(tasks).ConfigureAwait(false);
 
         var all = registry.GetAll();
 
@@ -266,7 +266,7 @@ public sealed class RouteRegistryTests
             tasks.Add(task);
         }
 
-        await Task.WhenAll(tasks);
+        await Task.WhenAll(tasks).ConfigureAwait(false);
 
         _ = await Assert.That(successCount).IsEqualTo(10);
     }
