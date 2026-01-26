@@ -19,10 +19,7 @@ public sealed class ContentStorageExtensionsTests
 
         var result = builder.AddContentStorage(storageBuilder =>
         {
-            _ = storageBuilder.UseFileSystem(options =>
-            {
-                _ = options.WithBasePath("test-content");
-            });
+            _ = storageBuilder.UseFileSystem(options => _ = options.WithBasePath("test-content"));
         });
 
         using (Assert.Multiple())

@@ -133,16 +133,10 @@ public class RoutingBuilderExtensionsTests
     {
         // Arrange
         var builder = new ForgingBlazorApplicationBuilder([]);
-        IForgingBlazorApplicationBuilder interfaceBuilder = builder;
 
         // Act & Assert
         _ = await Assert
-            .That(() =>
-                interfaceBuilder.AddRouting(routing =>
-                {
-                    _ = routing.MapPage("invalid_slug", _ => { });
-                })
-            )
+            .That(() => builder.AddRouting(routing => _ = routing.MapPage("invalid_slug", _ => { })))
             .Throws<ArgumentException>();
     }
 

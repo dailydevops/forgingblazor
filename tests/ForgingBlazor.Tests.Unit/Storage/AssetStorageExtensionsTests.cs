@@ -19,10 +19,7 @@ public sealed class AssetStorageExtensionsTests
 
         var result = builder.AddAssetStorage(storageBuilder =>
         {
-            _ = storageBuilder.UseFileSystem(options =>
-            {
-                _ = options.WithBasePath("test-assets");
-            });
+            _ = storageBuilder.UseFileSystem(options => _ = options.WithBasePath("test-assets"));
         });
 
         using (Assert.Multiple())

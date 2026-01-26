@@ -19,10 +19,7 @@ public sealed class ContentStorageBuilderTests
         var services = new ServiceCollection();
         var builder = new ContentStorageBuilder(services);
 
-        var result = builder.UseFileSystem(options =>
-        {
-            _ = options.WithBasePath("test-content");
-        });
+        var result = builder.UseFileSystem(options => _ = options.WithBasePath("test-content"));
 
         using (Assert.Multiple())
         {
@@ -54,10 +51,7 @@ public sealed class ContentStorageBuilderTests
         var services = new ServiceCollection();
         var builder = new ContentStorageBuilder(services);
 
-        _ = builder.UseFileSystem(options =>
-        {
-            _ = options.WithBasePath("content");
-        });
+        _ = builder.UseFileSystem(options => _ = options.WithBasePath("content"));
 
         var serviceProvider = services.BuildServiceProvider();
         var provider = serviceProvider.GetService<IContentStorageProvider>();

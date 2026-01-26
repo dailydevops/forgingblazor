@@ -19,10 +19,7 @@ public sealed class AssetStorageBuilderTests
         var services = new ServiceCollection();
         var builder = new AssetStorageBuilder(services);
 
-        var result = builder.UseFileSystem(options =>
-        {
-            _ = options.WithBasePath("test-assets");
-        });
+        var result = builder.UseFileSystem(options => _ = options.WithBasePath("test-assets"));
 
         using (Assert.Multiple())
         {
@@ -54,10 +51,7 @@ public sealed class AssetStorageBuilderTests
         var services = new ServiceCollection();
         var builder = new AssetStorageBuilder(services);
 
-        _ = builder.UseFileSystem(options =>
-        {
-            _ = options.WithBasePath("assets");
-        });
+        _ = builder.UseFileSystem(options => _ = options.WithBasePath("assets"));
 
         var serviceProvider = services.BuildServiceProvider();
         var provider = serviceProvider.GetService<IAssetStorageProvider>();
