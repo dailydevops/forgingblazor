@@ -9,19 +9,17 @@ using global::NetEvolve.ForgingBlazor.Routing.Configurations;
 /// </summary>
 internal sealed class RoutingBuilder : IRoutingBuilder
 {
-    private readonly RoutingBuilderState _state = new();
-
     /// <summary>
     /// Gets the underlying mutable state. Intended for testing.
     /// </summary>
-    internal RoutingBuilderState State => _state;
+    internal RoutingBuilderState State { get; } = new();
 
     /// <inheritdoc />
     public IRootConfiguration ConfigureRoot(Action<IRootConfiguration> configure)
     {
         ArgumentNullException.ThrowIfNull(configure);
 
-        var configuration = new RootConfiguration(_state);
+        var configuration = new RootConfiguration(State);
         configure(configuration);
         return configuration;
     }
@@ -33,8 +31,8 @@ internal sealed class RoutingBuilder : IRoutingBuilder
         ArgumentNullException.ThrowIfNull(configure);
 
         var (fullPath, segments) = RoutingPathUtility.NormalizeSegmentPath(name, null);
-        var segmentState = _state.GetOrAddSegment(fullPath, segments);
-        var configuration = new SegmentConfiguration(_state, segmentState);
+        var segmentState = State.GetOrAddSegment(fullPath, segments);
+        var configuration = new SegmentConfiguration(State, segmentState);
         configure(configuration);
         return configuration;
     }
@@ -46,7 +44,7 @@ internal sealed class RoutingBuilder : IRoutingBuilder
         ArgumentNullException.ThrowIfNull(configure);
 
         var (fullPath, segments, normalizedSlug) = RoutingPathUtility.NormalizePagePath(slug);
-        var pageState = _state.AddPage(fullPath, segments, normalizedSlug);
+        var pageState = State.AddPage(fullPath, segments, normalizedSlug);
         var configuration = new PageConfiguration(pageState);
         configure(configuration);
         return configuration;
@@ -56,5 +54,5 @@ internal sealed class RoutingBuilder : IRoutingBuilder
     /// Builds an immutable <see cref="RoutingConfiguration"/> snapshot based on the current state.
     /// </summary>
     /// <returns>The immutable routing configuration.</returns>
-    internal RoutingConfiguration Build() => _state.BuildConfiguration();
+    internal RoutingConfiguration Build() => State.BuildConfiguration();
 }

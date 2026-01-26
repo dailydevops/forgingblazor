@@ -1,6 +1,5 @@
 ﻿namespace NetEvolve.ForgingBlazor.Routing;
 
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -11,17 +10,12 @@ using Microsoft.AspNetCore.Components.Rendering;
 internal sealed class ContentRouteHandler : IComponent
 {
     private RenderHandle _renderHandle;
-    private RouteDefinition? _routeDefinition;
 
     /// <summary>
     /// Gets or sets the route definition to render.
     /// </summary>
     [Parameter]
-    public RouteDefinition? RouteDefinition
-    {
-        get => _routeDefinition;
-        set => _routeDefinition = value;
-    }
+    public RouteDefinition? RouteDefinition { get; set; }
 
     /// <inheritdoc />
     public void Attach(RenderHandle renderHandle) => _renderHandle = renderHandle;
@@ -42,7 +36,7 @@ internal sealed class ContentRouteHandler : IComponent
     /// <param name="builder">The render tree builder.</param>
     private void BuildRenderTree(RenderTreeBuilder builder)
     {
-        if (_routeDefinition == null)
+        if (RouteDefinition == null)
         {
             // No route definition available
             builder.AddContent(0, "No route definition available.");
@@ -50,7 +44,7 @@ internal sealed class ContentRouteHandler : IComponent
         }
 
         // Render the configured component
-        builder.OpenComponent(0, _routeDefinition.ComponentType);
+        builder.OpenComponent(0, RouteDefinition.ComponentType);
 
         // TODO: Pass resolved content and other parameters to the component
 

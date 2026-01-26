@@ -1,8 +1,7 @@
+﻿namespace NetEvolve.ForgingBlazor.Storage.AzureBlob;
+
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using NetEvolve.ForgingBlazor.Extensibility.Storage;
-
-namespace NetEvolve.ForgingBlazor.Storage.AzureBlob;
 
 /// <summary>
 /// Azure Blob Storage implementation of <see cref="IAssetStorageProvider"/>.
@@ -26,32 +25,33 @@ internal sealed class AzureBlobAssetStorageProvider : IAssetStorageProvider
     }
 
     /// <inheritdoc/>
-    public async Task<byte[]?> GetAssetAsync(
-        string path,
-        CancellationToken cancellationToken = default
-    )
+    public async Task<Stream> GetAssetAsync(string path, CancellationToken cancellationToken = default)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(path);
+        ArgumentNullException.ThrowIfNull(path);
 
         var blobClient = _containerClient.GetBlobClient(path);
 
         if (!await blobClient.ExistsAsync(cancellationToken).ConfigureAwait(false))
         {
-            return null;
+            throw new FileNotFoundException($"Asset file not found: {path}", path);
         }
 
         var response = await blobClient
-            .DownloadContentAsync(cancellationToken)
+            .DownloadStreamingAsync(cancellationToken: cancellationToken)
             .ConfigureAwait(false);
-        return response.Value.Content.ToArray();
+        return response.Value.Content;
     }
 
     /// <inheritdoc/>
     public async Task<IReadOnlyList<string>> GetAssetsAsync(
-        string? prefix = null,
+        string folder,
         CancellationToken cancellationToken = default
     )
     {
+        ArgumentNullException.ThrowIfNull(folder);
+
+        var normalizedFolder = folder.TrimStart('/');
+        var prefix = string.IsNullOrEmpty(normalizedFolder) ? null : $"{normalizedFolder}/";
         var results = new List<string>();
 
         await foreach (
@@ -67,35 +67,26 @@ internal sealed class AzureBlobAssetStorageProvider : IAssetStorageProvider
     }
 
     /// <inheritdoc/>
-    public async Task<bool> ExistsAsync(
-        string path,
-        CancellationToken cancellationToken = default
-    )
+    public async Task<bool> ExistsAsync(string path, CancellationToken cancellationToken = default)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(path);
+        ArgumentNullException.ThrowIfNull(path);
 
         var blobClient = _containerClient.GetBlobClient(path);
         return await blobClient.ExistsAsync(cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
-    public async Task SaveAssetAsync(
-        string path,
-        byte[] content,
-        CancellationToken cancellationToken = default
-    )
+    public async Task SaveAssetAsync(string path, Stream content, CancellationToken cancellationToken = default)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(path);
+        ArgumentNullException.ThrowIfNull(path);
         ArgumentNullException.ThrowIfNull(content);
 
         var blobClient = _containerClient.GetBlobClient(path);
 
-        using var stream = new MemoryStream(content);
-
         var contentType = GetContentType(path);
-        await blobClient
+        _ = await blobClient
             .UploadAsync(
-                stream,
+                content,
                 new BlobHttpHeaders { ContentType = contentType },
                 cancellationToken: cancellationToken
             )
@@ -105,26 +96,26 @@ internal sealed class AzureBlobAssetStorageProvider : IAssetStorageProvider
     /// <inheritdoc/>
     public async Task DeleteAssetAsync(string path, CancellationToken cancellationToken = default)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(path);
+        ArgumentNullException.ThrowIfNull(path);
 
         var blobClient = _containerClient.GetBlobClient(path);
-        await blobClient.DeleteIfExistsAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+        _ = await blobClient.DeleteIfExistsAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 
     private static string GetContentType(string path)
     {
-        var extension = Path.GetExtension(path).ToLowerInvariant();
+        var extension = Path.GetExtension(path).ToUpperInvariant();
         return extension switch
         {
-            ".jpg" or ".jpeg" => "image/jpeg",
-            ".png" => "image/png",
-            ".gif" => "image/gif",
-            ".svg" => "image/svg+xml",
-            ".webp" => "image/webp",
-            ".pdf" => "application/pdf",
-            ".json" => "application/json",
-            ".xml" => "application/xml",
-            _ => "application/octet-stream"
+            ".JPG" or ".JPEG" => "image/jpeg",
+            ".PNG" => "image/png",
+            ".GIF" => "image/gif",
+            ".SVG" => "image/svg+xml",
+            ".WEBP" => "image/webp",
+            ".PDF" => "application/pdf",
+            ".JSON" => "application/json",
+            ".XML" => "application/xml",
+            _ => "application/octet-stream",
         };
     }
 }

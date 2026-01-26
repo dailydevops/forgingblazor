@@ -1,9 +1,10 @@
+﻿namespace NetEvolve.ForgingBlazor.Storage.AzureBlob;
+
+using System.Globalization;
 using System.Text;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using NetEvolve.ForgingBlazor.Extensibility.Storage;
-
-namespace NetEvolve.ForgingBlazor.Storage.AzureBlob;
+using NetEvolve.ForgingBlazor.Content.Parsing;
 
 /// <summary>
 /// Azure Blob Storage implementation of <see cref="IContentStorageProvider"/>.
@@ -27,18 +28,19 @@ internal sealed class AzureBlobContentStorageProvider : IContentStorageProvider
     }
 
     /// <inheritdoc/>
-    public async Task<string?> GetContentAsync(
-        string segment,
+    public async Task<TDescriptor?> GetContentAsync<TDescriptor>(
+        string segmentPath,
         string slug,
-        string culture,
+        CultureInfo culture,
         CancellationToken cancellationToken = default
     )
+        where TDescriptor : ContentDescriptor, new()
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(segment);
-        ArgumentException.ThrowIfNullOrWhiteSpace(slug);
-        ArgumentException.ThrowIfNullOrWhiteSpace(culture);
+        ArgumentNullException.ThrowIfNull(segmentPath);
+        ArgumentNullException.ThrowIfNull(slug);
+        ArgumentNullException.ThrowIfNull(culture);
 
-        var blobPath = BuildBlobPath(segment, slug, culture);
+        var blobPath = BuildContentPath(segmentPath, slug, culture);
         var blobClient = _containerClient.GetBlobClient(blobPath);
 
         if (!await blobClient.ExistsAsync(cancellationToken).ConfigureAwait(false))
@@ -46,25 +48,27 @@ internal sealed class AzureBlobContentStorageProvider : IContentStorageProvider
             return null;
         }
 
-        var response = await blobClient
-            .DownloadContentAsync(cancellationToken)
-            .ConfigureAwait(false);
-        return response.Value.Content.ToString();
+        var response = await blobClient.DownloadContentAsync(cancellationToken).ConfigureAwait(false);
+        var markdownContent = response.Value.Content.ToString();
+
+        return ContentParser.Parse<TDescriptor>(markdownContent);
     }
 
     /// <inheritdoc/>
-    public async Task<IReadOnlyList<string>> GetContentsAsync(
-        string segment,
-        string? culture = null,
+    public async Task<IReadOnlyList<TDescriptor>> GetContentsAsync<TDescriptor>(
+        string segmentPath,
+        CultureInfo culture,
         CancellationToken cancellationToken = default
     )
+        where TDescriptor : ContentDescriptor, new()
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(segment);
+        ArgumentNullException.ThrowIfNull(segmentPath);
+        ArgumentNullException.ThrowIfNull(culture);
 
-        var prefix = string.IsNullOrWhiteSpace(culture)
-            ? $"{segment}/"
-            : $"{segment}/{culture}/";
-        var results = new List<string>();
+        var cultureFolder = GetCultureFolder(culture);
+        var normalizedSegment = segmentPath.TrimStart('/');
+        var prefix = $"{normalizedSegment}/{cultureFolder}/";
+        var results = new List<TDescriptor>();
 
         await foreach (
             var blobItem in _containerClient
@@ -74,7 +78,11 @@ internal sealed class AzureBlobContentStorageProvider : IContentStorageProvider
         {
             if (blobItem.Name.EndsWith(".md", StringComparison.OrdinalIgnoreCase))
             {
-                results.Add(blobItem.Name);
+                var blobClient = _containerClient.GetBlobClient(blobItem.Name);
+                var response = await blobClient.DownloadContentAsync(cancellationToken).ConfigureAwait(false);
+                var markdownContent = response.Value.Content.ToString();
+                var descriptor = ContentParser.Parse<TDescriptor>(markdownContent);
+                results.Add(descriptor);
             }
         }
 
@@ -82,44 +90,26 @@ internal sealed class AzureBlobContentStorageProvider : IContentStorageProvider
     }
 
     /// <inheritdoc/>
-    public async Task<bool> ExistsAsync(
-        string segment,
-        string slug,
-        string culture,
-        CancellationToken cancellationToken = default
-    )
+    public async Task<bool> ExistsAsync(string path, CancellationToken cancellationToken = default)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(segment);
-        ArgumentException.ThrowIfNullOrWhiteSpace(slug);
-        ArgumentException.ThrowIfNullOrWhiteSpace(culture);
+        ArgumentNullException.ThrowIfNull(path);
 
-        var blobPath = BuildBlobPath(segment, slug, culture);
-        var blobClient = _containerClient.GetBlobClient(blobPath);
-
+        var blobClient = _containerClient.GetBlobClient(path);
         return await blobClient.ExistsAsync(cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
-    public async Task SaveContentAsync(
-        string segment,
-        string slug,
-        string culture,
-        string content,
-        CancellationToken cancellationToken = default
-    )
+    public async Task SaveContentAsync(string path, string markdown, CancellationToken cancellationToken = default)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(segment);
-        ArgumentException.ThrowIfNullOrWhiteSpace(slug);
-        ArgumentException.ThrowIfNullOrWhiteSpace(culture);
-        ArgumentNullException.ThrowIfNull(content);
+        ArgumentNullException.ThrowIfNull(path);
+        ArgumentNullException.ThrowIfNull(markdown);
 
-        var blobPath = BuildBlobPath(segment, slug, culture);
-        var blobClient = _containerClient.GetBlobClient(blobPath);
+        var blobClient = _containerClient.GetBlobClient(path);
 
-        var bytes = Encoding.UTF8.GetBytes(content);
+        var bytes = Encoding.UTF8.GetBytes(markdown);
         using var stream = new MemoryStream(bytes);
 
-        await blobClient
+        _ = await blobClient
             .UploadAsync(
                 stream,
                 new BlobHttpHeaders { ContentType = "text/markdown" },
@@ -129,23 +119,21 @@ internal sealed class AzureBlobContentStorageProvider : IContentStorageProvider
     }
 
     /// <inheritdoc/>
-    public async Task DeleteContentAsync(
-        string segment,
-        string slug,
-        string culture,
-        CancellationToken cancellationToken = default
-    )
+    public async Task DeleteContentAsync(string path, CancellationToken cancellationToken = default)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(segment);
-        ArgumentException.ThrowIfNullOrWhiteSpace(slug);
-        ArgumentException.ThrowIfNullOrWhiteSpace(culture);
+        ArgumentNullException.ThrowIfNull(path);
 
-        var blobPath = BuildBlobPath(segment, slug, culture);
-        var blobClient = _containerClient.GetBlobClient(blobPath);
-
-        await blobClient.DeleteIfExistsAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+        var blobClient = _containerClient.GetBlobClient(path);
+        _ = await blobClient.DeleteIfExistsAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 
-    private static string BuildBlobPath(string segment, string slug, string culture) =>
-        $"{segment}/{culture}/{slug}.md";
+    private static string BuildContentPath(string segmentPath, string slug, CultureInfo culture)
+    {
+        var cultureFolder = GetCultureFolder(culture);
+        var normalizedSegment = segmentPath.TrimStart('/');
+        var fileName = $"{slug}.md";
+        return $"{normalizedSegment}/{cultureFolder}/{fileName}";
+    }
+
+    private static string GetCultureFolder(CultureInfo culture) => culture.Name.ToUpperInvariant();
 }

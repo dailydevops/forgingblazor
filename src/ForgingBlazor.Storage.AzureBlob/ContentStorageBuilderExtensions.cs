@@ -1,6 +1,4 @@
-using NetEvolve.ForgingBlazor.Extensibility.Storage;
-
-namespace NetEvolve.ForgingBlazor.Storage.AzureBlob;
+﻿namespace NetEvolve.ForgingBlazor.Storage.AzureBlob;
 
 /// <summary>
 /// Extension methods for <see cref="IContentStorageBuilder"/> to configure Azure Blob Storage.
@@ -26,16 +24,12 @@ public static class ContentStorageBuilderExtensions
 
         if (string.IsNullOrWhiteSpace(options.ConnectionString))
         {
-            throw new InvalidOperationException(
-                "Connection string must be configured using WithConnectionString()."
-            );
+            throw new InvalidOperationException("Connection string must be configured using WithConnectionString().");
         }
 
         if (string.IsNullOrWhiteSpace(options.ContainerName))
         {
-            throw new InvalidOperationException(
-                "Container name must be configured using WithContainerName()."
-            );
+            throw new InvalidOperationException("Container name must be configured using WithContainerName().");
         }
 
         // Note: Storage builder registration implementation depends on Phase 4 infrastructure

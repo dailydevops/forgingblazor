@@ -22,6 +22,7 @@
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/ForgingBlazor.Extensibility/ForgingBlazor.Extensibility.csproj" />
+    <Project Path="src/ForgingBlazor.Storage.AzureBlob/ForgingBlazor.Storage.AzureBlob.csproj" />
     <Project Path="src/ForgingBlazor/ForgingBlazor.csproj" />
     <Project Path="src/Xample.AppHost/Xample.AppHost.csproj" />
     <Project Path="src/Xample.ServiceDefaults/Xample.ServiceDefaults.csproj" />

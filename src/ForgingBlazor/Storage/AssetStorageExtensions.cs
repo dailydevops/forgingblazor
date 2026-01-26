@@ -1,7 +1,6 @@
 ﻿namespace NetEvolve.ForgingBlazor.Storage;
 
 using System;
-using Microsoft.Extensions.DependencyInjection;
 
 /// <summary>
 /// Extension methods for configuring asset storage.

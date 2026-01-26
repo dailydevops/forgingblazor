@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="NetEvolve.ForgingBlazor.Storage.AzureBlob" />
     <InternalsVisibleTo Include="NetEvolve.ForgingBlazor.Tests.Unit" />
     <InternalsVisibleTo Include="NetEvolve.ForgingBlazor.Tests.Integration" />
   </ItemGroup>

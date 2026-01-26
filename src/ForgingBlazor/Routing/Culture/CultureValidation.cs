@@ -7,9 +7,6 @@ using System.Globalization;
 /// </summary>
 internal sealed class CultureValidation
 {
-    private readonly IReadOnlySet<CultureInfo> _supportedCultures;
-    private readonly CultureInfo _defaultCulture;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="CultureValidation"/> class.
     /// </summary>
@@ -30,8 +27,8 @@ internal sealed class CultureValidation
             );
         }
 
-        _supportedCultures = supportedCultures;
-        _defaultCulture = defaultCulture;
+        SupportedCultures = supportedCultures;
+        DefaultCulture = defaultCulture;
     }
 
     /// <summary>
@@ -44,7 +41,7 @@ internal sealed class CultureValidation
     {
         ArgumentNullException.ThrowIfNull(culture);
 
-        return _supportedCultures.Contains(culture);
+        return SupportedCultures.Contains(culture);
     }
 
     /// <summary>
@@ -53,10 +50,10 @@ internal sealed class CultureValidation
     /// <exception cref="InvalidOperationException">Thrown when the default culture is not supported.</exception>
     public void ValidateDefaultCulture()
     {
-        if (!_supportedCultures.Contains(_defaultCulture))
+        if (!SupportedCultures.Contains(DefaultCulture))
         {
             throw new InvalidOperationException(
-                $"The default culture '{_defaultCulture.Name}' must be included in the supported cultures."
+                $"The default culture '{DefaultCulture.Name}' must be included in the supported cultures."
             );
         }
     }
@@ -74,7 +71,7 @@ internal sealed class CultureValidation
         if (!IsCultureSupported(culture))
         {
             throw new InvalidOperationException(
-                $"The culture '{culture.Name}' is not supported. Supported cultures: {string.Join(", ", _supportedCultures.Select(c => c.Name))}"
+                $"The culture '{culture.Name}' is not supported. Supported cultures: {string.Join(", ", SupportedCultures.Select(c => c.Name))}"
             );
         }
     }
@@ -82,10 +79,10 @@ internal sealed class CultureValidation
     /// <summary>
     /// Gets the default culture.
     /// </summary>
-    public CultureInfo DefaultCulture => _defaultCulture;
+    public CultureInfo DefaultCulture { get; }
 
     /// <summary>
     /// Gets the set of supported cultures.
     /// </summary>
-    public IReadOnlySet<CultureInfo> SupportedCultures => _supportedCultures;
+    public IReadOnlySet<CultureInfo> SupportedCultures { get; }
 }

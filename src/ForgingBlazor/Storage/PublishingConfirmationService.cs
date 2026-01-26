@@ -50,7 +50,7 @@ internal sealed class PublishingConfirmationService
     {
         ArgumentNullException.ThrowIfNull(contentPath);
 
-        _confirmations.TryRemove(contentPath, out _);
+        _ = _confirmations.TryRemove(contentPath, out _);
     }
 
     /// <summary>

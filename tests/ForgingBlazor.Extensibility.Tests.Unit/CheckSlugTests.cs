@@ -154,13 +154,11 @@ public sealed class CheckSlugTests
     [Arguments("-abc")] // Invalid start
     [Arguments("test--slug")] // Consecutive hyphens
     [Arguments("test slug")] // Space
-    public async Task ValidateSlug_InvalidSlug_ThrowsArgumentException(string? slug)
-    {
-        await Assert
+    public async Task ValidateSlug_InvalidSlug_ThrowsArgumentException(string? slug) =>
+        _ = await Assert
             .That(() => Check.ValidateSlug(slug))
             .Throws<ArgumentException>()
             .And.HasMessageContaining("not valid");
-    }
 
     [Test]
     public async Task ValidateSlug_InvalidSlugWithParameterName_ThrowsWithParameterName()
@@ -168,9 +166,7 @@ public sealed class CheckSlugTests
         var slug = "ab";
         var parameterName = "testParameter";
 
-        var exception = await Assert.That(() => Check.ValidateSlug(slug, parameterName)).Throws<ArgumentException>();
-
-        _ = await Assert.That(exception.ParamName!).IsEqualTo(parameterName);
+        _ = Assert.Throws<ArgumentException>(parameterName, () => Check.ValidateSlug(slug, parameterName));
     }
 
     [Test]
@@ -178,7 +174,7 @@ public sealed class CheckSlugTests
     {
         var slug = "ab";
 
-        var exception = await Assert.That(() => Check.ValidateSlug(slug)).Throws<ArgumentException>();
+        var exception = Assert.Throws<ArgumentException>("slug", () => Check.ValidateSlug(slug));
 
         _ = await Assert.That(exception.Message!).Contains("between 3 and 70 characters");
     }
@@ -188,9 +184,9 @@ public sealed class CheckSlugTests
     {
         var slug = new string('a', 71);
 
-        var exception = await Assert.That(() => Check.ValidateSlug(slug)).Throws<ArgumentException>();
+        var exception = Assert.Throws<ArgumentException>("slug", () => Check.ValidateSlug(slug));
 
-        _ = await Assert.That(exception.Message!).Contains("between 3 and 70 characters");
+        _ = await Assert.That(exception.Message).Contains("between 3 and 70 characters");
     }
 
     [Test]
@@ -198,7 +194,7 @@ public sealed class CheckSlugTests
     {
         var slug = "test--slug";
 
-        var exception = await Assert.That(() => Check.ValidateSlug(slug)).Throws<ArgumentException>();
+        var exception = Assert.Throws<ArgumentException>("slug", () => Check.ValidateSlug(slug));
 
         _ = await Assert.That(exception.Message!).Contains("single hyphens");
     }

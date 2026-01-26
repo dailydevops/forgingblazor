@@ -2,7 +2,6 @@
 
 using System.Globalization;
 using NetEvolve.ForgingBlazor.Routing.Culture;
-using NetEvolve.ForgingBlazor.Storage;
 
 /// <summary>
 /// Locates content files using culture fallback chain.

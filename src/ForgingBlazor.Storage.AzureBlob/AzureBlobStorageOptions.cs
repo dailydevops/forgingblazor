@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Storage.AzureBlob;
+﻿namespace NetEvolve.ForgingBlazor.Storage.AzureBlob;
 
 /// <summary>
 /// Implementation of Azure Blob Storage configuration options.

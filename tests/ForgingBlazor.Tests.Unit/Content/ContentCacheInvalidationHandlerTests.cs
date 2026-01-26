@@ -5,7 +5,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging.Abstractions;
 using NetEvolve.ForgingBlazor.Content;
 using TUnit.Assertions;
-using TUnit.Assertions.Extensions;
 using TUnit.Core;
 
 /// <summary>

@@ -362,7 +362,7 @@ Refs: TASK-005, TASK-006
 - Completed: TASK-067 through TASK-070 delivering comprehensive fail-fast startup validation infrastructure.
 - Files: Implementations added `src/ForgingBlazor/Routing/Validation/RoutingConfigurationValidation.cs`, `src/ForgingBlazor/Content/Validation/ContentStructureValidation.cs`, `src/ForgingBlazor/Storage/Validation/StorageConfigurationValidation.cs`, and `src/ForgingBlazor/Validation/StartupValidationHostedService.cs`.
 - Tests: `dotnet build ForgingBlazor.slnx --no-restore` (successful with warnings), `dotnet test --solution ForgingBlazor.slnx --no-build --no-restore` (372 tests passing).
-- Notes: RoutingConfigurationValidation ensures at least one culture configured and default component/layout defined. ContentStructureValidation validates existence of required content files (_index.md for segments, content files for pages) with StringComparison.Ordinal (CA1307). StorageConfigurationValidation checks base paths accessibility. StartupValidationHostedService aggregates all validation errors and throws on startup with CA1848 pragmas for logging warnings.
+- Notes: RoutingConfigurationValidation ensures at least one culture configured and default component/layout defined. ContentStructureValidation validates existence of required content files (\_index.md for segments, content files for pages) with StringComparison.Ordinal (CA1307). StorageConfigurationValidation checks base paths accessibility. StartupValidationHostedService aggregates all validation errors and throws on startup with CA1848 pragmas for logging warnings.
 
 ### Phase 10: Service Registration
 

@@ -58,7 +58,7 @@ internal sealed class ContentCacheService
             cacheKey,
             entry =>
             {
-                entry.SetOptions(_defaultCacheOptions);
+                _ = entry.SetOptions(_defaultCacheOptions);
                 return factory();
             }
         );

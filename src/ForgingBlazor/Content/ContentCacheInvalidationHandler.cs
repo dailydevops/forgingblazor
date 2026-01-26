@@ -5,7 +5,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using NetEvolve.ForgingBlazor.Routing.Culture;
 
 /// <summary>
 /// Handles cache invalidation based on file system changes.

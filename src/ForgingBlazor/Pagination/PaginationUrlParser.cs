@@ -1,7 +1,6 @@
 ﻿namespace NetEvolve.ForgingBlazor.Pagination;
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 /// <summary>
 /// Provides URL parsing services for pagination segments.

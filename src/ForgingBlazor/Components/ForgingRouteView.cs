@@ -2,7 +2,6 @@
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using Microsoft.AspNetCore.Components.Routing;
 
 /// <summary>
 /// Displays the page component associated with the current route's <see cref="RouteData"/>,
