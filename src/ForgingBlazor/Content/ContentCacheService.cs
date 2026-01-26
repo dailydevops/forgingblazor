@@ -73,10 +73,7 @@ internal sealed class ContentCacheService
     /// A full implementation would require tracking keys or using a distributed cache.
     /// For now, we'll need to remove specific entries as they're identified.
     /// </remarks>
-    internal static void InvalidateSegment(string segmentPath)
-    {
-        ArgumentNullException.ThrowIfNull(segmentPath);
-    }
+    internal static void InvalidateSegment(string segmentPath) => ArgumentNullException.ThrowIfNull(segmentPath);
 
     /// <summary>
     /// Invalidates a specific content entry.

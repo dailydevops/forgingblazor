@@ -14,15 +14,13 @@ using TUnit.Core;
 public sealed class ContentCacheInvalidationHandlerTests
 {
     [Test]
-    public async Task Constructor_WithNullCacheService_ThrowsArgumentNullException()
-    {
+    public async Task Constructor_WithNullCacheService_ThrowsArgumentNullException() =>
         // Act & Assert
         _ = await Assert
             .That(() =>
                 new ContentCacheInvalidationHandler(null!, NullLogger<ContentCacheInvalidationHandler>.Instance)
             )
             .Throws<ArgumentNullException>();
-    }
 
     [Test]
     public async Task Constructor_WithNullLogger_ThrowsArgumentNullException()

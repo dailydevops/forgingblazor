@@ -14,13 +14,11 @@ using TUnit.Core;
 public sealed class PaginationServiceTests
 {
     [Test]
-    public async Task CreatePaginatedResult_WithNullItems_ThrowsArgumentNullException()
-    {
+    public async Task CreatePaginatedResult_WithNullItems_ThrowsArgumentNullException() =>
         // Act & Assert
         _ = await Assert
             .That(() => PaginationService.CreatePaginatedResult<string>(null!, 1, 10))
             .Throws<ArgumentNullException>();
-    }
 
     [Test]
     public async Task CreatePaginatedResult_WithPageNumberLessThanOne_ThrowsArgumentOutOfRangeException()
@@ -204,13 +202,11 @@ public sealed class PaginationServiceTests
     }
 
     [Test]
-    public async Task GeneratePageUrl_WithNullSettings_ThrowsArgumentNullException()
-    {
+    public async Task GeneratePageUrl_WithNullSettings_ThrowsArgumentNullException() =>
         // Act & Assert
         _ = await Assert
             .That(() => PaginationService.GeneratePageUrl("/posts", 1, null!))
             .Throws<ArgumentNullException>();
-    }
 
     [Test]
     public async Task GeneratePageUrl_WithPageNumberLessThanOne_ThrowsArgumentOutOfRangeException()
@@ -289,13 +285,11 @@ public sealed class PaginationServiceTests
     }
 
     [Test]
-    public async Task TryParsePageNumber_WithNullSettings_ThrowsArgumentNullException()
-    {
+    public async Task TryParsePageNumber_WithNullSettings_ThrowsArgumentNullException() =>
         // Act & Assert
         _ = await Assert
             .That(() => PaginationService.TryParsePageNumber("2", null!, out _))
             .Throws<ArgumentNullException>();
-    }
 
     [Test]
     public async Task TryParsePageNumber_WithEmptySegment_ReturnsFalse()

@@ -116,9 +116,7 @@ internal sealed class StartupValidationHostedService : IHostedService
     }
 
     /// <inheritdoc />
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
+    public Task StopAsync(CancellationToken cancellationToken) =>
         // No cleanup needed
-        return Task.CompletedTask;
-    }
+        Task.CompletedTask;
 }
