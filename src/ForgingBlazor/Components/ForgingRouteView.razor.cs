@@ -1,12 +1,14 @@
 ﻿namespace NetEvolve.ForgingBlazor.Components;
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.AspNetCore.Components.Routing;
 
 /// <summary>
 /// Displays the page component associated with the current route's <see cref="RouteData"/>,
 /// with support for dynamic content resolution and <see cref="ResolvedContent{TDescriptor}"/> parameter injection.
 /// </summary>
-public sealed partial class ForgingRouteView : ComponentBase
+public sealed class ForgingRouteView : ComponentBase
 {
     private Type? _componentType;
     private Dictionary<string, object?>? _parameters;
@@ -30,6 +32,34 @@ public sealed partial class ForgingRouteView : ComponentBase
     /// </summary>
     [Parameter]
     public RenderFragment? NotFoundContent { get; set; }
+
+    /// <inheritdoc />
+    protected override void BuildRenderTree(RenderTreeBuilder builder)
+    {
+        ArgumentNullException.ThrowIfNull(builder);
+
+        if (RouteData is not null)
+        {
+            if (_resolvedContent is not null)
+            {
+                builder.OpenComponent<DynamicComponent>(0);
+                builder.AddComponentParameter(1, "Type", _componentType);
+                builder.AddComponentParameter(2, "Parameters", _parameters);
+                builder.CloseComponent();
+            }
+            else
+            {
+                builder.OpenComponent<RouteView>(0);
+                builder.AddComponentParameter(1, "RouteData", RouteData);
+                builder.AddComponentParameter(2, "DefaultLayout", DefaultLayout);
+                builder.CloseComponent();
+            }
+        }
+        else if (NotFoundContent is not null)
+        {
+            builder.AddContent(0, NotFoundContent);
+        }
+    }
 
     /// <inheritdoc />
     protected override void OnParametersSet()

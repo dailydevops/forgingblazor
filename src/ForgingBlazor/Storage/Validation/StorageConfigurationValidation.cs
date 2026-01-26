@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Storage.Validation;
+﻿namespace NetEvolve.ForgingBlazor.Storage.Validation;
 
 using System;
 using System.IO;

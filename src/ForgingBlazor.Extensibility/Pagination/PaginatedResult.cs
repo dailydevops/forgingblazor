@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Pagination;
+﻿namespace NetEvolve.ForgingBlazor.Pagination;
 
 using System.Collections.Generic;
 

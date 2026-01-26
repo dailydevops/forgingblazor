@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Routing.Validation;
+﻿namespace NetEvolve.ForgingBlazor.Routing.Validation;
 
 using System;
 using Microsoft.Extensions.Options;

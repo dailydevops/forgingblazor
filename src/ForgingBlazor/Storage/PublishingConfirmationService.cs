@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Storage;
+﻿namespace NetEvolve.ForgingBlazor.Storage;
 
 using System;
 using System.Collections.Concurrent;

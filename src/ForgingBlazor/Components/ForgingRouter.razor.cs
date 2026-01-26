@@ -2,13 +2,14 @@
 
 using System.Reflection;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Routing;
 
 /// <summary>
 /// Routes incoming requests to Blazor components or dynamic content, with content routing taking precedence
 /// over standard component routing.
 /// </summary>
-public sealed partial class ForgingRouter : IComponent, IHandleAfterRender, IDisposable
+public sealed class ForgingRouter : IComponent, IHandleAfterRender, IDisposable
 {
     private RenderHandle _renderHandle;
     private bool _navigationInterceptionEnabled;
@@ -60,6 +61,14 @@ public sealed partial class ForgingRouter : IComponent, IHandleAfterRender, IDis
 
     /// <inheritdoc />
     public void Attach(RenderHandle renderHandle) => _renderHandle = renderHandle;
+
+    private void BuildRenderTree(RenderTreeBuilder builder)
+    {
+        builder.OpenComponent<CascadingValue<ForgingRouter>>(0);
+        builder.AddComponentParameter(1, "Value", this);
+        builder.AddComponentParameter(2, "ChildContent", (RenderFragment?)_renderFragment);
+        builder.CloseComponent();
+    }
 
     /// <inheritdoc />
     public async Task SetParametersAsync(ParameterView parameters)
@@ -120,7 +129,7 @@ public sealed partial class ForgingRouter : IComponent, IHandleAfterRender, IDis
         if (Navigating is not null)
         {
             _renderFragment = Navigating;
-            _renderHandle.Render(_renderFragment);
+            _renderHandle.Render(BuildRenderTree);
         }
 
         if (OnNavigateAsync.HasDelegate)
@@ -133,6 +142,6 @@ public sealed partial class ForgingRouter : IComponent, IHandleAfterRender, IDis
         // TODO: Implement content route resolution here
         // For now, always render NotFound
         _renderFragment = NotFound;
-        _renderHandle.Render(_renderFragment!);
+        _renderHandle.Render(BuildRenderTree);
     }
 }

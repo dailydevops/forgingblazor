@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Tests.Unit.Content;
+﻿namespace NetEvolve.ForgingBlazor.Tests.Unit.Content;
 
 using System;
 using Microsoft.Extensions.Caching.Memory;

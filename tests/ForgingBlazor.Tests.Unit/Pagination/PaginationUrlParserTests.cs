@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Tests.Unit.Pagination;
+﻿namespace NetEvolve.ForgingBlazor.Tests.Unit.Pagination;
 
 using System;
 using NetEvolve.ForgingBlazor.Pagination;
@@ -24,11 +24,9 @@ public sealed class PaginationUrlParserTests
     }
 
     [Test]
-    public async Task TryParse_WithNullSettings_ThrowsArgumentNullException()
-    {
+    public async Task TryParse_WithNullSettings_ThrowsArgumentNullException() =>
         // Act & Assert
         _ = await Assert.That(() => PaginationUrlParser.TryParse("2", null!, out _)).Throws<ArgumentNullException>();
-    }
 
     [Test]
     public async Task TryParse_NumericFormat_ValidNumber_ReturnsTrue()
@@ -59,11 +57,9 @@ public sealed class PaginationUrlParserTests
     }
 
     [Test]
-    public async Task TryParseNumeric_WithNullSegment_ThrowsArgumentNullException()
-    {
+    public async Task TryParseNumeric_WithNullSegment_ThrowsArgumentNullException() =>
         // Act & Assert
         _ = await Assert.That(() => PaginationUrlParser.TryParseNumeric(null!, out _)).Throws<ArgumentNullException>();
-    }
 
     [Test]
     public async Task TryParseNumeric_WithEmptySegment_ReturnsFalse()
@@ -132,22 +128,18 @@ public sealed class PaginationUrlParserTests
     }
 
     [Test]
-    public async Task TryParsePrefixed_WithNullSegment_ThrowsArgumentNullException()
-    {
+    public async Task TryParsePrefixed_WithNullSegment_ThrowsArgumentNullException() =>
         // Act & Assert
         _ = await Assert
             .That(() => PaginationUrlParser.TryParsePrefixed(null!, "page", out _))
             .Throws<ArgumentNullException>();
-    }
 
     [Test]
-    public async Task TryParsePrefixed_WithNullPrefix_ThrowsArgumentNullException()
-    {
+    public async Task TryParsePrefixed_WithNullPrefix_ThrowsArgumentNullException() =>
         // Act & Assert
         _ = await Assert
             .That(() => PaginationUrlParser.TryParsePrefixed("page-2", null!, out _))
             .Throws<ArgumentNullException>();
-    }
 
     [Test]
     public async Task TryParsePrefixed_WithEmptySegment_ReturnsFalse()
