@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NetEvolve.ForgingBlazor;
 
 /// <summary>
@@ -21,10 +22,16 @@ internal static class FrontmatterValidation
     {
         ArgumentNullException.ThrowIfNull(frontmatter);
 
+        var uppercaseKeys = frontmatter.ToDictionary(
+            kvp => kvp.Key.ToUpperInvariant(),
+            kvp => kvp.Value,
+            StringComparer.OrdinalIgnoreCase
+        );
+
         foreach (var requiredField in _requiredFields)
         {
             if (
-                !frontmatter.TryGetValue(requiredField, out var value)
+                !uppercaseKeys.TryGetValue(requiredField, out var value)
                 || value is null
                 || (value is string strValue && string.IsNullOrWhiteSpace(strValue))
             )
@@ -46,7 +53,13 @@ internal static class FrontmatterValidation
 
     private static void ValidateSlugField(IReadOnlyDictionary<string, object> frontmatter)
     {
-        if (!frontmatter.TryGetValue("slug", out var slugValue) || slugValue is not string slug)
+        var uppercaseKeys = frontmatter.ToDictionary(
+            kvp => kvp.Key.ToUpperInvariant(),
+            kvp => kvp.Value,
+            StringComparer.OrdinalIgnoreCase
+        );
+
+        if (!uppercaseKeys.TryGetValue("slug", out var slugValue) || slugValue is not string slug)
         {
             throw new ContentValidationException("slug", typeof(string), slugValue);
         }
@@ -63,7 +76,13 @@ internal static class FrontmatterValidation
 
     private static void ValidateDateField(IReadOnlyDictionary<string, object> frontmatter, string fieldName)
     {
-        if (!frontmatter.TryGetValue(fieldName, out var dateValue))
+        var uppercaseKeys = frontmatter.ToDictionary(
+            kvp => kvp.Key.ToUpperInvariant(),
+            kvp => kvp.Value,
+            StringComparer.OrdinalIgnoreCase
+        );
+
+        if (!uppercaseKeys.TryGetValue(fieldName, out var dateValue))
         {
             throw new ContentValidationException($"Required frontmatter field '{fieldName}' is missing.");
         }

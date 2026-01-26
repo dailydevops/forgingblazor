@@ -121,6 +121,20 @@ internal static class ContentDescriptorFactory
                 : Enum.ToObject(underlyingType, value);
         }
 
+        if (underlyingType.IsArray)
+        {
+            var elementType = underlyingType.GetElementType()!;
+            if (value is System.Collections.IList list)
+            {
+                var array = Array.CreateInstance(elementType, list.Count);
+                for (var i = 0; i < list.Count; i++)
+                {
+                    array.SetValue(ConvertValue(list[i], elementType), i);
+                }
+                return array;
+            }
+        }
+
         if (value.GetType() == underlyingType)
         {
             return value;
