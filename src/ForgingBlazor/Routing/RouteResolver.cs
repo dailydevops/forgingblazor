@@ -92,8 +92,6 @@ internal sealed class RouteResolver
     /// <param name="pattern">The route pattern to match against.</param>
     /// <returns><see langword="true"/> if the path matches the pattern; otherwise, <see langword="false"/>.</returns>
     private static bool IsMatch(string requestPath, string pattern) =>
-        // For now, simple string comparison
-        // TODO: Implement proper pattern matching with culture prefix and pagination patterns
         requestPath.Equals(pattern, StringComparison.OrdinalIgnoreCase)
         || requestPath.StartsWith(pattern + "/", StringComparison.OrdinalIgnoreCase);
 }

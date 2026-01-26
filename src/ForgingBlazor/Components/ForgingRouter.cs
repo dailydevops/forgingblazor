@@ -4,6 +4,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Routing;
+using NetEvolve.ForgingBlazor.Routing;
 
 /// <summary>
 /// Routes incoming requests to Blazor components or dynamic content, with content routing taking precedence
@@ -13,7 +14,6 @@ public sealed class ForgingRouter : IComponent, IHandleAfterRender, IDisposable
 {
     private RenderHandle _renderHandle;
     private bool _navigationInterceptionEnabled;
-    private string? _location;
     private RenderFragment? _renderFragment;
 
     [Inject]
@@ -21,6 +21,12 @@ public sealed class ForgingRouter : IComponent, IHandleAfterRender, IDisposable
 
     [Inject]
     private INavigationInterception NavigationInterception { get; set; } = default!;
+
+    [Inject]
+    private RouteRegistry RouteRegistry { get; set; } = default!;
+
+    [Inject]
+    private RouteResolver RouteResolver { get; set; } = default!;
 
     /// <summary>
     /// Gets or sets the assembly that should be searched for components matching the URI.
@@ -123,8 +129,8 @@ public sealed class ForgingRouter : IComponent, IHandleAfterRender, IDisposable
 
     private async Task RefreshAsync(bool isNavigationIntercepted)
     {
-        _location = NavigationManager.Uri;
-        var locationPath = NavigationManager.ToBaseRelativePath(_location);
+        var location = NavigationManager.Uri;
+        var locationPath = NavigationManager.ToBaseRelativePath(location);
 
         if (Navigating is not null)
         {
@@ -132,16 +138,40 @@ public sealed class ForgingRouter : IComponent, IHandleAfterRender, IDisposable
             _renderHandle.Render(BuildRenderTree);
         }
 
-        if (OnNavigateAsync.HasDelegate)
+        // Note: OnNavigateAsync callback is handled by the Router component
+        // We don't invoke it directly here to avoid NavigationContext construction
+        // isNavigationIntercepted indicates whether this was a SPA navigation (true) or a full page load (false)
+
+        // Try to resolve a content route first
+        if (RouteResolver.TryResolve(locationPath, out var routeDefinition))
         {
-            // TODO: Implement proper NavigationContext handling
-            // For now, we skip the navigate event to avoid compilation errors
-            // This will be implemented when full routing integration is complete
+            // Render content route via ContentRouteHandler
+            // isNavigationIntercepted is available for cache/state management decisions
+            _renderFragment = builder =>
+            {
+                builder.OpenComponent<ContentRouteHandler>(0);
+                builder.AddComponentParameter(1, "RouteDefinition", routeDefinition);
+                builder.AddComponentParameter(2, "RequestPath", locationPath);
+                builder.AddComponentParameter(3, "NavigationIntercepted", isNavigationIntercepted);
+                builder.CloseComponent();
+            };
+        }
+        else
+        {
+            // Fall back to standard component routing using Router
+            _renderFragment = builder =>
+            {
+                builder.OpenComponent<Router>(0);
+                builder.AddComponentParameter(1, "AppAssembly", AppAssembly);
+                builder.AddComponentParameter(2, "AdditionalAssemblies", AdditionalAssemblies);
+                builder.AddComponentParameter(3, "Found", Found);
+                builder.AddComponentParameter(4, "NotFound", NotFound);
+                builder.AddComponentParameter(5, "Navigating", Navigating);
+                builder.AddComponentParameter(6, "OnNavigateAsync", OnNavigateAsync);
+                builder.CloseComponent();
+            };
         }
 
-        // TODO: Implement content route resolution here
-        // For now, always render NotFound
-        _renderFragment = NotFound;
         _renderHandle.Render(BuildRenderTree);
     }
 }

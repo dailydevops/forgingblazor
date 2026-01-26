@@ -17,6 +17,18 @@ internal sealed class ContentRouteHandler : IComponent
     [Parameter]
     public RouteDefinition? RouteDefinition { get; set; }
 
+    /// <summary>
+    /// Gets or sets the request path that resolved to this route.
+    /// </summary>
+    [Parameter]
+    public string? RequestPath { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the navigation was intercepted (SPA navigation) or a full page load.
+    /// </summary>
+    [Parameter]
+    public bool NavigationIntercepted { get; set; }
+
     /// <inheritdoc />
     public void Attach(RenderHandle renderHandle) => _renderHandle = renderHandle;
 
@@ -47,6 +59,9 @@ internal sealed class ContentRouteHandler : IComponent
         builder.OpenComponent(0, RouteDefinition.ComponentType);
 
         // TODO: Pass resolved content and other parameters to the component
+        // - RequestPath: Current request path that resolved to this route
+        // - NavigationIntercepted: Indicates if this was a SPA navigation (true) or full page load (false)
+        //   Can be used for cache/state management decisions
 
         builder.CloseComponent();
     }
