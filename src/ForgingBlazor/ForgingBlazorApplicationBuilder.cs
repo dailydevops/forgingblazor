@@ -17,10 +17,8 @@ internal sealed class ForgingBlazorApplicationBuilder : IForgingBlazorApplicatio
     /// </summary>
     private readonly WebApplicationBuilder _builder;
 
-    /// <summary>
-    /// Gets the service collection for registering application services.
-    /// </summary>
-    internal IServiceCollection Services => _builder.Services;
+    /// <inheritdoc />
+    public IServiceCollection Services => _builder.Services;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ForgingBlazorApplicationBuilder"/> class with the specified command-line arguments.

@@ -41,9 +41,12 @@ public class PaginationConfigValidationTests
         validation.Configure(options);
 
         // Assert
-        _ = await Assert.That(options.Mode).EqualTo(PaginationMode.Prefixed);
-        _ = await Assert.That(options.PageSize).EqualTo(25);
-        _ = await Assert.That(options.Path).EqualTo("page");
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(options.Mode).EqualTo(PaginationMode.Prefixed);
+            _ = await Assert.That(options.PageSize).EqualTo(25);
+            _ = await Assert.That(options.Path).EqualTo("page");
+        }
     }
 
     [Test]

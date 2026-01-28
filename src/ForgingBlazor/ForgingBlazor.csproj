@@ -6,12 +6,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="NetEvolve.ForgingBlazor.Storage.AzureBlob" />
+    <InternalsVisibleTo Include="NetEvolve.ForgingBlazor.Tests.Unit" />
+    <InternalsVisibleTo Include="NetEvolve.ForgingBlazor.Tests.Integration" />
+  </ItemGroup>
+
+  <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Markdig" />
     <PackageReference Include="NetEscapades.Configuration.Yaml" />
+    <PackageReference Include="YamlDotNet" />
   </ItemGroup>
 
   <ItemGroup>

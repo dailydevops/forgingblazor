@@ -1,4 +1,4 @@
-namespace NetEvolve.ForgingBlazor.Tests.Unit.Configurations;
+﻿namespace NetEvolve.ForgingBlazor.Tests.Unit.Configurations;
 
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Configuration;
@@ -43,9 +43,12 @@ public class SiteConfigValidationTests
         validation.Configure(options);
 
         // Assert
-        _ = await Assert.That(options.BaseUrl).EqualTo("https://example.com");
-        _ = await Assert.That(options.LanguageCode).EqualTo("de-DE");
-        _ = await Assert.That(options.Title).EqualTo("Test Site");
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(options.BaseUrl).EqualTo("https://example.com");
+            _ = await Assert.That(options.LanguageCode).EqualTo("de-DE");
+            _ = await Assert.That(options.Title).EqualTo("Test Site");
+        }
     }
 
     [Test]
@@ -80,8 +83,11 @@ public class SiteConfigValidationTests
         var result = validation.Validate(null, options);
 
         // Assert
-        _ = await Assert.That(result.Failed).EqualTo(true);
-        _ = await Assert.That(result.FailureMessage).Contains("valid absolute URI");
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result.Failed).EqualTo(true);
+            _ = await Assert.That(result.FailureMessage).Contains("valid absolute URI");
+        }
     }
 
     [Test]
@@ -104,8 +110,11 @@ public class SiteConfigValidationTests
         var result = validation.Validate(null, options);
 
         // Assert
-        _ = await Assert.That(result.Failed).EqualTo(true);
-        _ = await Assert.That(result.FailureMessage).Contains("HTTP or HTTPS scheme");
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result.Failed).EqualTo(true);
+            _ = await Assert.That(result.FailureMessage).Contains("HTTP or HTTPS scheme");
+        }
     }
 
     [Test]
@@ -128,8 +137,11 @@ public class SiteConfigValidationTests
         var result = validation.Validate(null, options);
 
         // Assert
-        _ = await Assert.That(result.Failed).EqualTo(true);
-        _ = await Assert.That(result.FailureMessage).Contains("language code must be provided");
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result.Failed).EqualTo(true);
+            _ = await Assert.That(result.FailureMessage).Contains("language code must be provided");
+        }
     }
 
     [Test]
@@ -152,8 +164,11 @@ public class SiteConfigValidationTests
         var result = validation.Validate(null, options);
 
         // Assert
-        _ = await Assert.That(result.Failed).EqualTo(true);
-        _ = await Assert.That(result.FailureMessage).Contains("site title must be provided");
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result.Failed).EqualTo(true);
+            _ = await Assert.That(result.FailureMessage).Contains("site title must be provided");
+        }
     }
 
     [Test]

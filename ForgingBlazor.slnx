@@ -22,6 +22,7 @@
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/ForgingBlazor.Extensibility/ForgingBlazor.Extensibility.csproj" />
+    <Project Path="src/ForgingBlazor.Storage.AzureBlob/ForgingBlazor.Storage.AzureBlob.csproj" />
     <Project Path="src/ForgingBlazor/ForgingBlazor.csproj" />
     <Project Path="src/Xample.AppHost/Xample.AppHost.csproj" />
     <Project Path="src/Xample.ServiceDefaults/Xample.ServiceDefaults.csproj" />
@@ -30,6 +31,7 @@
   <Folder Name="/tests/">
     <Project Path="tests/ForgingBlazor.Extensibility.Tests.Integration/ForgingBlazor.Extensibility.Tests.Integration.csproj" />
     <Project Path="tests/ForgingBlazor.Extensibility.Tests.Unit/ForgingBlazor.Extensibility.Tests.Unit.csproj" />
+    <Project Path="tests/ForgingBlazor.Storage.AzureBlob.Tests.Unit/ForgingBlazor.Storage.AzureBlob.Tests.Unit.csproj" />
     <Project Path="tests/ForgingBlazor.Tests.Integration/ForgingBlazor.Tests.Integration.csproj" />
     <Project Path="tests/ForgingBlazor.Tests.Unit/ForgingBlazor.Tests.Unit.csproj" />
     <Project Path="tests/Xample.AppHost.Tests.Integration/Xample.AppHost.Tests.Integration.csproj" />

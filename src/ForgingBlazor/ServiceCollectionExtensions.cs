@@ -59,4 +59,71 @@ internal static class ServiceCollectionExtensions
         throw new InvalidOperationException(
             $"The services have already been registered. The marker type is '{markerTypeName}'."
         );
+
+    /// <summary>
+    /// Registers routing services with the service collection.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <returns>The <see cref="IServiceCollection"/> for method chaining.</returns>
+    internal static IServiceCollection AddRoutingServices(this IServiceCollection services)
+    {
+        _ = services.AddSingleton<Routing.RouteRegistry>();
+        _ = services.AddSingleton<Routing.RouteResolver>();
+
+        return services;
+    }
+
+    /// <summary>
+    /// Registers content services with the service collection.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <returns>The <see cref="IServiceCollection"/> for method chaining.</returns>
+    internal static IServiceCollection AddContentServices(this IServiceCollection services)
+    {
+        _ = services.AddSingleton<Content.ContentCacheService>();
+        _ = services.AddSingleton<Content.CultureContentLocator>();
+        _ = services.AddSingleton<Content.ContentExpirationService>();
+        _ = services.AddSingleton<Content.DraftContentFilter>();
+        _ = services.AddSingleton(TimeProvider.System);
+
+        return services;
+    }
+
+    /// <summary>
+    /// Registers storage services with the service collection.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <returns>The <see cref="IServiceCollection"/> for method chaining.</returns>
+    internal static IServiceCollection AddStorageServices(this IServiceCollection services)
+    {
+        _ = services.AddSingleton<Storage.PublishingConfirmationService>();
+
+        return services;
+    }
+
+    /// <summary>
+    /// Registers validation services with the service collection.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <returns>The <see cref="IServiceCollection"/> for method chaining.</returns>
+    internal static IServiceCollection AddValidationServices(this IServiceCollection services)
+    {
+        _ = services.AddSingleton<Routing.Validation.RoutingConfigurationValidation>();
+        _ = services.AddSingleton<Storage.Validation.StorageConfigurationValidation>();
+
+        return services;
+    }
+
+    /// <summary>
+    /// Registers culture services with the service collection.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <returns>The <see cref="IServiceCollection"/> for method chaining.</returns>
+    internal static IServiceCollection AddCultureServices(this IServiceCollection services)
+    {
+        _ = services.AddSingleton<Routing.Culture.CultureFallbackChain>();
+        _ = services.AddSingleton<Routing.Culture.CultureValidation>();
+
+        return services;
+    }
 }
