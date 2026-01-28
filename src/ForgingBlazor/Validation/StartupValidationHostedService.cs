@@ -12,7 +12,7 @@ using NetEvolve.ForgingBlazor.Storage.Validation;
 /// <summary>
 /// Internal hosted service running all validations during <see cref="StartAsync"/> and throwing aggregated exceptions.
 /// </summary>
-internal sealed class StartupValidationHostedService : IHostedService
+internal sealed partial class StartupValidationHostedService : IHostedService
 {
     private readonly ILogger<StartupValidationHostedService> _logger;
     private readonly RoutingConfigurationValidation? _routingValidation;
@@ -45,7 +45,7 @@ internal sealed class StartupValidationHostedService : IHostedService
     /// <inheritdoc />
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Starting startup validation...");
+        LogStartingValidation();
 
         var errors = new List<string>();
 
@@ -102,15 +102,24 @@ internal sealed class StartupValidationHostedService : IHostedService
         if (errors.Count > 0)
         {
             var errorMessage = string.Join(Environment.NewLine, errors);
-            _logger.LogError("Startup validation failed:{NewLine}{Errors}", Environment.NewLine, errorMessage);
+            LogValidationFailed(Environment.NewLine, errorMessage);
             throw new InvalidOperationException($"Startup validation failed:{Environment.NewLine}{errorMessage}");
         }
 
-        _logger.LogInformation("Startup validation completed successfully.");
+        LogValidationCompleted();
     }
 
     /// <inheritdoc />
     public Task StopAsync(CancellationToken cancellationToken) =>
         // No cleanup needed
         Task.CompletedTask;
+
+    [LoggerMessage(LogLevel.Information, "Starting startup validation...")]
+    private partial void LogStartingValidation();
+
+    [LoggerMessage(LogLevel.Error, "Startup validation failed:{NewLine}{Errors}")]
+    private partial void LogValidationFailed(string newLine, string errors);
+
+    [LoggerMessage(LogLevel.Information, "Startup validation completed successfully.")]
+    private partial void LogValidationCompleted();
 }

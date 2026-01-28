@@ -33,7 +33,7 @@ internal sealed class AssetStorageBuilder : IAssetStorageBuilder
         var options = new FileSystemStorageOptions();
         configure(options);
 
-        _services.AddSingleton<IAssetStorageProvider>(sp => new FileSystemAssetStorageProvider(options));
+        _ = _services.AddSingleton<IAssetStorageProvider>(sp => new FileSystemAssetStorageProvider(options));
 
         return this;
     }

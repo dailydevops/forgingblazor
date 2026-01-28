@@ -33,7 +33,7 @@ internal sealed class ContentStorageBuilder : IContentStorageBuilder
         var options = new FileSystemStorageOptions();
         configure(options);
 
-        _services.AddSingleton<IContentStorageProvider>(sp => new FileSystemContentStorageProvider(options));
+        _ = _services.AddSingleton<IContentStorageProvider>(sp => new FileSystemContentStorageProvider(options));
 
         return this;
     }

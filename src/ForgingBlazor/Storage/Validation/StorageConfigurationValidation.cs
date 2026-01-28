@@ -30,14 +30,11 @@ internal sealed class StorageConfigurationValidation : IValidateOptions<StorageC
         }
 
         // Validate asset storage base path if configured
-        if (!string.IsNullOrWhiteSpace(options.AssetStorageBasePath))
+        if (!string.IsNullOrWhiteSpace(options.AssetStorageBasePath) && !Directory.Exists(options.AssetStorageBasePath))
         {
-            if (!Directory.Exists(options.AssetStorageBasePath))
-            {
-                return ValidateOptionsResult.Fail(
-                    $"Asset storage base path '{options.AssetStorageBasePath}' does not exist or is not accessible."
-                );
-            }
+            return ValidateOptionsResult.Fail(
+                $"Asset storage base path '{options.AssetStorageBasePath}' does not exist or is not accessible."
+            );
         }
 
         return ValidateOptionsResult.Success;

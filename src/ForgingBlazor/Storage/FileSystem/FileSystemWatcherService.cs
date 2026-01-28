@@ -19,7 +19,7 @@ using Microsoft.Extensions.Logging;
 [SupportedOSPlatform("windows")]
 [SupportedOSPlatform("linux")]
 [SupportedOSPlatform("macos")]
-internal sealed class FileSystemWatcherService : IHostedService, IDisposable
+internal sealed partial class FileSystemWatcherService : IHostedService, IDisposable
 {
     private readonly ILogger<FileSystemWatcherService> _logger;
     private readonly FileSystemStorageOptions _options;
@@ -59,17 +59,17 @@ internal sealed class FileSystemWatcherService : IHostedService, IDisposable
     {
         if (!_options.EnableWatch || string.IsNullOrEmpty(_options.BasePath))
         {
-            _logger.LogInformation("File system watching is disabled or base path not configured");
+            LogWatchingDisabled();
             return Task.CompletedTask;
         }
 
         if (!Directory.Exists(_options.BasePath))
         {
-            _logger.LogWarning("Base path does not exist: {BasePath}", _options.BasePath);
+            LogBasePathDoesNotExist(_options.BasePath);
             return Task.CompletedTask;
         }
 
-        _logger.LogInformation("Starting file system watcher for: {BasePath}", _options.BasePath);
+        LogStartingWatcher(_options.BasePath);
 
         _watcher = new FileSystemWatcher(_options.BasePath)
         {
@@ -91,7 +91,7 @@ internal sealed class FileSystemWatcherService : IHostedService, IDisposable
     /// <inheritdoc />
     public async Task StopAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Stopping file system watcher");
+        LogStoppingWatcher();
 
         if (_watcher is not null)
         {
@@ -163,7 +163,7 @@ internal sealed class FileSystemWatcherService : IHostedService, IDisposable
 
         foreach (var file in changedFiles)
         {
-            _logger.LogDebug("Processing file change: {FilePath}", file);
+            LogProcessingFileChange(file);
 
             foreach (var handler in _changeHandlers)
             {
@@ -173,9 +173,27 @@ internal sealed class FileSystemWatcherService : IHostedService, IDisposable
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error processing file change handler for: {FilePath}", file);
+                    LogErrorProcessingHandler(ex, file);
                 }
             }
         }
     }
+
+    [LoggerMessage(LogLevel.Information, "File system watching is disabled or base path not configured")]
+    private partial void LogWatchingDisabled();
+
+    [LoggerMessage(LogLevel.Warning, "Base path does not exist: {BasePath}")]
+    private partial void LogBasePathDoesNotExist(string basePath);
+
+    [LoggerMessage(LogLevel.Information, "Starting file system watcher for: {BasePath}")]
+    private partial void LogStartingWatcher(string basePath);
+
+    [LoggerMessage(LogLevel.Information, "Stopping file system watcher")]
+    private partial void LogStoppingWatcher();
+
+    [LoggerMessage(LogLevel.Debug, "Processing file change: {FilePath}")]
+    private partial void LogProcessingFileChange(string filePath);
+
+    [LoggerMessage(LogLevel.Error, "Error processing file change handler for: {FilePath}")]
+    private partial void LogErrorProcessingHandler(Exception exception, string filePath);
 }

@@ -21,10 +21,7 @@ internal sealed class CultureFallbackChain
     /// Initializes a new instance of the <see cref="CultureFallbackChain"/> class.
     /// </summary>
     /// <param name="defaultCulture">The default culture to use in the fallback chain. Defaults to en-US if <c>null</c>.</param>
-    public CultureFallbackChain(CultureInfo? defaultCulture = null)
-    {
-        _defaultCulture = defaultCulture ?? CultureInfo.GetCultureInfo("en-US");
-    }
+    public CultureFallbackChain(CultureInfo? defaultCulture = null) => _defaultCulture = defaultCulture ?? CultureInfo.GetCultureInfo("en-US");
 
     /// <summary>
     /// Gets the fallback chain for the specified culture.
@@ -36,10 +33,11 @@ internal sealed class CultureFallbackChain
     {
         ArgumentNullException.ThrowIfNull(culture);
 
-        var chain = new List<CultureInfo?>();
-
-        // 1. Add the specific culture (e.g., de-DE) or neutral culture (e.g., de)
-        chain.Add(culture);
+        List<CultureInfo?> chain =
+        [
+            // 1. Add the specific culture (e.g., de-DE) or neutral culture (e.g., de)
+            culture
+        ];
 
         // 2. Add the parent neutral culture if the current culture is specific (e.g., de from de-DE)
         if (!culture.IsNeutralCulture && !string.IsNullOrEmpty(culture.Parent?.Name))

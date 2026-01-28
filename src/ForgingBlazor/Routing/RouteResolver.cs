@@ -1,4 +1,6 @@
-﻿namespace NetEvolve.ForgingBlazor.Routing;
+﻿using System.Linq;
+
+namespace NetEvolve.ForgingBlazor.Routing;
 
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -45,13 +47,10 @@ internal sealed class RouteResolver
 
         // Try to match against all registered routes (for partial matches, nested routes, etc.)
         var allRoutes = _registry.GetAll();
-        foreach (var route in allRoutes)
+        foreach (var route in allRoutes.Where(route => IsMatch(normalizedPath, route.PathPattern)))
         {
-            if (IsMatch(normalizedPath, route.PathPattern))
-            {
-                definition = route;
-                return true;
-            }
+            definition = route;
+            return true;
         }
 
         definition = null;
@@ -73,7 +72,7 @@ internal sealed class RouteResolver
         // Ensure leading slash
         if (!path.StartsWith('/'))
         {
-            path = "/" + path;
+            path = $"/{path}";
         }
 
         // Remove trailing slashes (except for root)

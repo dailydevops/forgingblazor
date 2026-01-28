@@ -99,7 +99,9 @@ internal sealed class ContentCacheService
     /// This would require tracking all keys or disposing and recreating the cache.
     /// For development, restart the application to clear the cache.
     /// </remarks>
-    internal static void Clear() { }
+    internal static void Clear() {
+        // TODO: Implement cache clearing logic if needed.
+    }
 
     private static string BuildCacheKey(string segmentPath, string slug, CultureInfo culture)
     {

@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 /// This handler subscribes to file system watcher events and invalidates
 /// the corresponding cache entries when content files are modified.
 /// </remarks>
-internal sealed class ContentCacheInvalidationHandler
+internal sealed partial class ContentCacheInvalidationHandler
 {
     private readonly ContentCacheService _cacheService;
     private readonly ILogger<ContentCacheInvalidationHandler> _logger;
@@ -54,22 +54,17 @@ internal sealed class ContentCacheInvalidationHandler
 
             if (segmentPath is null || slug is null || culture is null)
             {
-                _logger.LogWarning("Could not parse file path for cache invalidation: {FilePath}", fullPath);
+                LogCouldNotParseFilePath(fullPath);
                 return;
             }
 
-            _logger.LogDebug(
-                "Invalidating cache for segment: {SegmentPath}, slug: {Slug}, culture: {Culture}",
-                segmentPath,
-                slug,
-                culture.Name
-            );
+            LogInvalidatingCache(segmentPath, slug, culture.Name);
 
             _cacheService.Invalidate(segmentPath, slug, culture);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error handling file change for cache invalidation: {FilePath}", fullPath);
+            LogErrorHandlingFileChange(ex, fullPath);
         }
     }
 
@@ -109,7 +104,7 @@ internal sealed class ContentCacheInvalidationHandler
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Error parsing file path: {FilePath}", fullPath);
+            LogErrorParsingFilePath(ex, fullPath);
             return (null, null, null);
         }
     }
@@ -135,4 +130,16 @@ internal sealed class ContentCacheInvalidationHandler
         var parts = directoryPath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         return string.Join("/", parts.TakeLast(2));
     }
+
+    [LoggerMessage(LogLevel.Warning, "Could not parse file path for cache invalidation: {FilePath}")]
+    private partial void LogCouldNotParseFilePath(string filePath);
+
+    [LoggerMessage(LogLevel.Debug, "Invalidating cache for segment: {SegmentPath}, slug: {Slug}, culture: {Culture}")]
+    private partial void LogInvalidatingCache(string segmentPath, string slug, string culture);
+
+    [LoggerMessage(LogLevel.Error, "Error handling file change for cache invalidation: {FilePath}")]
+    private partial void LogErrorHandlingFileChange(Exception exception, string filePath);
+
+    [LoggerMessage(LogLevel.Warning, "Error parsing file path: {FilePath}")]
+    private partial void LogErrorParsingFilePath(Exception exception, string filePath);
 }
