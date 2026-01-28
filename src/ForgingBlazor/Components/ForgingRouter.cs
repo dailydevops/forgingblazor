@@ -72,7 +72,7 @@ public sealed class ForgingRouter : IComponent, IHandleAfterRender, IDisposable
     {
         builder.OpenComponent<CascadingValue<ForgingRouter>>(0);
         builder.AddComponentParameter(1, "Value", this);
-        builder.AddComponentParameter(2, "ChildContent", (RenderFragment?)_renderFragment);
+        builder.AddComponentParameter(2, "ChildContent", _renderFragment);
         builder.CloseComponent();
     }
 

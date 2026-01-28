@@ -31,11 +31,9 @@ internal sealed class ContentStorageBuilder : IContentStorageBuilder
         ArgumentNullException.ThrowIfNull(configure);
 
         var options = new FileSystemStorageOptions();
-#pragma warning disable IDE0058 // Expression value is never used
         configure(options);
 
         _services.AddSingleton<IContentStorageProvider>(sp => new FileSystemContentStorageProvider(options));
-#pragma warning restore IDE0058
 
         return this;
     }

@@ -54,28 +54,22 @@ internal sealed class ContentCacheInvalidationHandler
 
             if (segmentPath is null || slug is null || culture is null)
             {
-#pragma warning disable CA1848 // Use LoggerMessage delegates
                 _logger.LogWarning("Could not parse file path for cache invalidation: {FilePath}", fullPath);
-#pragma warning restore CA1848
                 return;
             }
 
-#pragma warning disable CA1848 // Use LoggerMessage delegates
             _logger.LogDebug(
                 "Invalidating cache for segment: {SegmentPath}, slug: {Slug}, culture: {Culture}",
                 segmentPath,
                 slug,
                 culture.Name
             );
-#pragma warning restore CA1848
 
             _cacheService.Invalidate(segmentPath, slug, culture);
         }
         catch (Exception ex)
         {
-#pragma warning disable CA1848 // Use LoggerMessage delegates
             _logger.LogError(ex, "Error handling file change for cache invalidation: {FilePath}", fullPath);
-#pragma warning restore CA1848
         }
     }
 
@@ -115,9 +109,7 @@ internal sealed class ContentCacheInvalidationHandler
         }
         catch (Exception ex)
         {
-#pragma warning disable CA1848 // Use LoggerMessage delegates
             _logger.LogWarning(ex, "Error parsing file path: {FilePath}", fullPath);
-#pragma warning restore CA1848
             return (null, null, null);
         }
     }

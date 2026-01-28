@@ -42,27 +42,21 @@ public sealed class AzureBlobContentStorageProviderTests(AzuriteFixture fixture)
     [Test]
     public void Constructor_WithNullConnectionString_ThrowsArgumentException() =>
         // Act & Assert
-#pragma warning disable CA1806 // Do not ignore method results
         _ = Assert.Throws<ArgumentException>(() => _ = new AzureBlobContentStorageProvider(null!, TestContainerName));
-#pragma warning restore CA1806 // Do not ignore method results
 
     [Test]
     public void Constructor_WithEmptyConnectionString_ThrowsArgumentException() =>
         // Act & Assert
-#pragma warning disable CA1806 // Do not ignore method results
         _ = Assert.Throws<ArgumentException>(() =>
             _ = new AzureBlobContentStorageProvider(string.Empty, TestContainerName)
         );
-#pragma warning restore CA1806 // Do not ignore method results
 
     [Test]
     public void Constructor_WithNullContainerName_ThrowsArgumentException() =>
         // Act & Assert
-#pragma warning disable CA1806 // Do not ignore method results
         _ = Assert.Throws<ArgumentException>(() =>
             _ = new AzureBlobContentStorageProvider(_fixture.ConnectionString, null!)
         );
-#pragma warning restore CA1806 // Do not ignore method results
 
     [Test]
     public async Task GetContentAsync_WhenBlobExists_ReturnsContent()

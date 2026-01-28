@@ -59,23 +59,17 @@ internal sealed class FileSystemWatcherService : IHostedService, IDisposable
     {
         if (!_options.EnableWatch || string.IsNullOrEmpty(_options.BasePath))
         {
-#pragma warning disable CA1848 // Use LoggerMessage delegates
             _logger.LogInformation("File system watching is disabled or base path not configured");
-#pragma warning restore CA1848
             return Task.CompletedTask;
         }
 
         if (!Directory.Exists(_options.BasePath))
         {
-#pragma warning disable CA1848 // Use LoggerMessage delegates
             _logger.LogWarning("Base path does not exist: {BasePath}", _options.BasePath);
-#pragma warning restore CA1848
             return Task.CompletedTask;
         }
 
-#pragma warning disable CA1848 // Use LoggerMessage delegates
         _logger.LogInformation("Starting file system watcher for: {BasePath}", _options.BasePath);
-#pragma warning restore CA1848
 
         _watcher = new FileSystemWatcher(_options.BasePath)
         {
@@ -97,9 +91,7 @@ internal sealed class FileSystemWatcherService : IHostedService, IDisposable
     /// <inheritdoc />
     public async Task StopAsync(CancellationToken cancellationToken)
     {
-#pragma warning disable CA1848 // Use LoggerMessage delegates
         _logger.LogInformation("Stopping file system watcher");
-#pragma warning restore CA1848
 
         if (_watcher is not null)
         {
@@ -171,9 +163,7 @@ internal sealed class FileSystemWatcherService : IHostedService, IDisposable
 
         foreach (var file in changedFiles)
         {
-#pragma warning disable CA1848 // Use LoggerMessage delegates
             _logger.LogDebug("Processing file change: {FilePath}", file);
-#pragma warning restore CA1848
 
             foreach (var handler in _changeHandlers)
             {
@@ -183,9 +173,7 @@ internal sealed class FileSystemWatcherService : IHostedService, IDisposable
                 }
                 catch (Exception ex)
                 {
-#pragma warning disable CA1848 // Use LoggerMessage delegates
                     _logger.LogError(ex, "Error processing file change handler for: {FilePath}", file);
-#pragma warning restore CA1848
                 }
             }
         }

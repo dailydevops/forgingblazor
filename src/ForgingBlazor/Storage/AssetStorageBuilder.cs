@@ -31,11 +31,9 @@ internal sealed class AssetStorageBuilder : IAssetStorageBuilder
         ArgumentNullException.ThrowIfNull(configure);
 
         var options = new FileSystemStorageOptions();
-#pragma warning disable IDE0058 // Expression value is never used
         configure(options);
 
         _services.AddSingleton<IAssetStorageProvider>(sp => new FileSystemAssetStorageProvider(options));
-#pragma warning restore IDE0058
 
         return this;
     }

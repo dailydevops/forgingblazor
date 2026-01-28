@@ -86,7 +86,7 @@ internal sealed class CanonicalUrlGenerator
         // Ensure leading slash
         if (!path.StartsWith('/'))
         {
-            path = "/" + path;
+            path = $"/{path}";
         }
 
         // Remove trailing slashes (except for root)

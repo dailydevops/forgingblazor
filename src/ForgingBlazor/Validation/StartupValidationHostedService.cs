@@ -45,9 +45,7 @@ internal sealed class StartupValidationHostedService : IHostedService
     /// <inheritdoc />
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-#pragma warning disable CA1848 // Use LoggerMessage delegates for better performance
         _logger.LogInformation("Starting startup validation...");
-#pragma warning restore CA1848
 
         var errors = new List<string>();
 
@@ -104,15 +102,11 @@ internal sealed class StartupValidationHostedService : IHostedService
         if (errors.Count > 0)
         {
             var errorMessage = string.Join(Environment.NewLine, errors);
-#pragma warning disable CA1848 // Use LoggerMessage delegates for better performance
             _logger.LogError("Startup validation failed:{NewLine}{Errors}", Environment.NewLine, errorMessage);
-#pragma warning restore CA1848
             throw new InvalidOperationException($"Startup validation failed:{Environment.NewLine}{errorMessage}");
         }
 
-#pragma warning disable CA1848 // Use LoggerMessage delegates for better performance
         _logger.LogInformation("Startup validation completed successfully.");
-#pragma warning restore CA1848
     }
 
     /// <inheritdoc />

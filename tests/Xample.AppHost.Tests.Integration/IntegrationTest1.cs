@@ -42,9 +42,9 @@ public class IntegrationTest1
             .ResourceNotifications.WaitForResourceHealthyAsync(ProjectNames.Xample, cancellationToken)
             .WaitAsync(DefaultTimeout, cancellationToken)
             .ConfigureAwait(false);
-#pragma warning disable CA2234 // Pass system uri objects instead of strings
-        using var response = await httpClient.GetAsync("/", cancellationToken).ConfigureAwait(false);
-#pragma warning restore CA2234 // Pass system uri objects instead of strings
+        using var response = await httpClient
+            .GetAsync(new Uri("/", UriKind.Relative), cancellationToken)
+            .ConfigureAwait(false);
 
         // Assert
         _ = await Assert.That(response.StatusCode).EqualTo(HttpStatusCode.OK);
