@@ -1,5 +1,6 @@
 ﻿namespace NetEvolve.ForgingBlazor.Components;
 
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Components;
 
 /// <summary>
@@ -17,6 +18,7 @@ using Microsoft.AspNetCore.Components;
 /// <item><description>REQ-CMP-011: Components receive <see cref="ResolvedContent{TDescriptor}"/> as parameter.</description></item>
 /// </list>
 /// </remarks>
+[SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "As required.")]
 public abstract class ContentComponent<TDescriptor> : ComponentBase
     where TDescriptor : ContentDescriptor
 {

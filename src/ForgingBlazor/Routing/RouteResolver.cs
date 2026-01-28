@@ -1,9 +1,8 @@
-﻿using System.Linq;
-
-namespace NetEvolve.ForgingBlazor.Routing;
+﻿namespace NetEvolve.ForgingBlazor.Routing;
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 /// <summary>
 /// Internal class for matching incoming request paths to <see cref="RouteDefinition"/> entries,
@@ -47,14 +46,9 @@ internal sealed class RouteResolver
 
         // Try to match against all registered routes (for partial matches, nested routes, etc.)
         var allRoutes = _registry.GetAll();
-        foreach (var route in allRoutes.Where(route => IsMatch(normalizedPath, route.PathPattern)))
-        {
-            definition = route;
-            return true;
-        }
 
-        definition = null;
-        return false;
+        definition = allRoutes.FirstOrDefault(route => IsMatch(normalizedPath, route.PathPattern));
+        return definition is not null;
     }
 
     /// <summary>

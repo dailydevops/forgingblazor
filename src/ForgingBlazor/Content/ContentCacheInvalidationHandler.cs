@@ -18,6 +18,8 @@ internal sealed partial class ContentCacheInvalidationHandler
     private readonly ContentCacheService _cacheService;
     private readonly ILogger<ContentCacheInvalidationHandler> _logger;
 
+    private static readonly char[] _pathSeparators = [Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar];
+
     /// <summary>
     /// Initializes a new instance of the <see cref="ContentCacheInvalidationHandler"/> class.
     /// </summary>
@@ -127,7 +129,7 @@ internal sealed partial class ContentCacheInvalidationHandler
         // This is a simplified implementation
         // A full implementation would need to know the base content path
         // and calculate the relative segment path from it
-        var parts = directoryPath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        var parts = directoryPath.Split(_pathSeparators);
         return string.Join("/", parts.TakeLast(2));
     }
 

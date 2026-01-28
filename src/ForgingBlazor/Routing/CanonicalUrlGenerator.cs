@@ -6,7 +6,7 @@ using System.Globalization;
 /// <summary>
 /// Internal class for generating canonical URLs based on <see cref="CultureCanonical"/> setting and route definition.
 /// </summary>
-internal sealed class CanonicalUrlGenerator
+internal static class CanonicalUrlGenerator
 {
     /// <summary>
     /// Generates a canonical URL for a route.
