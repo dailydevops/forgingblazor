@@ -58,10 +58,13 @@ internal sealed class ContentRouteHandler : IComponent
         // Render the configured component
         builder.OpenComponent(0, RouteDefinition.ComponentType);
 
-        // TODO: Pass resolved content and other parameters to the component
-        // - RequestPath: Current request path that resolved to this route
-        // - NavigationIntercepted: Indicates if this was a SPA navigation (true) or full page load (false)
-        //   Can be used for cache/state management decisions
+        // Pass route context parameters to the component
+        if (!string.IsNullOrEmpty(RequestPath))
+        {
+            builder.AddComponentParameter(1, "RequestPath", RequestPath);
+        }
+
+        builder.AddComponentParameter(2, "NavigationIntercepted", NavigationIntercepted);
 
         builder.CloseComponent();
     }

@@ -99,8 +99,14 @@ internal sealed class ContentCacheService
     /// This would require tracking all keys or disposing and recreating the cache.
     /// For development, restart the application to clear the cache.
     /// </remarks>
-    internal static void Clear() {
-        // TODO: Implement cache clearing logic if needed.
+    /// <exception cref="NotSupportedException">Always thrown as IMemoryCache does not support clearing all entries.</exception>
+    internal static void Clear()
+    {
+        throw new NotSupportedException(
+            "Clearing all cache entries is not supported by IMemoryCache. "
+                + "To clear the cache during development, restart the application. "
+                + "For production scenarios, implement key tracking if cache clearing is required."
+        );
     }
 
     private static string BuildCacheKey(string segmentPath, string slug, CultureInfo culture)

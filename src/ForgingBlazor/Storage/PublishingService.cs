@@ -56,8 +56,10 @@ internal sealed class PublishingService : IPublishingService
             throw new InvalidOperationException("Draft storage is not configured.");
         }
 
-        // TODO: Implement publishing logic when route registry provides segment/culture information
-        return Task.CompletedTask;
+        throw new NotImplementedException(
+            "Publishing logic requires route registry integration to enumerate all segments and cultures. "
+                + "This functionality will be implemented once the route registry provides access to configured segments and supported cultures."
+        );
     }
 
     /// <inheritdoc />
@@ -68,7 +70,9 @@ internal sealed class PublishingService : IPublishingService
             throw new InvalidOperationException("Publishing storage is not configured.");
         }
 
-        // TODO: Implement unpublishing logic when route registry provides segment/culture information
-        return Task.CompletedTask;
+        throw new NotImplementedException(
+            "Unpublishing logic requires route registry integration to enumerate all segments and cultures. "
+                + "This functionality will be implemented once the route registry provides access to configured segments and supported cultures."
+        );
     }
 }
