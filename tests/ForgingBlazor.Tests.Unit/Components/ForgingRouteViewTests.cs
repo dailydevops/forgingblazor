@@ -157,7 +157,7 @@ public sealed class ForgingRouteViewTests : Bunit.TestContext
         public string? Slug { get; set; }
     }
 
-    private sealed class TestResolvedContent { }
+    private sealed partial class TestResolvedContent { }
 
     private sealed class TestLayout : LayoutComponentBase { }
 }

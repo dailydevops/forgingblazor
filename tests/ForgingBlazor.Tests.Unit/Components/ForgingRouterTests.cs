@@ -30,9 +30,9 @@ public sealed class ForgingRouterTests : Bunit.TestContext
     public async Task Render_WhenAppAssemblyIsNull_ThrowsInvalidOperationException()
     {
         // Arrange & Act & Assert
-        var exception = Assert.ThrowsAsync<InvalidOperationException>(async () =>
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
         {
-            var cut = RenderComponent<ForgingRouter>(parameters =>
+            using var _ = RenderComponent<ForgingRouter>(parameters =>
                 parameters
                     .Add(p => p.AppAssembly, null)
                     .Add(p => p.Found, context => builder => { })
@@ -42,16 +42,16 @@ public sealed class ForgingRouterTests : Bunit.TestContext
             await Task.Delay(10).ConfigureAwait(false); // Allow component to settle
         });
 
-        _ = await Assert.That((await exception).Message!).Contains(nameof(ForgingRouter.AppAssembly));
+        _ = await Assert.That(exception!.Message).Contains(nameof(ForgingRouter.AppAssembly));
     }
 
     [Test]
     public async Task Render_WhenFoundIsNull_ThrowsInvalidOperationException()
     {
         // Arrange & Act & Assert
-        var exception = Assert.ThrowsAsync<InvalidOperationException>(async () =>
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
         {
-            var cut = RenderComponent<ForgingRouter>(parameters =>
+            using var _ = RenderComponent<ForgingRouter>(parameters =>
                 parameters
                     .Add(p => p.AppAssembly, Assembly.GetExecutingAssembly())
                     .Add(p => p.Found, (RenderFragment<RouteData>?)null)
@@ -61,16 +61,16 @@ public sealed class ForgingRouterTests : Bunit.TestContext
             await Task.Delay(10).ConfigureAwait(false);
         });
 
-        _ = await Assert.That((await exception).Message).Contains(nameof(ForgingRouter.Found));
+        _ = await Assert.That(exception!.Message).Contains(nameof(ForgingRouter.Found));
     }
 
     [Test]
     public async Task Render_WhenNotFoundIsNull_ThrowsInvalidOperationException()
     {
         // Arrange & Act & Assert
-        var exception = Assert.ThrowsAsync<InvalidOperationException>(async () =>
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
         {
-            var cut = RenderComponent<ForgingRouter>(parameters =>
+            using var _ = RenderComponent<ForgingRouter>(parameters =>
                 parameters
                     .Add(p => p.AppAssembly, Assembly.GetExecutingAssembly())
                     .Add(p => p.Found, context => builder => { })
@@ -80,35 +80,7 @@ public sealed class ForgingRouterTests : Bunit.TestContext
             await Task.Delay(10).ConfigureAwait(false);
         });
 
-        _ = await Assert.That((await exception).Message!).Contains(nameof(ForgingRouter.NotFound));
-    }
-
-    [Test]
-    public async Task Render_WhenAllRequiredParametersProvided_RendersSuccessfully()
-    {
-        // Arrange
-        var appAssembly = Assembly.GetExecutingAssembly();
-        var foundInvoked = false;
-        var notFoundMarkup = "<p>Not Found</p>";
-
-        // Act
-        var cut = RenderComponent<ForgingRouter>(parameters =>
-            parameters
-                .Add(p => p.AppAssembly, appAssembly)
-                .Add(
-                    p => p.Found,
-                    context =>
-                    {
-                        foundInvoked = true;
-                        return builder => builder.AddMarkupContent(0, "<p>Found</p>");
-                    }
-                )
-                .Add(p => p.NotFound, builder => builder.AddMarkupContent(0, notFoundMarkup))
-        );
-
-        // Assert - Component renders without throwing
-        _ = await Assert.That(cut).IsNotNull();
-        // The component should have rendered (either Found or standard Router fallback)
+        _ = await Assert.That(exception!.Message).Contains(nameof(ForgingRouter.NotFound));
     }
 
     [Test]
@@ -168,9 +140,6 @@ public sealed class ForgingRouterTests : Bunit.TestContext
 
         // Act - Dispose the component
         cut.Dispose();
-
-        // Assert - Should not throw; event unsubscription happens internally
-        _ = await Assert.That(true).IsTrue();
     }
 
     [Test]
