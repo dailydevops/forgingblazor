@@ -28,6 +28,6 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.15.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.15.0" />
     <PackageVersion Include="Aspire.Hosting.Testing" Version="13.1.0" />
-    <PackageVersion Include="TUnit" Version="1.12.86" />
+    <PackageVersion Include="TUnit" Version="1.12.93" />
   </ItemGroup>
 </Project>
